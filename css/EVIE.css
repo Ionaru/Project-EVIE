@@ -6,34 +6,34 @@ body, h1, h4, p, div {
 }
 
 body.modal-open {
-  overflow-y: scroll;
-  padding-right: 0 !important;
+    overflow-y: scroll;
+    padding-right: 0 !important;
 }
 
-div.planet{
-      border: 2px solid #337ab7;
+div.planet {
+    border: 2px solid #337ab7;
 }
 
-div.planetcontainer{
-      margin-bottom: 5px;
+div.planetcontainer {
+    margin-bottom: 5px;
 }
 
-img.planetimg{
+img.planetimg {
     margin: 5px;
-      border: 2px solid #337ab7;
+    border: 2px solid #337ab7;
 }
 
 ul.bottom {
-      position: absolute;
-      bottom: 0;
-     } 
-     
+    position: absolute;
+    bottom: 0;
+}
+
 .col-centered {
-    display:inline-block;
-    float:none;
+    display: inline-block;
+    float: none;
     /* reset the text-align */
     /* inline-block space fix */
-    margin-right:-4px;
+    margin-right: -4px;
 }
 
 .floating-box {
@@ -46,78 +46,78 @@ a.anchor {
     display: block;
     position: relative;
     top: -60px;
-    visibility: hidden;  
+    visibility: hidden;
 }
 
 a.back-to-top {
-	display: none;
-	width: 60px;
-	height: 60px;
-	text-indent: -9999px;
-	position: fixed;
-	z-index: 999;
-	right: 20px;
-	bottom: 20px;
-	background: #202020 url("../icons/fleet.png") no-repeat center 43%;
+    display: none;
+    width: 60px;
+    height: 60px;
+    text-indent: -9999px;
+    position: fixed;
+    z-index: 999;
+    right: 20px;
+    bottom: 20px;
+    background: #202020 url("../icons/fleet.png") no-repeat center 43%;
 }
 
-  table {
+table {
     /*max-width: auto;*/
     border: 2px solid #337ab7;
     width: 100%;
-    margin:0;
-    padding:0;
+    margin: 0;
+    padding: 0;
     border-collapse: collapse;
     border-spacing: 0;
-  }
+}
 
-  table tr {
+table tr {
     border: 1px solid #337ab7;
     padding: 10px;
-  }
+}
 
-  table th, table td {
+table th, table td {
     padding: 10px;
     text-align: center;
-  }
+}
 
-  table th {
+table th {
     text-transform: uppercase;
     font-size: 14px;
-    letter-spacing: 0px;
-  }
+    letter-spacing: 0;
+}
 
-  @media screen and (max-width: 768px) {
+@media screen and (max-width: 768px) {
 
     table {
-      border: 0;
+        border: 0;
     }
 
     table thead {
-      display: none;
+        display: none;
     }
 
     table tr {
-      margin-bottom: 10px;
-      display: block;
-      border-bottom: 2px solid #337ab7;
+        margin-bottom: 10px;
+        display: block;
+        border-bottom: 2px solid #337ab7;
     }
 
     table td {
-      display: block;
-      text-align: right;
-      font-size: 13px;
-      border-bottom: 1px #337ab7;
+        display: block;
+        text-align: right;
+        font-size: 13px;
+        border-bottom: 1px #337ab7;
     }
 
     table td:last-child {
-      border-bottom: 0;
+        border-bottom: 0;
     }
 
     table td:before {
-      content: attr(data-label);
-      float: left;
-      text-transform: uppercase;
-      font-weight: bold;
+        content: attr(data-label);
+        float: left;
+        text-transform: uppercase;
+        font-weight: bold;
     }
-  }
+}

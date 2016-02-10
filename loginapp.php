@@ -43,44 +43,47 @@ class OneFileLoginApplication
     public function runApplication()
     {
         // check is user wants to register
-        if (isset($_GET['action'])){
+        if (isset($_GET['action'])) {
             if ($_GET['action'] === 'register') {
                 $this->doRegistration();
             }/* elseif ($_GET['action'] === 'recover') {
                 //$this->doPassRecovery();
                 //$this->showPassRecoveryPage();
                 */
-            } elseif ($_GET['action'] === 'temp') {
+            elseif ($_GET['action'] === 'temp') {
                 $this->doTempLogin();
-            /*} elseif ($_GET['action'] === 'change') {
-                $this->doPassChange();
-            }*/
+                /*} elseif ($_GET['action'] === 'change') {
+                    $this->doPassChange();
+                }*/
 
-        } else {
-            // start the session, always needed!
-            $this->loginStuff();
-            $this->getActiveAPI();
+            } else {
+                // start the session, always needed!
+                $this->loginStuff();
+                $this->getActiveAPI();
 
+            }
         }
     }
-    
-    private function getActiveAPI(){
+
+    private function getActiveAPI()
+    {
         //$_SESSION["keyID"] = "123456";
         //$_SESSION["vCode"] = "codecodecodecodecodecode";
     }
-    
-    private function loginStuff(){
-        
-            $this->doStartSession();
-            // check for possible user interactions (login with session/post data or logout)
-            $this->performUserLoginAction();
+
+    private function loginStuff()
+    {
+        $this->doStartSession();
+        // check for possible user interactions (login with session/post data or logout)
+        $this->performUserLoginAction();
     }
-    
-    private function doTempLogin(){
+
+    private function doTempLogin()
+    {
         if ($this->checkTempDataNotEmpty()) {
             $this->doStartSession();
             $keyID = $_POST['keyID'];
-            $vCode = $_POST['vCode']; 
+            $vCode = $_POST['vCode'];
             $_SESSION['keyID'] = $keyID;
             $_SESSION['vCode'] = $vCode;
             $_SESSION['selectedCharacter'] = 0;
@@ -89,7 +92,7 @@ class OneFileLoginApplication
             die();
         }
     }
-    
+
     private function createDatabaseConnection()
     {
         try {
@@ -102,7 +105,7 @@ class OneFileLoginApplication
             return false;
         }
         try {
-            $this->db_connection = new PDO('mysql:host='.$DB_Host.';dbname='.$DB_Name.';charset=utf8', $DB_User, $DB_Password);
+            $this->db_connection = new PDO('mysql:host=' . $DB_Host . ';dbname=' . $DB_Name . ';charset=utf8', $DB_User, $DB_Password);
             return true;
         } catch (PDOException $e) {
             $this->feedback = 'PDO database connection problem: ' . $e->getMessage();
@@ -132,9 +135,9 @@ class OneFileLoginApplication
      * It's cleaner to put this into a method than writing it directly into runApplication()
      */
     private function doStartSession()
-    {   
+    {
         session_set_cookie_params(7200);
-        if(session_status() === PHP_SESSION_NONE) {
+        if (session_status() === PHP_SESSION_NONE) {
             session_start();
         }
     }
@@ -319,29 +322,29 @@ class OneFileLoginApplication
             return true;
         } elseif (empty($_POST['user_name'])) {
             echo '<script type="text/javascript">';
-   			echo 'alert("Username field was empty.")';
-   			echo '</script>';
+            echo 'alert("Username field was empty.")';
+            echo '</script>';
         } elseif (empty($_POST['user_password'])) {
             echo '<script type="text/javascript">';
-   			echo 'alert("Password field was empty.")';
-   			echo '</script>';
+            echo 'alert("Password field was empty.")';
+            echo '</script>';
         }
         // default return
         return false;
     }
-    
+
     private function checkTempDataNotEmpty()
     {
         if (!empty($_POST['keyID']) && !empty($_POST['vCode'])) {
             return true;
         } elseif (empty($_POST['keyID'])) {
             echo '<script type="text/javascript">';
-   			echo 'alert("Key ID field was empty.")';
-   			echo '</script>';
+            echo 'alert("Key ID field was empty.")';
+            echo '</script>';
         } elseif (empty($_POST['vCode'])) {
             echo '<script type="text/javascript">';
-   			echo 'alert("Verification Code field was empty.")';
-   			echo '</script>';
+            echo 'alert("Verification Code field was empty.")';
+            echo '</script>';
         }
         // default return
         return false;
@@ -393,13 +396,13 @@ class OneFileLoginApplication
                 return true;
             } else {
                 echo '<script type="text/javascript">';
-   			echo 'alert("Wrong password.")';
-   			echo '</script>';
+                echo 'alert("Wrong password.")';
+                echo '</script>';
             }
         } else {
             echo '<script type="text/javascript">';
-   		    echo 'alert("This user does not exist.")';
-   		    echo '</script>';
+            echo 'alert("This user does not exist.")';
+            echo '</script>';
         }
         // default return
         return false;
@@ -432,45 +435,45 @@ class OneFileLoginApplication
             // only this case return true, only this case is valid
             return true;
         } elseif (empty($_POST['user_name'])) {
-			echo '<script type="text/javascript">';
-   			echo 'alert("Username can not be empty")';
-   			echo '</script>';
+            echo '<script type="text/javascript">';
+            echo 'alert("Username can not be empty")';
+            echo '</script>';
         } elseif (empty($_POST['user_password_new']) || empty($_POST['user_password_repeat'])) {
-			echo '<script type="text/javascript">';
-   			echo 'alert("Password can not be empty")';
-   			echo '</script>';
+            echo '<script type="text/javascript">';
+            echo 'alert("Password can not be empty")';
+            echo '</script>';
         } elseif ($_POST['user_password_new'] !== $_POST['user_password_repeat']) {
-			echo '<script type="text/javascript">';
-   			echo 'alert("Password and password repeat are not the same")';
-   			echo '</script>';
+            echo '<script type="text/javascript">';
+            echo 'alert("Password and password repeat are not the same")';
+            echo '</script>';
         } elseif (strlen($_POST['user_password_new']) < 6) {
-			echo '<script type="text/javascript">';
-   			echo 'alert("Password has a minimum length of 6 characters")';
-   			echo '</script>';
+            echo '<script type="text/javascript">';
+            echo 'alert("Password has a minimum length of 6 characters")';
+            echo '</script>';
         } elseif (strlen($_POST['user_name']) > 64 || strlen($_POST['user_name']) < 2) {
-			echo '<script type="text/javascript">';
-   			echo 'alert("Username cannot be shorter than 2 or longer than 16 characters")';
-   			echo '</script>';
+            echo '<script type="text/javascript">';
+            echo 'alert("Username cannot be shorter than 2 or longer than 16 characters")';
+            echo '</script>';
         } elseif (!preg_match('/^[a-z\d]{2,64}$/i', $_POST['user_name'])) {
-			echo '<script type="text/javascript">';
-   			echo 'alert("Username does not fit the name scheme: only a-Z and numbers are allowed, 2 to 16 characters")';
-   			echo '</script>';
+            echo '<script type="text/javascript">';
+            echo 'alert("Username does not fit the name scheme: only a-Z and numbers are allowed, 2 to 16 characters")';
+            echo '</script>';
         } elseif (empty($_POST['user_email'])) {
-			echo '<script type="text/javascript">';
-   			echo 'alert("Email cannot be empty")';
-   			echo '</script>';
+            echo '<script type="text/javascript">';
+            echo 'alert("Email cannot be empty")';
+            echo '</script>';
         } elseif (strlen($_POST['user_email']) > 64) {
-			echo '<script type="text/javascript">';
-   			echo 'alert("Email cannot be longer than 64 characters")';
-   			echo '</script>';
+            echo '<script type="text/javascript">';
+            echo 'alert("Email cannot be longer than 64 characters")';
+            echo '</script>';
         } elseif (!filter_var($_POST['user_email'], FILTER_VALIDATE_EMAIL)) {
-			echo '<script type="text/javascript">';
-   			echo 'alert("Your email address is not in a valid email format")';
-   			echo '</script>';
+            echo '<script type="text/javascript">';
+            echo 'alert("Your email address is not in a valid email format")';
+            echo '</script>';
         } else {
-			echo '<script type="text/javascript">';
-   			echo 'alert("An unknown error occurred.")';
-   			echo '</script>';
+            echo '<script type="text/javascript">';
+            echo 'alert("An unknown error occurred.")';
+            echo '</script>';
         }
 
         // default return
@@ -501,10 +504,10 @@ class OneFileLoginApplication
         // If you meet the inventor of PDO, punch him. Seriously.
         $result_row = $query->fetchObject();
         if ($result_row) {
-				echo '<script type="text/javascript">';
-				echo 'alert("Sorry, that username / email is already taken. Please choose another one.")';
-   				echo '</script>';
-                return true;
+            echo '<script type="text/javascript">';
+            echo 'alert("Sorry, that username / email is already taken. Please choose another one.")';
+            echo '</script>';
+            return true;
         } else {
             $sql = 'INSERT INTO users (user_name, user_password_hash, user_email)
                     VALUES(:user_name, :user_password_hash, :user_email)';
@@ -517,17 +520,17 @@ class OneFileLoginApplication
             $registration_success_state = $query->execute();
 
             if ($registration_success_state) {
-				echo '<script type="text/javascript">';
-   				echo 'alert("Your account has been created successfully. You can now log in.")';
+                echo '<script type="text/javascript">';
+                echo 'alert("Your account has been created successfully. You can now log in.")';
                 echo '</script>';
                 //header("Location: /eve/account.php?char=0");
                 //die();
-                
+
                 return true;
             } else {
-				echo '<script type="text/javascript">';
-   				echo 'alert("Sorry, your registration failed. Please go back and try again.")';
-   				echo '</script>';
+                echo '<script type="text/javascript">';
+                echo 'alert("Sorry, your registration failed. Please go back and try again.")';
+                echo '</script>';
             }
         }
         // default return
