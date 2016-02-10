@@ -23,7 +23,7 @@
                   <p id="browser">You are viewing this page in </p>
                   <p id="debugCache">Nothing in the Cache! </p>
                   ';
-                  var_dump($_SESSION);
+                  //var_dump($_SESSION);
               }
             }
             
@@ -53,8 +53,8 @@
 
 <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
-<script type="text/javascript" src="/eve/js/jquery.timeago.js"></script>
-<script type="text/javascript" src="/eve/js/countUP.js"></script>
-<script type="text/javascript" src="/eve/js/jquery.total-storage.js"></script>
-<script type="text/javascript" src="/eve/js/helperFunctions.js"></script>
-<script type="text/javascript" src="/eve/js/footerJS.js"></script>
+<script type="text/javascript" src="js/jquery.timeago.js"></script>
+<script type="text/javascript" src="js/countUP.js"></script>
+<script type="text/javascript" src="js/jquery.total-storage.js"></script>
+<script type="text/javascript" src="js/helperFunctions.js"></script>
+<script type="text/javascript" src="js/footerJS.js"></script>

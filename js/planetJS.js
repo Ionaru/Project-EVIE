@@ -42,7 +42,7 @@
           planetTypeName = row.getAttribute('planetTypeName');
           upgradeLevel = row.getAttribute('upgradeLevel');
           numberOfPins = row.getAttribute('numberOfPins');
-          src = '/eve/items/' + planetTypeID + '_64.png';
+          src = 'items/' + planetTypeID + '_64.png';
           $('#planetsNew').append('<div class="planetcontainer col-sm-12 col-md-12"><div id="planetDivNew' + planetID + '" class="planet"><span class="floating-box"><img class="img img-circle planetimg" src="' + src + '" alt="PlanetImg' + planetID + '" id="planetImgNew' + planetID + '">' + planetName + planetTypeName.replace('Planet', '') + '</span><span class="floating-box">Command Center Level ' + upgradeLevel + '</span><span class="floating-box" id="installations' + planetID + '">' + numberOfPins + ' Installations</span><span class="floating-box" id="harvesterActive' + planetID + 'New"></span><span class="floating-box text-right"><a class="btn btn-primary btn-xl">Expand</a></span></div></div>');
           $('#planets').append('<div class="planetcontainer text-center col-sm-6 col-md-4"><div id="planetDiv' + planetID + '" class="planet"><img class="img img-circle planetimg" src="' + src + '" alt="PlanetImg' + planetID + '" id="planetImg' + planetID + '"><p>' + planetName + planetTypeName.replace('Planet', '') + '<br>Command Center Level ' + upgradeLevel + '<br>' + numberOfPins + ' Installations</p></div></div>');
           getPlanetInstallations(keyID, vCode, charIDs, i, planetID);
@@ -135,7 +135,7 @@
         $('#skill' + typeID).html(skillName + ' ' + level);
       }
     };
-    request2.open('GET', 'https://api.eveonline.com//eve/TypeName.xml.aspx?ids=' + typeID, true);
+    request2.open('GET', 'https://api.eveonline.com/eve/TypeName.xml.aspx?ids=' + typeID, true);
     request2.send();
   };
 

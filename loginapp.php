@@ -14,10 +14,9 @@
 class OneFileLoginApplication
 {
     /**
-     * @var object Database connection
+     * @var Object database connection
      */
-    private $db_connection = null;
-    private $sql_connection = null;
+    private $db_connection;
 
     /**
      * @var bool Login status of user
@@ -27,86 +26,41 @@ class OneFileLoginApplication
     /**
      * @var string System messages, likes errors, notices, etc.
      */
-    public $feedback = "";
+    public $feedback = '';
 
 
     /**
-     * Does necessary checks for PHP version and PHP password compatibility library and runs the application
+     * Runs the application
      */
     public function __construct()
     {
-        if ($this->performMinimumRequirementsCheck()) {
-            $this->runApplication();
-        }
-    }
-
-    /**
-     * Performs a check for minimum requirements to run this application.
-     * Does not run the further application when PHP version is lower than 5.3.7
-     * Does include the PHP password compatibility library when PHP version lower than 5.5.0
-     * (this library adds the PHP 5.5 password hashing functions to older versions of PHP)
-     * @return bool Success status of minimum requirements check, default is false
-     */
-    private function performMinimumRequirementsCheck()
-    {
-        if (version_compare(PHP_VERSION, '5.3.7', '<')) {
-            echo "Sorry, Simple PHP Login does not run on a PHP version older than 5.3.7 !";
-        } elseif (version_compare(PHP_VERSION, '5.5.0', '<')) {
-            require_once("libraries/password_compatibility_library.php");
-            return true;
-        } elseif (version_compare(PHP_VERSION, '5.5.0', '>=')) {
-            return true;
-        }
-        // default return
-        return false;
+        $this->runApplication();
     }
 
     /**
      * This is basically the controller that handles the entire flow of the application.
      */
-     
-     /*
     public function runApplication()
     {
-        // check is user wants to see register page (etc.)
-        if (isset($_GET["action"]) && $_GET["action"] == "register") {
-            $this->doRegistration();
-            $this->showPageRegistration();
-        } else {
-            // start the session, always needed!
-            session_set_cookie_params(7200);
-            $this->doStartSession();
-            // check for possible user interactions (login with session/post data or logout)
-            $this->performUserLoginAction();
-            // show "page", according to user's login status
-            if ($this->getUserLoginStatus()) {
-               $this->showPageLoggedIn();
-            } else {
-                $this->showPageLoginForm();
-            }
-        }
-    }
-    
-    */
-    
-    public function runApplication()
-    {
-        // check is user wants to see register page (etc.)
-        if (isset($_GET["action"]) && $_GET["action"] == "register") {
-            $this->doRegistration();
-            //$this->showPageRegistration();
-        } elseif (isset($_GET["action"]) && $_GET["action"] == "recover") {
-            $this->doPassRecovery();
-            //$this->showPassRecoveryPage();
-        } elseif (isset($_GET["action"]) && $_GET["action"] == "temp") {
-            $this->doTempLogin();
-        } elseif (isset($_GET["action"]) && $_GET["action"] == "change") {
-            $this->doPassChange();
+        // check is user wants to register
+        if (isset($_GET['action'])){
+            if ($_GET['action'] === 'register') {
+                $this->doRegistration();
+            }/* elseif ($_GET['action'] === 'recover') {
+                //$this->doPassRecovery();
+                //$this->showPassRecoveryPage();
+                */
+            } elseif ($_GET['action'] === 'temp') {
+                $this->doTempLogin();
+            /*} elseif ($_GET['action'] === 'change') {
+                $this->doPassChange();
+            }*/
+
         } else {
             // start the session, always needed!
             $this->loginStuff();
             $this->getActiveAPI();
-            
+
         }
     }
     
@@ -120,28 +74,18 @@ class OneFileLoginApplication
             $this->doStartSession();
             // check for possible user interactions (login with session/post data or logout)
             $this->performUserLoginAction();
-            // show "page", according to user's login status
-            if ($this->getUserLoginStatus()) {
-               $this->showPageLoggedIn();
-            } else {
-                $this->showPageLoginForm();
-            }
     }
     
     private function doTempLogin(){
         if ($this->checkTempDataNotEmpty()) {
             $this->doStartSession();
-            echo '<script type="text/javascript">';
-   		    echo 'alert("'.var_dump($_SESSION).'")';
-   		    echo '</script>';
             $keyID = $_POST['keyID'];
             $vCode = $_POST['vCode']; 
-            $_SESSION["keyID"] = $keyID;
-            $_SESSION["vCode"] = $vCode;
-            $_SESSION["selectedCharacter"] = 0;
+            $_SESSION['keyID'] = $keyID;
+            $_SESSION['vCode'] = $vCode;
+            $_SESSION['selectedCharacter'] = 0;
             $this->user_is_logged_in = true;
-            $this->showPageLoggedIn();
-            header("Location: /eve/");
+            header('Location: index.php');
             die();
         }
     }
@@ -158,12 +102,12 @@ class OneFileLoginApplication
             return false;
         }
         try {
-            $this->db_connection = new PDO('mysql:host='.$DB_Host.';dbname='.DB_Name.';charset=utf8', $DB_User, $DB_Password);
+            $this->db_connection = new PDO('mysql:host='.$DB_Host.';dbname='.$DB_Name.';charset=utf8', $DB_User, $DB_Password);
             return true;
         } catch (PDOException $e) {
-            $this->feedback = "PDO database connection problem: " . $e->getMessage();
+            $this->feedback = 'PDO database connection problem: ' . $e->getMessage();
         } catch (Exception $e) {
-            $this->feedback = "General problem: " . $e->getMessage();
+            $this->feedback = 'General problem: ' . $e->getMessage();
         }
         return false;
     }
@@ -174,11 +118,11 @@ class OneFileLoginApplication
      */
     private function performUserLoginAction()
     {
-        if (isset($_GET["action"]) && $_GET["action"] == "logout") {
+        if (isset($_GET['action']) && $_GET['action'] === 'logout') {
             $this->doLogout();
-        } elseif (!empty($_SESSION['user_name']) && ($_SESSION['user_is_logged_in'])) {
+        } elseif (!empty($_SESSION['user_name']) && $_SESSION['user_is_logged_in']) {
             $this->doLoginWithSessionData();
-        } elseif (isset($_POST["login"])) {
+        } elseif (isset($_POST['login'])) {
             $this->doLoginWithPostData();
         }
     }
@@ -190,7 +134,9 @@ class OneFileLoginApplication
     private function doStartSession()
     {   
         session_set_cookie_params(7200);
-        if(session_status() == PHP_SESSION_NONE) session_start();
+        if(session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
     }
 
     /**
@@ -206,10 +152,8 @@ class OneFileLoginApplication
      */
     private function doLoginWithPostData()
     {
-        if ($this->checkLoginFormDataNotEmpty()) {
-            if ($this->createDatabaseConnection()) {
-                $this->checkPasswordCorrectnessAndLogin();
-            }
+        if ($this->checkLoginFormDataNotEmpty() && $this->createDatabaseConnection()) {
+            $this->checkPasswordCorrectnessAndLogin();
         }
     }
 
@@ -229,26 +173,25 @@ class OneFileLoginApplication
      */
     private function doRegistration()
     {
-        if ($this->checkRegistrationData()) {
-            if ($this->createDatabaseConnection()) {
-                $this->createNewUser();
-            }
+        if ($this->checkRegistrationData() && $this->createDatabaseConnection()) {
+            $this->createNewUser();
         }
         // default return
         return false;
     }
-    
+
+    /*
     private function doPassChange()
     {
-        $oldpass = "1";
-        $newpass = "2";
-        $newpass2 = "3";
-        $username = "4";
+        $oldpass = '1';
+        $newpass = '2';
+        $newpass2 = '3';
+        $username = '4';
         $oldpass = $_POST['user_password_old'];
         $newpass = $_POST['user_password_new'];
         $newpass2 = $_POST['user_password_repeat'];
         $username = $_POST['user_name'];
-        if($newpass == $newpass2){
+        if($newpass === $newpass2){
             $oldpasshash =  password_hash($oldpass, PASSWORD_DEFAULT);
             $this->createDatabaseConnection();
             $sql = 'SELECT user_password_hash, user_email FROM users WHERE user_name = "'.$username.'" LIMIT 1';
@@ -269,7 +212,9 @@ class OneFileLoginApplication
                         $this->loginStuff();
                         return true;
                     } catch (PDOException $e) {
-                        var_dump($e->getMessage());
+                        echo '<script type="text/javascript">';
+                        echo 'alert("Database Error")';
+                        echo '</script>';
                     }
                 }
                 else {
@@ -286,7 +231,8 @@ class OneFileLoginApplication
         }
         return false;
     }
-    
+    */
+    /*
     private function doPassRecovery()
     {
         try {
@@ -361,6 +307,7 @@ class OneFileLoginApplication
         }
         return false;
     }
+    */
 
     /**
      * Validates the login form data, checks if username and password are provided
@@ -440,7 +387,8 @@ class OneFileLoginApplication
                 $result_row2 = $query2->fetchObject();
                 if ($result_row2) {
                     $_SESSION['keyID'] = $result_row2->apikey_keyid;
-                    $_SESSION['vCode'] = $result_row2->apikey_vcode;  
+                    $_SESSION['vCode'] = $result_row2->apikey_vcode;
+                    $_SESSION['selectedCharacter'] = 0;
                 }
                 return true;
             } else {
@@ -464,7 +412,7 @@ class OneFileLoginApplication
     private function checkRegistrationData()
     {
         // if no registration form submitted: exit the method
-        if (!isset($_POST["register"])) {
+        if (!isset($_POST['register'])) {
             return false;
         }
 
@@ -594,31 +542,7 @@ class OneFileLoginApplication
     {
         return $this->user_is_logged_in;
     }
-
-    /**
-     * Simple demo-"page" that will be shown when the user is logged in.
-     * In a real application you would probably include an html-template here, but for this extremely simple
-     * demo the "echo" statements are totally okay.
-     */
-    private function showPageLoggedIn()
-    {
-        if ($this->feedback) {
-        }
-    }
-
-    private function showPageLoginForm()
-    {
-        if ($this->feedback) {
-        }
-    }
-
-    private function showPageRegistration()
-    {
-        if ($this->feedback) {
-        }
-    }
 }
 
 // run the application
 $application = new OneFileLoginApplication();
-?>

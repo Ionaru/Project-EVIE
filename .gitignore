@@ -1,7 +1,10 @@
-*.png
-*.svg
 404.php
 *.htaccess
 403.php
 config/EVIEdatabase.ini
 config/EVIEmail.ini
+Project EVIE.iml
+Project_EVIE.iml
+.idea/
+icons/
+items/

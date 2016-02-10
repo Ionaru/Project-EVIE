@@ -58,11 +58,11 @@ a.back-to-top {
 	z-index: 999;
 	right: 20px;
 	bottom: 20px;
-	background: #202020 url("icons/fleet.png") no-repeat center 43%;
+	background: #202020 url("../icons/fleet.png") no-repeat center 43%;
 }
 
   table {
-    max-width: auto;
+    /*max-width: auto;*/
     border: 2px solid #337ab7;
     width: 100%;
     margin:0;

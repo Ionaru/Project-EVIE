@@ -1,122 +1,28 @@
 
 <?php
-  $dashboardactive = "";
-  $dashboardactivembl = "";
-  $skillsactive = ""; 
-  $skillsactivembl = "";
-  $mailactive = "";
-  $mailactivembl = "";
-  $marketactive = "";
-  $marketactivembl = "";
-  $walletactive = "";
-  $walletactivembl = "";
-  $assetsactive = "";
-  $assetsactivembl = "";
-  $contactsactive = "";
-  $contactsactivembl = "";
-  $planetsactive = "";
-  $planetsactivembl = "";
-  $industryactive = "";
-  $industryactivembl = "";
-  $calendaractive = "";
-  $calendaractivembl = "";
-  $settingsactive = "";
-  $settingsactivembl = "";             
-
-   switch  ($url) {
-    case "index.php":
-        $dashboardactive = 'class="active"';
-        $dashboardactivembl = 'style="background-color: #404040;"';
-        $title = 'Dashboard';
-        break;
-    case "skills.php":
-        $skillsactive = 'class="active"';
-        $skillsactivembl = 'style="background-color: #404040;"';
-        $title = 'Skills';
-        break;
-    case "mail.php":
-        $mailactive = 'class="active"';
-        $mailactivembl = 'style="background-color: #404040;"';
-        $title = 'Eve Mail';
-        break;
-    case "market.php":
-        $marketactive = 'class="active"';
-        $marketactivembl = 'style="background-color: #404040;"';
-        $title = 'Market';
-        break;
-    case "wallet.php":
-        $walletactive = 'class="active"';
-        $walletactivembl = 'style="background-color: #404040;"';
-        $title = 'Wallet';
-        break;
-    case "assets.php":
-        $assetsactive = 'class="active"';
-        $assetsactivembl = 'style="background-color: #404040;"';
-        $title = 'Assets';
-        break;
-    case "contacts.php":
-        $contactsactive = 'class="active"';
-        $contactsactivembl = 'style="background-color: #404040;"';
-        $title = 'Contacts';
-        break;
-    case "planets.php":
-        $planetsactive = 'class="active"';
-        $planetsactivembl = 'style="background-color: #404040;"';
-        $title = 'Planets';
-        break;
-    case "industry.php":
-        $industryactive = 'class="active"';
-        $industryactivembl = 'style="background-color: #404040;"';
-        $title = 'Industry';
-        break;
-    case "calendar.php":
-        $calendaractive = 'class="active"';
-        $calendaractivembl = 'style="background-color: #404040;"';
-        $title = 'Calendar';
-        break;
-    case "settings.php":
-        $settingsactive = 'class="active"';
-        $settingsactivembl = 'style="background-color: #404040;"';
-        $title = 'Settings';
-        break;
-    case "account.php":
-        //$accountactive = 'class="active"';
-        //$accountactivembl = 'style="background-color: #404040;"';
-        $title = 'Account';
-        break;
-    case "apikeys.php":
-        //$accountactive = 'class="active"';
-        //$accountactivembl = 'style="background-color: #404040;"';
-        //$title = 'Account';
-        break;
-    default:
-        $title = 'Unknown';
-        break;
-}
-
   if(isset ($_GET['char'])){
     if(!empty($_GET)){ 
       $selectedChar = $_GET['char'];
       if($selectedChar > 2){
          $selectedChar = 0;
-         header("Location: /eve/index.php?char=0");
+         header("Location: index.php?char=0");
          die(); 
       }
       else if ($selectedChar == "") {
          $selectedChar = 0;
-         header("Location: /eve/index.php?char=0");
+         header("Location: index.php?char=0");
          die();
       }
     }
     else{
        $selectedChar = 0;
-       header("Location: /eve/index.php?char=0");
+       header("Location: index.php?char=0");
        die(); 
     }
   }
   else{
        $selectedChar = 0;
-       header("Location: /eve/index.php?char=0");
+       header("Location: index.php?char=0");
        die(); 
   }
 $charactivecss = '"padding-top: 12px; max-height: 50px; background-color: #404040; border-top: 3px solid #337ab7;"'; 
@@ -156,8 +62,8 @@ switch ($selectedChar) {
     } ?>
       <ul class="nav navbar-nav navbar-right hidden-xs" style="max-height: 50px;">
       <?php 
-      $url = get_string_between($_SERVER['REQUEST_URI'], '/eve/', '?');
-      if(($url != "index.php") && ($url != "account.php") && ($url != "apikeys.php")){
+      $url = $_SERVER['REQUEST_URI'];
+      if((strpos($url, 'index.php') == false) && (strpos($url, 'account.php') == false) && (strpos($url, 'apikeys.php') == false)){
        echo' 
         <li><a ID="charLink0" style='.$char0active.' href="?char=0"><img alt="char0" id="char0" style="max-height: 50px" class="img" src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" width="50" height="50"></a></li>
         <li><a ID="charLink1" style='.$char1active.' href="?char=1"><img alt="char1" id="char1" style="max-height: 50px" class="img" src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" width="50" height="50"></a></li>

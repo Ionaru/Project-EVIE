@@ -5,48 +5,94 @@ Start session and load loginapp
 session_start();
 include "loginapp.php";
 
-$url = get_string_between($_SERVER['REQUEST_URI'], '/eve/', '?');
+$title = "";
+$dashboardactive = "";
+$dashboardactivembl = "";
+$skillsactive = "";
+$skillsactivembl = "";
+$mailactive = "";
+$mailactivembl = "";
+$marketactive = "";
+$marketactivembl = "";
+$walletactive = "";
+$walletactivembl = "";
+$assetsactive = "";
+$assetsactivembl = "";
+$contactsactive = "";
+$contactsactivembl = "";
+$planetsactive = "";
+$planetsactivembl = "";
+$industryactive = "";
+$industryactivembl = "";
+$calendaractive = "";
+$calendaractivembl = "";
+$settingsactive = "";
+$settingsactivembl = "";
+
+$url = $_SERVER['REQUEST_URI'];
    switch  ($url) {
-    case "index.php":
+    case (strpos($url, 'index.php') !== false):
         $title = 'Dashboard';
+        $dashboardactive = 'class="active"';
+        $dashboardactivembl = 'style="background-color: #404040;"';
         break;
-    case "character.php":
+    case (strpos($url, 'character.php') !== false):
         $title = 'Character Sheet';
         break;
-    case "mail.php":
+    case (strpos($url, 'mail.php') !== false):
         $title = 'Eve Mail';
+        $mailactive = 'class="active"';
+        $mailactivembl = 'style="background-color: #404040;"';
         break;
-    case "skills.php":
+    case (strpos($url, 'skills.php') !== false):
         $title = 'Skills';
+        $skillsactive = 'class="active"';
+        $skillsactivembl = 'style="background-color: #404040;"';
         break;
-    case "market.php":
+    case (strpos($url, 'market.php') !== false):
         $title = 'Market';
+        $marketactive = 'class="active"';
+        $marketactivembl = 'style="background-color: #404040;"';
         break;
-    case "wallet.php":
+    case (strpos($url, 'wallet.php') !== false):
         $title = 'Wallet';
+        $walletactive = 'class="active"';
+        $walletactivembl = 'style="background-color: #404040;"';
         break;
-    case "assets.php":
+    case (strpos($url, 'assets.php') !== false):
         $title = 'Assets';
+        $assetsactive = 'class="active"';
+        $assetsactivembl = 'style="background-color: #404040;"';
         break;
-    case "contacts.php":
+    case (strpos($url, 'contacts.php') !== false):
         $title = 'Contacts';
+        $contactsactive = 'class="active"';
+        $contactsactivembl = 'style="background-color: #404040;"';
         break;
-    case "industry.php":
+    case (strpos($url, 'industry.php') !== false):
         $title = 'Industry';
+        $industryactive = 'class="active"';
+        $industryactivembl = 'style="background-color: #404040;"';
         break;
-    case "calendar.php":
+    case (strpos($url, 'calendar.php') !== false):
         $title = 'Calendar';
+        $calendaractive = 'class="active"';
+        $calendaractivembl = 'style="background-color: #404040;"';
         break;
-    case "settings.php":
+    case (strpos($url, 'settings.php') !== false):
         $title = 'Settings';
+        $settingsactive = 'class="active"';
+        $settingsactivembl = 'style="background-color: #404040;"';
         break; 
-    case "planets.php":
+    case (strpos($url, 'planets.php') !== false):
         $title = 'Planets';
+        $planetsactive = 'class="active"';
+        $planetsactivembl = 'style="background-color: #404040;"';
         break;
-    case "account.php":
+    case (strpos($url, 'account.php') !== false):
         $title = 'Account';
         break;
-    case "apikeys.php":
+    case (strpos($url, 'apikeys.php') !== false):
         $title = 'API Key Management';
         break;
     default:
@@ -54,13 +100,13 @@ $url = get_string_between($_SERVER['REQUEST_URI'], '/eve/', '?');
         break;
 }
 
-if ((empty($_SESSION)) && ($url != "account.php")){
-    header("Location: /eve/account.php?char=0");
+if ((empty($_SESSION)) && (strpos($url, 'account.php') == false)){
+    header("Location: account.php?char=0");
     die();
 }
 
-if ((empty($_SESSION['keyID'])) && ($url != "apikeys.php") && ($url != "account.php")){
-    header("Location: /eve/apikeys.php?char=0");
+if ((empty($_SESSION['keyID'])) && (strpos($url, 'apikeys.php') == false) && (strpos($url, 'account.php') == false)){
+    header("Location: apikeys.php?char=0");
     die();
 }  
 
@@ -88,7 +134,7 @@ function get_string_between($string, $start, $end){
 <title>Project EVIE - <?php echo $title; ?></title>
 <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
-<link href="css/dashboard.css" rel="stylesheet">
+<link rel="stylesheet" href="css/dashboard.css">
 <link rel="stylesheet" href="css/EVIE.css">
 
 <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->

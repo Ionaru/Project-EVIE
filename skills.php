@@ -1,30 +1,28 @@
 <?php ob_start();?>
-<?php include "head.php"; ?>
-<?php include "nav.php"; ?>
+<?php include 'head.php'; ?>
+<?php include 'nav.php'; ?>
 
-       <div id="CurrentlyTraining" class="container-fluid">
-       
-        </div>
-       <div id="1234" class="container-fluid">
+   <div id="CurrentlyTraining" class="container-fluid">
+
+   </div>
+   <div id="1234" class="container-fluid">
         <div class="panel-group" id="accordion">
-  <div class="panel panel-default">
-    <div class="panel-heading">
-      <h4 class="panel-title">
-        <a data-toggle="collapse" data-parent="#accordion" href="#collapse1">
-        Skills</a>
-      </h4>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h4 class="panel-title">
+                    <a data-toggle="collapse" data-parent="#accordion" href="#collapse1">Skills</a>
+                    </h4>
+                </div>
+                <div id="collapse1" class="panel-collapse collapse in">
+                    <div id="5555" class="panel-body">
+                        <div id="skilllist"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-    <div id="collapse1" class="panel-collapse collapse in">
-      <div id="5555" class="panel-body">
-      
-      <div id="skilllist"></div>
-      
-      </div>
-    </div>
-  </div>
-  </div>
        
-<?php include "foot.php"; ?> 
+<?php include 'foot.php'; ?>
 <script>
 
     $('#myTabs a').click(function (e) {
@@ -53,9 +51,7 @@ $(document).ready(function() {
                   for(var i = 0; i < charIDs.length; i++) {
                     $("#char" + i).attr('src','https://image.eveonline.com/Character/' + charIDs[i] + '_50.jpg');
                     $("#charmbl" + i).attr('src','https://image.eveonline.com/Character/' + charIDs[i] + '_256.jpg');
-                    $("#char" + i).css("visibility", "visible");
-                    $("#charmbl" + i).css("visibility", "visible");
-                    $("#charLink" + i).css("visibility", "visible");
+                    $("#char" + i, "#charmbl" + i, "#charLink" + i).css("visibility", "visible");
                     //$("#charlink" + i).attr('title','Hello');
                     }
                     //getWalletJournal(keyID, vCode, charIDs, refTypes, <?php echo $selectedChar ?>);
@@ -241,7 +237,7 @@ function getSkillInTraining(keyID, vCode, charIDs, i){
           getSkillTimeRemaining(trainingStartTime, currentTQTime, trainingEndTime, i);
         }
       };
-      request2.open("GET", "https://api.eveonline.com//eve/TypeName.xml.aspx?ids=" + skillID, true);
+      request2.open("GET", "https://api.eveonline.com/eve/TypeName.xml.aspx?ids=" + skillID, true);
       request2.send();
     }
     else {
@@ -324,7 +320,7 @@ function getSkillNames(skills){
               
         }
       };
-      request.open("GET", "https://api.eveonline.com//eve/TypeName.xml.aspx?ids=" + skillIDs, true);
+      request.open("GET", "https://api.eveonline.com/eve/TypeName.xml.aspx?ids=" + skillIDs, true);
       request.send();
 }
 

@@ -7,7 +7,7 @@
 
 <?php include "foot.php"; ?>
 
-<script type="text/javascript" src="/eve/js/planetJS.js"></script>
+<script type="text/javascript" src="js/planetJS.js"></script>
 </body>
 </html>
 <?php ob_flush(); ?>

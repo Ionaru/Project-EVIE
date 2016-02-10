@@ -43,17 +43,17 @@ function checkForError($data){
 function doAction($action, $id){
         if($action == "setActive"){
             setActive($id);
-            header("Location: /eve/index.php");
+            header("Location: index.php");
             die();    
         }
         else if($action == "delete"){
            deleteKey($id);
-           header("Location: /eve/apikeys.php?char=0");
+           header("Location: apikeys.php?char=0");
             die();
         }
         else if($action == "addKey"){
            addKey();
-           header("Location: /eve/apikeys.php?char=0");
+           header("Location: apikeys.php?char=0");
             die();
         }
 }
@@ -135,9 +135,18 @@ function deleteKey($id){
  
 function createDatabaseConnection()
     {
+        try {
+            $config = parse_ini_file('config/EVIEdatabase.ini');
+            $DB_Host = $config['DB_Host'];
+            $DB_Name = $config['DB_Name'];
+            $DB_User = $config['DB_User'];
+            $DB_Password = $config['DB_Password'];
+        } catch (Exception $e) {
+            return false;
+        }
         global $db_connection;
         try {
-            $db_connection = new PDO('mysql:host=localhost;dbname=web_evie;charset=utf8', 'Ionaru', 'Fontys1.7');
+            $db_connection = new PDO('mysql:host='.$DB_Host.';dbname='.$DB_Name.';charset=utf8', $DB_User, $DB_Password);
             return true;
         } catch (PDOException $e) {
             $this->feedback = "PDO database connection problem: " . $e->getMessage();

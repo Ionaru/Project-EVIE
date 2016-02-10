@@ -100,7 +100,7 @@ function getSkillInTraining(keyID, vCode, charIDs, i){
           $("#CurrentlyTraining").html('<a style="color: black;" href="skills.php?char=' + i + '">' + skillName + " " + skillLvl + "</a>");
         }
       };
-      request2.open("GET", "https://api.eveonline.com//eve/TypeName.xml.aspx?ids=" + skillID, true);
+      request2.open("GET", "https://api.eveonline.com/eve/TypeName.xml.aspx?ids=" + skillID, true);
       request2.send();
     }
     else {
@@ -165,7 +165,7 @@ function getItemName(typeID, level){
               $('#skill' + typeID).html(skillName + ' ' + level);
         }
       };
-      request2.open("GET", "https://api.eveonline.com//eve/TypeName.xml.aspx?ids=" + typeID, true);
+      request2.open("GET", "https://api.eveonline.com/eve/TypeName.xml.aspx?ids=" + typeID, true);
       request2.send();
       }
 

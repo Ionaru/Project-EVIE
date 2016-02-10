@@ -1,31 +1,19 @@
 <?php ob_start();
+include 'head.php';
+include 'nav.php'; ?>
 
-if ($_SERVER['REQUEST_URI'] == "/eve/")
-{
-  header("Location: /eve/index.php");
-  die();  
-}
+    <h2>Account Information</h2>
+    <div id="AccountInfo"></div>
+    <hr>
+    <h2>Characters</h2>
+    <div id="CharacterDivs" class="row placeholders">
+    </div>
 
-function select(){
-  
-}
-
-
-?>
-<?php include "head.php"; ?>
-<?php include "nav.php"; ?>
-<h2>Account Information</h2>
-  <div id="AccountInfo"></div>
-  <hr>
-  <h2>Characters</h2>
-  <div id="CharacterDivs" class="row placeholders">
-  </div>
-
-<?php include "foot.php"; ?>
-    <script>       
-    $(function () {
-      $('[data-toggle="tooltip"]').tooltip()
-    })    
+<?php include 'foot.php'; ?>
+<script>
+$(function () {
+  $('[data-toggle='tooltip']').tooltip()
+})
     
 $(document).ready(function() {
     getAccountInfo(keyID, vCode);
@@ -73,7 +61,7 @@ $(document).ready(function() {
           //document.getElementById("ImageAccount1Character2").src="https://image.eveonline.com/Character/" + charIDs[1] + "_256.jpg";
           for(var i = 0; i < charIDs.length; i++) {
               document.getElementById("ImageAccount1Character" + (i + 1)).src="https://image.eveonline.com/Character/" + charIDs[i] + "_256.jpg";
-              <?php if(get_string_between($_SERVER['REQUEST_URI'], '/eve/', '?') != "index.php"){
+              <?php if(strpos($_SERVER['REQUEST_URI'], 'index.php') == false){
               echo'
               document.getElementById("char" + i).src="https://image.eveonline.com/Character/" + charIDs[i] + "_256.jpg";
               document.getElementById("char" + i).style="max-height: 50px;";
