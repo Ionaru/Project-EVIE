@@ -17,7 +17,6 @@
             incorrect.</p>
         <p>Material related to EVE Online is used with limited permission of CCP Games hf. No official affiliation or
             endorsement by CCP Games hf is stated or implied.</p>
-        ?>
     </div>
 
 </footer>

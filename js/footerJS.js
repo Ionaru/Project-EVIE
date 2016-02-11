@@ -35,6 +35,37 @@ jQuery(document).ready(function () {
         $("#imageCalendar").attr('src', 'icons/calendar.png');
         $("#imageSettings").attr('src', 'icons/settings.png');
     }
+
+    var charIDs, charRequest;
+    charIDs = [];
+    charRequest = new XMLHttpRequest;
+    charRequest.onreadystatechange = function () {
+        var charID, i, row, rows, xml;
+        if (charRequest.readyState === 4 && charRequest.status === 200) {
+            xml = charRequest.responseXML;
+            rows = xml.getElementsByTagName('row');
+            i = 0;
+            while (i < rows.length) {
+                row = rows[i];
+                charID = row.getAttribute('characterID');
+                charIDs[i] = charID;
+                i++;
+            }
+            i = 0;
+            var css = "characterInactive";
+            while (i < charIDs.length) {
+                if (i == selectedCharacter) {
+                    css = "characterActive";
+                }
+                if (!!document.getElementById("charLinks")) {
+                    $('#charLinks').append('<li><a id="charLink' + i + '" class="' + css + '" href="?char=' + i + '"><img alt="char' + i + '" id="char' + i + '" style="max-height: 50px" class="img" src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" width="50" height="50"></a></li>');
+                    i++;
+                }
+            }
+        }
+    };
+    charRequest.open('GET', 'https://api.eveonline.com/account/Characters.xml.aspx?keyID=' + keyID + '&vCode=' + vCode, true);
+    charRequest.send();
 });
 
 //Get Character ID from a name

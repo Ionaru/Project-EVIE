@@ -42,6 +42,18 @@ ul.bottom {
     padding: 10px;
 }
 
+.characterActive {
+    padding-top: 12px;
+    max-height: 50px;
+    background-color: #404040;
+    border-top: 3px solid #337ab7;
+}
+
+.characterInactive {
+    max-height: 50px;
+    visibility: hidden;
+}
+
 a.anchor {
     display: block;
     position: relative;

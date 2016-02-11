@@ -31,11 +31,6 @@ include 'nav.php'; ?>
                         charNames[i] = charName;
                         charIDs[i] = charID;
                     }
-                    /*
-                     //$('#WalletContent').append('<h2>Journal</h2><table class="table"><thead><tr><th style="width: 25%">Date (EVE Time)</th><th style="width: 25%">Type</th><th style="width: 25%">Amount</th><th style="width: 25%">Balance</th></tr></thead><tbody id="WalletJournalBody' + <?php echo($selectedChar + 1) ?> + '"></tbody></table></div>');
-                     //$('#WalletContent').append('<h2>Transactions</h2><table class="table"><thead><tr><th style="width: 20%">Date (EVE Time)</th><th style="width: 40%">Information</th><th style="width: 40%">Price</th></tr></thead><tbody id="WalletTransactionsBody' + <?php echo($selectedChar + 1) ?> + '"></tbody></table></div>');
-                     */
-                    //console.log(charIDs);
                     for (var i = 0; i < charIDs.length; i++) {
                         $("#mobilecharacter").append('<div class="col-xs-4 col-centered text-center"><a href="?char=' + i + '"><img alt="character" src="https://image.eveonline.com/Character/' + charIDs[i] + '_50.jpg"></a></div>');
                         $("#char" + i).attr('src', 'https://image.eveonline.com/Character/' + charIDs[i] + '_50.jpg');
@@ -63,9 +58,9 @@ include 'nav.php'; ?>
                         document.getElementById("ImageAccount1Character" + (i + 1)).src = "https://image.eveonline.com/Character/" + charIDs[i] + "_256.jpg";
                         <?php if (strpos($_SERVER['REQUEST_URI'], 'index.php') === false) {
                         echo '
-              document.getElementById("char" + i).src="https://image.eveonline.com/Character/" + charIDs[i] + "_256.jpg";
-              document.getElementById("char" + i).style="max-height: 50px;";
-              ';
+                              document.getElementById("char" + i).src="https://image.eveonline.com/Character/" + charIDs[i] + "_256.jpg";
+                              document.getElementById("char" + i).style="max-height: 50px;";
+                              ';
                     }?>
                     }
                     //getWalletJournal(keyID, vCode, charIDs, refTypes, <?php echo $selectedChar ?>);
