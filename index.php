@@ -31,6 +31,7 @@ include 'nav.php'; ?>
                         charNames[i] = charName;
                         charIDs[i] = charID;
                     }
+
                     for (var i = 0; i < charIDs.length; i++) {
                         $("#mobilecharacter").append('<div class="col-xs-4 col-centered text-center"><a href="?char=' + i + '"><img alt="character" src="https://image.eveonline.com/Character/' + charIDs[i] + '_50.jpg"></a></div>');
                         $("#char" + i).attr('src', 'https://image.eveonline.com/Character/' + charIDs[i] + '_50.jpg');
