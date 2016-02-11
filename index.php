@@ -12,17 +12,13 @@ include 'nav.php'; ?>
 <?php include 'foot.php'; ?>
     <script>
         $(function () {
-            $('[data-toggle='
-            tooltip
-            ']'
-            ).
-            tooltip()
-        })
+            $('[data-toggle="tooltip"]').tooltip();
+        });
 
         $(document).ready(function () {
             getAccountInfo(keyID, vCode);
-            var charIDs = new Array();
-            var charNames = new Array();
+            var charIDs = [];
+            var charNames = [];
             var charRequest = new XMLHttpRequest();
             charRequest.onreadystatechange = function () {
                 if (charRequest.readyState == 4 && charRequest.status == 200) {
@@ -65,7 +61,7 @@ include 'nav.php'; ?>
                     //document.getElementById("ImageAccount1Character2").src="https://image.eveonline.com/Character/" + charIDs[1] + "_256.jpg";
                     for (var i = 0; i < charIDs.length; i++) {
                         document.getElementById("ImageAccount1Character" + (i + 1)).src = "https://image.eveonline.com/Character/" + charIDs[i] + "_256.jpg";
-                        <?php if (strpos($_SERVER['REQUEST_URI'], 'index.php') == false) {
+                        <?php if (strpos($_SERVER['REQUEST_URI'], 'index.php') === false) {
                         echo '
               document.getElementById("char" + i).src="https://image.eveonline.com/Character/" + charIDs[i] + "_256.jpg";
               document.getElementById("char" + i).style="max-height: 50px;";
@@ -126,7 +122,7 @@ include 'nav.php'; ?>
             var seconds = Math.floor((distance % _minute) / _second);
             //console.log(minutes);
             //console.log(seconds);
-            var output = ""
+            var output = "";
             if (days > 0) {
                 if (days == 1) {
                     output += (days + " day");
@@ -236,7 +232,7 @@ include 'nav.php'; ?>
                 var seconds = Math.floor((distance % _minute) / _second);
                 //console.log(minutes);
                 //console.log(seconds);
-                var output = ""
+                var output = "";
                 if (days > 0) {
                     if (days == 1) {
                         output += (days + " day");
@@ -350,7 +346,7 @@ include 'nav.php'; ?>
                 var seconds = Math.floor((distance % _minute) / _second);
                 //console.log(minutes);
                 //console.log(seconds);
-                var output = ""
+                var output = "";
                 if (days > 0) {
                     if (days == 1) {
                         output += (days + " day");

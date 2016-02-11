@@ -6,7 +6,6 @@
             echo '<input id="passAlong_keyID" type="hidden" value="' . $_SESSION['keyID'] . '" />';
             echo '<input id="passAlong_vCode" type="hidden" value="' . $_SESSION['vCode'] . '" />';
             echo '<input id="passAlong_selectedCharacter" type="hidden" value="' . $_SESSION['selectedCharacter'] . '" />';
-            var_dump($_SESSION);
         }
         ?>
 
@@ -18,6 +17,7 @@
             incorrect.</p>
         <p>Material related to EVE Online is used with limited permission of CCP Games hf. No official affiliation or
             endorsement by CCP Games hf is stated or implied.</p>
+        ?>
     </div>
 
 </footer>

@@ -44,6 +44,7 @@ class OneFileLoginApplication
     {
         // check is user wants to register
         if (isset($_GET['action'])) {
+            error_log('DEBUG: Action set');
             if ($_GET['action'] === 'register') {
                 $this->doRegistration();
             }/* elseif ($_GET['action'] === 'recover') {
@@ -56,19 +57,11 @@ class OneFileLoginApplication
                     $this->doPassChange();
                 }*/
 
-            } else {
-                // start the session, always needed!
-                $this->loginStuff();
-                $this->getActiveAPI();
-
             }
+        }else {
+            // start the session, always needed!
+            $this->loginStuff();
         }
-    }
-
-    private function getActiveAPI()
-    {
-        //$_SESSION["keyID"] = "123456";
-        //$_SESSION["vCode"] = "codecodecodecodecodecode";
     }
 
     private function loginStuff()

@@ -1,8 +1,8 @@
 <?php ob_start(); ?>
-<?php include "head.php"; ?>
-<?php include "nav.php";
+<?php include 'head.php'; ?>
+<?php include 'nav.php';
 
-if (isset ($_GET['action']) && isset ($_GET['id'])) {
+if (isset ($_GET['action'], $_GET['id'])) {
     doAction($_GET['action'], $_GET['id']);
 } else if (isset ($_GET['action']) && !isset ($_GET['id'])) {
     $id = 0;
@@ -26,6 +26,7 @@ function getAPIInfo($keyID, $vCode)
             return $data;
         }
     }
+    return false;
 }
 
 function getAPIType($data)
@@ -80,7 +81,7 @@ function addKey()
 function setAllKeysInactive()
 {
     $db_connection = createDatabaseConnection();
-    $sql2 = 'UPDATE `apikeys` SET `apikey_isactive`= 0 WHERE `user_name`=\'' . $_SESSION['user_name'] . '\'';
+    $sql2 = 'UPDATE apikeys SET apikey_isactive = 0 WHERE user_name = \'' . $_SESSION['user_name'] . '\'';
     $query = $db_connection->prepare($sql2);
     $query->execute();
 }
@@ -114,7 +115,7 @@ function deleteKey($id)
     $sql = 'SELECT user_name FROM apikeys WHERE apikey_id=' . $id . ';';
     foreach ($db_connection->query($sql) as $row) {
         if ($row['user_name'] === $_SESSION['user_name']) {
-            $sql2 = 'DELETE FROM `apikeys` WHERE `user_name`=\'' . $_SESSION['user_name'] . '\' AND `apikey_id`=\'' . $id . '\'';
+            $sql2 = 'DELETE FROM `apikeys` WHERE `user_name` =\'' . $_SESSION['user_name'] . '\' AND `apikey_id`=\'' . $id . '\'';
             $query = $db_connection->prepare($sql2);
             $query->execute();
             unset($_SESSION['keyID'], $_SESSION['vCode']);
@@ -159,7 +160,7 @@ function getUserAPIKeys()
     global $apikey_type;
     global $apikey_isactive;
     global $apikey_dateadded;
-    $sql = 'SELECT * FROM apikeys WHERE user_name='.$_SESSION['user_name'];
+    $sql = 'SELECT * FROM apikeys WHERE user_name = \''.$_SESSION['user_name'].'\'';
     foreach ($db_connection->query($sql) as $row) {
         $apikey_id = $row['apikey_id'];
         $apikey_name = $row['apikey_name'];

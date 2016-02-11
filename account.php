@@ -1,6 +1,6 @@
 <?php ob_start(); ?>
-<?php include "head.php"; ?>
-<?php include "nav.php"; ?>
+<?php include 'head.php'; ?>
+<?php include 'nav.php'; ?>
 <?php //include "loginapp.php";?>
     <div id="alertbox" role="alert"></div>
     <div class="hidden-xs" id="accountLarge">
@@ -83,7 +83,7 @@
         <div id="loginModal" class="modal fade">
             <div class="modal-dialog modal-sm">
                 <div class="modal-content">
-                    <form method="post" action=<?php echo $_SERVER['SCRIPT_NAME']; ?> name="loginform">
+                    <form name="loginform" method="post" action=<?php echo $_SERVER['SCRIPT_NAME']; ?>>
                         <div class="modal-header">
                             <button type="button" class="close" data-dismiss="modal">&times;</button>
                             <h4 class="modal-title">Login</h4>
@@ -234,7 +234,7 @@
     </div>
 
 
-<?php include "foot.php"; ?>
+<?php include 'foot.php'; ?>
     </body>
     </html>
 <?php ob_flush(); ?>
