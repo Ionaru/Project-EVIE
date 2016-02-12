@@ -8,7 +8,7 @@
         request.onreadystatechange = function () {
             var i, refTypes, row, rows, xml;
             if (request.readyState === 4 && request.status === 200) {
-                refTypes = new Object;
+                refTypes = {};
                 xml = request.responseXML;
                 rows = xml.getElementsByTagName('row');
                 i = 0;
