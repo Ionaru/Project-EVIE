@@ -7,15 +7,9 @@
 <?php include 'foot.php'; ?>
 
     <script>
-
-        $('#myTabs a').click(function (e) {
-            e.preventDefault()
-            $(this).tab('show')
-        })
-
         $(function () {
             $('[data-toggle="tooltip"]').tooltip()
-        })
+        });
 
         var refTypes = [];
 
@@ -42,10 +36,11 @@
                     var charIDs = [];
                     var charRequest = new XMLHttpRequest();
                     charRequest.onreadystatechange = function () {
+                        var charID;
                         if (charRequest.readyState == 4 && charRequest.status == 200) {
                             var xml = charRequest.responseXML;
                             var rows = xml.getElementsByTagName("row");
-                            for (var i = 0; i < rows.length; i++) {
+                            for (i = 0; i < rows.length; i++) {
                                 var row = rows[i];
                                 charID = row.getAttribute("characterID");
                                 charIDs[i] = charID;
@@ -95,7 +90,7 @@
                                 '<a style="cursor: pointer;" id="moreTransactions1000">1000</a> ' +
                                 '<a style="cursor: pointer;" id="moreTransactionsAll">Max</a></span> ' +
                                 '<span id="loadingiconT"></span>');
-                            for (var i = 0; i < charIDs.length; i++) {
+                            for (i = 0; i < charIDs.length; i++) {
                                 $("#char" + i).css("visibility", "visible").attr('src', 'https://image.eveonline.com/Character/' + charIDs[i] + '_50.jpg');
                                 $("#charmbl" + i).css("visibility", "visible").attr('src', 'https://image.eveonline.com/Character/' + charIDs[i] + '_256.jpg');
                                 $("#charLink" + i).css("visibility", "visible");
@@ -103,7 +98,7 @@
                             }
                             getBalance(keyID, vCode, charIDs, <?php echo $selectedChar ?>);
                             getWalletJournal(keyID, vCode, charIDs, refTypes, <?php echo $selectedChar ?>);
-                            getWalletTransactions(keyID, vCode, charIDs, refTypes, <?php echo $selectedChar ?>);
+                            getWalletTransactions(keyID, vCode, charIDs, <?php echo $selectedChar ?>);
                         }
                     };
                     charRequest.open("GET", "https://api.eveonline.com/account/Characters.xml.aspx?keyID=" + keyID + "&vCode=" + vCode, true);
@@ -136,6 +131,7 @@
         function getBalance(keyID, vCode, charIDs, i) {
             var request = new XMLHttpRequest();
             request.onreadystatechange = function () {
+                var balance;
                 if (request.readyState == 4 && request.status == 200) {
                     var xml = request.responseXML;
                     var rows = xml.getElementsByTagName("row");
@@ -162,24 +158,6 @@
             request.send();
         }
 
-        function getName(keyID, vCode, charIDs) {
-            var bool = true;
-            for (var i = 0; i < charIDs.length; i++) {
-                var li = '<li role="presentation">';
-                var request = new XMLHttpRequest();
-                request.open("GET", "https://api.eveonline.com/char/CharacterSheet.xml.aspx?keyID=" + keyID + "&vCode=" + vCode + "&characterID=" + charIDs[i], false);
-                request.send();
-                var xml = request.responseXML;
-                var name = xml.getElementsByTagName("name")[0];
-                var y = name.childNodes[0];
-                var z = y.nodeValue;
-                if (bool) {
-                    li = '<li role="presentation" class="active">'
-                    bool = false;
-                }
-            }
-        }
-
         function getWalletJournal(keyID, vCode, charIDs, refTypes, i) {
             var request = new XMLHttpRequest();
             request.onreadystatechange = function () {
@@ -189,6 +167,7 @@
                 var refTypeID;
                 var balance;
                 var refID;
+                var color;
                 if (request.readyState == 4 && request.status == 200) {
                     var xml = request.responseXML;
                     //console.log(xml);
@@ -205,10 +184,10 @@
                             //ownerName1 = row.getAttribute("ownerName1");
                             //ownerName2 = row.getAttribute("ownerName2");
                             if (amount < 0) {
-                                var color = "red";
+                                color = "red";
                             }
                             else {
-                                var color = "green";
+                                color = "green";
                                 ownerName1 = row.getAttribute("ownerName1");
                             }
 
@@ -230,7 +209,6 @@
                             output += '</tr>';
                             $('#WalletJournalBody').append(output);
                         }
-                        $('#rowcountJ').append(rows.length);
                         $('#moreJournal50').attr('onclick', 'getMoreWalletJournal("' + keyID + '", "' + vCode + '", "' + charIDs[i] + '", "' + refID + '", "50")');
                         $('#moreJournal100').attr('onclick', 'getMoreWalletJournal("' + keyID + '", "' + vCode + '", "' + charIDs[i] + '", "' + refID + '", "100")');
                         $('#moreJournal250').attr('onclick', 'getMoreWalletJournal("' + keyID + '", "' + vCode + '", "' + charIDs[i] + '", "' + refID + '", "250")');
@@ -247,13 +225,19 @@
         }
 
         function getMoreWalletJournal(keyID, vCode, charID, fromID, amountToLoad) {
-            refTypes;
+            //refTypes;
             $('#loadingiconW').html('<i class="fa fa-spin fa-circle-o-notch"></i>');
             var request = new XMLHttpRequest();
             request.onreadystatechange = function () {
+                var ownerName1;
+                var color;
+                var date;
+                var amount;
+                var refTypeID;
+                var balance;
+                var refID;
                 if (request.readyState == 4 && request.status == 200) {
                     var xml = request.responseXML;
-                    //console.log(xml);
                     var rows = xml.getElementsByTagName("row");
                     if (rows.length != 0) {
                         for (var i2 = 0; i2 < rows.length; i2++) {
@@ -261,27 +245,23 @@
                             date = row.getAttribute("date");
                             amount = row.getAttribute("amount");
                             refTypeID = refTypes[row.getAttribute("refTypeID")];
-                            //refTypeID = row.getAttribute("refTypeID");
                             balance = row.getAttribute("balance");
                             refID = row.getAttribute("refID");
-                            //ownerName1 = row.getAttribute("ownerName1");
-                            //ownerName2 = row.getAttribute("ownerName2");
                             if (amount < 0) {
-                                var color = "red";
+                                color = "red";
                                 ownerName1 = "";
                             }
                             else {
-                                var color = "green";
+                                color = "green";
                                 ownerName1 = row.getAttribute("ownerName1");
                             }
                             $('#WalletJournalBody').append('<tr><td data-label="Date">' + date + '</td><td data-label="refType">' + refTypeID + '</td><td data-label="From">' + ownerName1 + '</td><td style="color:' + color + '" data-label="Amount">' + (parseFloat(amount)).formatMoney(2, ',', '.') + ' ISK</td><td data-label="Balance">' + (parseFloat(balance)).formatMoney(2, ',', '.') + ' ISK</td></tr>');
-                            $('#moreJournal50').attr('onclick', 'getMoreWalletJournal("' + keyID + '", "' + vCode + '", "' + charID + '", "' + refID + '", "50")');
-                            $('#moreJournal100').attr('onclick', 'getMoreWalletJournal("' + keyID + '", "' + vCode + '", "' + charID + '", "' + refID + '", "100")');
-                            $('#moreJournal250').attr('onclick', 'getMoreWalletJournal("' + keyID + '", "' + vCode + '", "' + charID + '", "' + refID + '", "250")');
-                            $('#moreJournal1000').attr('onclick', 'getMoreWalletJournal("' + keyID + '", "' + vCode + '", "' + charID + '", "' + refID + '", "1000")');
-                            $('#moreJournalAll').attr('onclick', 'getMoreWalletJournal("' + keyID + '", "' + vCode + '", "' + charID + '", "' + refID + '", "2560")');
-                            $('#loadingicon').html('');
                         }
+                        $('#moreJournal50').attr('onclick', 'getMoreWalletJournal("' + keyID + '", "' + vCode + '", "' + charID + '", "' + refID + '", "50")');
+                        $('#moreJournal100').attr('onclick', 'getMoreWalletJournal("' + keyID + '", "' + vCode + '", "' + charID + '", "' + refID + '", "100")');
+                        $('#moreJournal250').attr('onclick', 'getMoreWalletJournal("' + keyID + '", "' + vCode + '", "' + charID + '", "' + refID + '", "250")');
+                        $('#moreJournal1000').attr('onclick', 'getMoreWalletJournal("' + keyID + '", "' + vCode + '", "' + charID + '", "' + refID + '", "1000")');
+                        $('#moreJournalAll').attr('onclick', 'getMoreWalletJournal("' + keyID + '", "' + vCode + '", "' + charID + '", "' + refID + '", "2560")');
                     }
                     else {
                         $('#moreJournal').html('There is no more journal info available.');
@@ -293,9 +273,19 @@
             request.send();
         }
 
-        function getWalletTransactions(keyID, vCode, charIDs, refTypes, i) {
+        function getWalletTransactions(keyID, vCode, charIDs, i) {
             var request = new XMLHttpRequest();
             request.onreadystatechange = function () {
+                var date;
+                var quantity;
+                var typeName;
+                var typeID;
+                var price;
+                var clientName;
+                var transactionType;
+                var transactionID;
+                var color;
+                var info;
                 if (request.readyState == 4 && request.status == 200) {
                     var xml = request.responseXML;
                     var rows = xml.getElementsByTagName("row");
@@ -311,22 +301,21 @@
                             transactionType = row.getAttribute("transactionType");
                             transactionID = row.getAttribute("transactionID");
                             if (transactionType == "buy") {
-                                var color = "red";
-                                var info = " bought from ";
+                                color = "red";
+                                info = " bought from ";
                             }
                             else {
-                                var color = "green";
-                                var info = " sold to ";
+                                color = "green";
+                                info = " sold to ";
                             }
                             //console.log(clientName);
                             $('#WalletTransactionsBody').append('<tr><td data-label="Date">' + date + '</td><td data-label="Information">' + quantity + ' x <a style="cursor: pointer;" onclick="getItemData(' + "'" + typeID + "'" + ')">' + typeName + '</a>' + info + ' <a style="cursor: pointer;" onclick="getCharData(' + "'" + clientName + "'" + ')">' + clientName + '</a></td><td data-label="Price" style="color: ' + color + '">' + (parseFloat(price * quantity)).formatMoney(2, ',', '.') + ' ISK (' + (parseFloat(price)).formatMoney(2, ',', '.') + ' ISK per item)</td></tr>');
-                            $('#moreTransactions50').attr('onclick', 'getMoreWalletTransactions("' + keyID + '", "' + vCode + '", "' + charIDs[i] + '", "' + transactionID + '", "50")');
-                            $('#moreTransactions100').attr('onclick', 'getMoreWalletTransactions("' + keyID + '", "' + vCode + '", "' + charIDs[i] + '", "' + transactionID + '", "100")');
-                            $('#moreTransactions250').attr('onclick', 'getMoreWalletTransactions("' + keyID + '", "' + vCode + '", "' + charIDs[i] + '", "' + transactionID + '", "250")');
-                            $('#moreTransactions1000').attr('onclick', 'getMoreWalletTransactions("' + keyID + '", "' + vCode + '", "' + charIDs[i] + '", "' + transactionID + '", "1000")');
-                            $('#moreTransactionsAll').attr('onclick', 'getMoreWalletTransactions("' + keyID + '", "' + vCode + '", "' + charIDs[i] + '", "' + transactionID + '", "2560")');
                         }
-                        $('#rowcountT').append(rows.length);
+                        $('#moreTransactions50').attr('onclick', 'getMoreWalletTransactions("' + keyID + '", "' + vCode + '", "' + charIDs[i] + '", "' + transactionID + '", "50")');
+                        $('#moreTransactions100').attr('onclick', 'getMoreWalletTransactions("' + keyID + '", "' + vCode + '", "' + charIDs[i] + '", "' + transactionID + '", "100")');
+                        $('#moreTransactions250').attr('onclick', 'getMoreWalletTransactions("' + keyID + '", "' + vCode + '", "' + charIDs[i] + '", "' + transactionID + '", "250")');
+                        $('#moreTransactions1000').attr('onclick', 'getMoreWalletTransactions("' + keyID + '", "' + vCode + '", "' + charIDs[i] + '", "' + transactionID + '", "1000")');
+                        $('#moreTransactionsAll').attr('onclick', 'getMoreWalletTransactions("' + keyID + '", "' + vCode + '", "' + charIDs[i] + '", "' + transactionID + '", "2560")');
                     }
                     else {
                         $('#moreTransactions').html('There is no transaction info available.');
@@ -341,6 +330,16 @@
             $('#loadingiconT').html('<i class="fa fa-spin fa-circle-o-notch"></i>');
             var request = new XMLHttpRequest();
             request.onreadystatechange = function () {
+                var date;
+                var quantity;
+                var typeName;
+                var typeID;
+                var price;
+                var clientName;
+                var transactionType;
+                var transactionID;
+                var color;
+                var info;
                 if (request.readyState == 4 && request.status == 200) {
                     var xml = request.responseXML;
                     var rows = xml.getElementsByTagName("row");
@@ -356,21 +355,21 @@
                             transactionType = row.getAttribute("transactionType");
                             transactionID = row.getAttribute("transactionID");
                             if (transactionType == "buy") {
-                                var color = "red";
-                                var info = " bought from ";
+                                color = "red";
+                                info = " bought from ";
                             }
                             else {
-                                var color = "green";
-                                var info = " sold to ";
+                                color = "green";
+                                info = " sold to ";
                             }
                             //console.log(clientName);
                             $('#WalletTransactionsBody').append('<tr><td data-label="Date">' + date + '</td><td data-label="Information">' + quantity + ' x <a style="cursor: pointer;" onclick="getItemData(' + "'" + typeID + "'" + ')">' + typeName + '</a>' + info + ' <a style="cursor: pointer;" onclick="getCharData(' + "'" + clientName + "'" + ')">' + clientName + '</a></td><td data-label="Price" style="color: ' + color + '">' + (parseFloat(price * quantity)).formatMoney(2, ',', '.') + ' ISK (' + (parseFloat(price)).formatMoney(2, ',', '.') + ' ISK per item)</td></tr>');
-                            $('#moreTransactions50').attr('onclick', 'getMoreWalletTransactions("' + keyID + '", "' + vCode + '", "' + charID + '", "' + transactionID + '", "50")');
-                            $('#moreTransactions100').attr('onclick', 'getMoreWalletTransactions("' + keyID + '", "' + vCode + '", "' + charID + '", "' + transactionID + '", "100")');
-                            $('#moreTransactions250').attr('onclick', 'getMoreWalletTransactions("' + keyID + '", "' + vCode + '", "' + charID + '", "' + transactionID + '", "250")');
-                            $('#moreTransactions1000').attr('onclick', 'getMoreWalletTransactions("' + keyID + '", "' + vCode + '", "' + charID + '", "' + transactionID + '", "1000")');
-                            $('#moreTransactionsAll').attr('onclick', 'getMoreWalletTransactions("' + keyID + '", "' + vCode + '", "' + charID + '", "' + transactionID + '", "2560")');
                         }
+                        $('#moreTransactions50').attr('onclick', 'getMoreWalletTransactions("' + keyID + '", "' + vCode + '", "' + charID + '", "' + transactionID + '", "50")');
+                        $('#moreTransactions100').attr('onclick', 'getMoreWalletTransactions("' + keyID + '", "' + vCode + '", "' + charID + '", "' + transactionID + '", "100")');
+                        $('#moreTransactions250').attr('onclick', 'getMoreWalletTransactions("' + keyID + '", "' + vCode + '", "' + charID + '", "' + transactionID + '", "250")');
+                        $('#moreTransactions1000').attr('onclick', 'getMoreWalletTransactions("' + keyID + '", "' + vCode + '", "' + charID + '", "' + transactionID + '", "1000")');
+                        $('#moreTransactionsAll').attr('onclick', 'getMoreWalletTransactions("' + keyID + '", "' + vCode + '", "' + charID + '", "' + transactionID + '", "2560")');
                     }
                     else {
                         $('#moreTransactions').html('There is no more transaction info available.');
