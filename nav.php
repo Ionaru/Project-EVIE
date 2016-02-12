@@ -21,26 +21,8 @@ if (isset ($_GET['char'])) {
     header('Location: index.php?char=0');
     die();
 }
-$charactivecss = '"padding-top: 12px; max-height: 50px; background-color: #404040; border-top: 3px solid #337ab7;"';
-$charinactivecss = '"max-height: 50px; visibility: hidden;"';
 $settingscss = '"max-height: 50px; background-color: #404040; border-top: 3px solid #337ab7;"';
-$char0active = $charinactivecss;
-$char1active = $charinactivecss;
-$char2active = $charinactivecss;
 $url = $_SERVER['REQUEST_URI'];
-
-switch ($selectedChar) {
-    case 0:
-        $char0active = $charactivecss;
-        break;
-    case 1:
-        $char1active = $charactivecss;
-        break;
-    case 2:
-        $char2active = $charactivecss;
-        break;
-}
-
 ?>
 
 <nav class="navbar navbar-inverse navbar-fixed-top">
@@ -58,24 +40,13 @@ switch ($selectedChar) {
                 }
                 echo '<li><a href="' . $_SERVER['SCRIPT_NAME'] . '?action=logout">Log out</a></li>';
                 echo '</ul>';
-            } ?>
-            <ul class="nav navbar-nav navbar-right hidden-xs" style="max-height: 50px;">
-                <?php
+            }
+            if ((strpos($url, 'index.php') === false) && (strpos($url, 'account.php') === false) && (strpos($url, 'apikeys.php') === false)) {
+                echo '
+                <ul id="charLinks" class="nav navbar-nav navbar-right hidden-xs" style="max-height: 50px;"></ul>';
+                }
+            ?>
 
-                if ((strpos($url, 'index.php') === false) && (strpos($url, 'account.php') === false) && (strpos($url, 'apikeys.php') === false)) {
-                    echo <<<END
-            <li><a ID="charLink0" style="$char0active" href="?char=0">
-            <img alt="char0" id="char0" style="max-height: 50px" class="img" src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" width="50" height="50">
-            </a></li>
-            <li><a ID="charLink1" style="$char1active" href="?char=1">
-            <img alt="char1" id="char1" style="max-height: 50px" class="img" src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" width="50" height="50">
-            </a></li>
-            <li><a ID="charLink2" style="$char2active" href="?char=2">
-            <img alt="char2" id="char2" style="max-height: 50px" class="img" src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" width="50" height="50">
-            </a></li>
-END;
-                } ?>
-            </ul>
             <div class="row visible-xs" style="border-bottom: 3px solid #337ab7;">
                 <div <?php echo $dashboardactivembl ?> class="col-xs-3 visible-xs"><a
                         href=<?php echo '"index.php?char=' . $selectedChar . '"'; ?>><img alt="Dashboard"
