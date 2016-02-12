@@ -172,7 +172,7 @@
                 var xml = request.responseXML;
                 var name = xml.getElementsByTagName("name")[0];
                 var y = name.childNodes[0];
-                z = y.nodeValue;
+                var z = y.nodeValue;
                 if (bool) {
                     li = '<li role="presentation" class="active">'
                     bool = false;
@@ -183,6 +183,12 @@
         function getWalletJournal(keyID, vCode, charIDs, refTypes, i) {
             var request = new XMLHttpRequest();
             request.onreadystatechange = function () {
+                var ownerName1;
+                var date;
+                var amount;
+                var refTypeID;
+                var balance;
+                var refID;
                 if (request.readyState == 4 && request.status == 200) {
                     var xml = request.responseXML;
                     //console.log(xml);
@@ -206,7 +212,7 @@
                                 ownerName1 = row.getAttribute("ownerName1");
                             }
 
-                            output = '';
+                            var output = '';
                             output += '<tr>';
                             output += '<td data-label="Date">' + date + '</td>';
                             output += '<td data-label="refType">' + refTypeID + '</td>';
@@ -223,20 +229,16 @@
                             output += '<td data-label="Balance">' + (parseFloat(balance)).formatMoney(2, ',', '.') + ' ISK</td></tr>';
                             output += '</tr>';
                             $('#WalletJournalBody').append(output);
-
-                            $('#moreJournal50').attr('onclick', 'getMoreWalletJournal("' + keyID + '", "' + vCode + '", "' + charIDs[i] + '", "' + refID + '", "50")');
-                            $('#moreJournal100').attr('onclick', 'getMoreWalletJournal("' + keyID + '", "' + vCode + '", "' + charIDs[i] + '", "' + refID + '", "100")');
-                            $('#moreJournal250').attr('onclick', 'getMoreWalletJournal("' + keyID + '", "' + vCode + '", "' + charIDs[i] + '", "' + refID + '", "250")');
-                            $('#moreJournal1000').attr('onclick', 'getMoreWalletJournal("' + keyID + '", "' + vCode + '", "' + charIDs[i] + '", "' + refID + '", "1000")');
-                            $('#moreJournalAll').attr('onclick', 'getMoreWalletJournal("' + keyID + '", "' + vCode + '", "' + charIDs[i] + '", "' + refID + '", "2560")');
                         }
+                        $('#rowcountJ').append(rows.length);
+                        $('#moreJournal50').attr('onclick', 'getMoreWalletJournal("' + keyID + '", "' + vCode + '", "' + charIDs[i] + '", "' + refID + '", "50")');
+                        $('#moreJournal100').attr('onclick', 'getMoreWalletJournal("' + keyID + '", "' + vCode + '", "' + charIDs[i] + '", "' + refID + '", "100")');
+                        $('#moreJournal250').attr('onclick', 'getMoreWalletJournal("' + keyID + '", "' + vCode + '", "' + charIDs[i] + '", "' + refID + '", "250")');
+                        $('#moreJournal1000').attr('onclick', 'getMoreWalletJournal("' + keyID + '", "' + vCode + '", "' + charIDs[i] + '", "' + refID + '", "1000")');
+                        $('#moreJournalAll').attr('onclick', 'getMoreWalletJournal("' + keyID + '", "' + vCode + '", "' + charIDs[i] + '", "' + refID + '", "2560")');
                     }
                     else {
-                        $('#WalletJournalBody').append('<tr><td data-label="Date">There is no journal info available.</td><td></td><td></td><td></td>"></tr>');
-
-                    }
-                    if (rows.length < 50) {
-                        $('#moreJournal').html('');
+                        $('#moreJournal').html('There is no journal info available.');
                     }
                 }
             };
@@ -282,11 +284,7 @@
                         }
                     }
                     else {
-                        $('#WalletJournalBody').append('<tr><td data-label="Date">There is no more journal info available.</td><td></td><td></td><td></td>"></tr>');
-
-                    }
-                    if (rows.length < amountToLoad) {
-                        $('#moreJournal').html('');
+                        $('#moreJournal').html('There is no more journal info available.');
                     }
                     $('#loadingiconW').html('');
                 }
@@ -328,13 +326,10 @@
                             $('#moreTransactions1000').attr('onclick', 'getMoreWalletTransactions("' + keyID + '", "' + vCode + '", "' + charIDs[i] + '", "' + transactionID + '", "1000")');
                             $('#moreTransactionsAll').attr('onclick', 'getMoreWalletTransactions("' + keyID + '", "' + vCode + '", "' + charIDs[i] + '", "' + transactionID + '", "2560")');
                         }
+                        $('#rowcountT').append(rows.length);
                     }
                     else {
-                        $('#WalletTransactionsBody').append('<tr><td data-label="Date">There is no transaction info available.</td><td></td><td></td>"></tr>');
-
-                    }
-                    if (rows.length < 50) {
-                        $('#moreTransactions').html('');
+                        $('#moreTransactions').html('There is no transaction info available.');
                     }
                 }
             };
@@ -378,11 +373,8 @@
                         }
                     }
                     else {
-                        $('#WalletTransactionsBody').append('<tr><td data-label="Date">There is no more transaction info available.</td><td></td><td></td>"></tr>');
+                        $('#moreTransactions').html('There is no more transaction info available.');
 
-                    }
-                    if (rows.length < amountToLoad) {
-                        $('#moreTransactions').html('');
                     }
                     $('#loadingiconT').html('');
                 }
