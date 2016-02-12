@@ -57,18 +57,30 @@
                                 '<span id="balanceSpan"></span>' +
                                 '</h2>' +
                                 '<h2>Journal</h2>' +
+                                '<a href="#Transactions"> Jump to Transactions</a>' +
                                 '<table class="table">' +
                                 '<thead><tr>' +
-                                '<th style="width: 25%">Date (EVE Time)</th>' +
-                                '<th style="width: 25%">Type</th>' +
-                                '<th style="width: 25%">Amount</th>' +
-                                '<th style="width: 25%">Balance</th>' +
+                                '<th style="width: 20%">Date (EVE Time)</th>' +
+                                '<th style="width: 20%">Type</th>' +
+                                '<th style="width: 20%">From</th>' +
+                                '<th style="width: 20%">Amount</th>' +
+                                '<th style="width: 20%">Balance</th>' +
                                 '</tr></thead>' +
                                 '<tbody id="WalletJournalBody' + '<?php echo($selectedChar + 1) ?>' + '">' +
                                 '</tbody>' +
                                 '</table>' +
+                                '<span id="moreJournal">Load more entries ' +
+                                '<a style="cursor: pointer;" id="moreJournal50">50</a> ' +
+                                '<a style="cursor: pointer;" id="moreJournal100">100</a> ' +
+                                '<a style="cursor: pointer;" id="moreJournal250">250</a> ' +
+                                '<a style="cursor: pointer;" id="moreJournal1000">1000</a> ' +
+                                '<a style="cursor: pointer;" id="moreJournalAll">Max</a>' +
+                                '</span> ' +
+                                '<span id="loadingiconW"></span>' +
                                 '</div>' +
+                                '<hr>' +
                                 '<h2>Transactions</h2>' +
+                                '<a href="#Journal"> Jump to Journal</a>' +
                                 '<table class="table">' +
                                 '<thead><tr>' +
                                 '<th style="width: 20%">Date (EVE Time)</th>' +
@@ -77,13 +89,20 @@
                                 '</tr></thead>' +
                                 '<tbody id="WalletTransactionsBody' + '<?php echo($selectedChar + 1) ?>' + '></tbody>' +
                                 '</table>' +
+                                '<span id="moreTransactions">Load more entries ' +
+                                '<a style="cursor: pointer;" id="moreTransactions50">50</a> ' +
+                                '<a style="cursor: pointer;" id="moreTransactions100">100</a> ' +
+                                '<a style="cursor: pointer;" id="moreTransactions250">250</a> ' +
+                                '<a style="cursor: pointer;" id="moreTransactions1000">1000</a> ' +
+                                '<a style="cursor: pointer;" id="moreTransactionsAll">Max</a>' +
+                                '</span> ' +
+                                '<span id="loadingiconT"></span>' +
                                 '</div>');
                             for (i = 0; i < charIDs.length; i++) {
                                 $("#char" + i).attr('src', 'https://image.eveonline.com/Character/' + charIDs[i] + '_50.jpg');
                                 $("#charmbl" + i).attr('src', 'https://image.eveonline.com/Character/' + charIDs[i] + '_256.jpg');
                                 $("#char" + i, "#charmbl" + i).css("visibility", "visible");
                                 $("#charLink" + i).css("visibility", "visible");
-                                //$("#charlink" + i).attr('title','Hello');
                             }
                             getBalance(keyID, vCode, charIDs, <?php echo $selectedChar ?>);
                             getWalletJournal(keyID, vCode, charIDs, refTypes, <?php echo $selectedChar ?>);
@@ -207,7 +226,7 @@
                         }
                     }
                     else {
-                        $('#WalletJournalBody' + (i + 1)).append('<tr><td data-label="Date">There is no journal info available.</td><td></td><td></td><td></td>"></tr>');
+                        $('#WalletJournalBody' + (i + 1)).append('<tr><td data-label="Date">There is no journal info available.</td><td></td><td></td><td></td><td></td>"></tr>');
 
                     }
                     if (rows.length < 50) {
