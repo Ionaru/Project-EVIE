@@ -5,7 +5,8 @@
         if (!empty($_SESSION['keyID'])) {
             echo '<input id="passAlong_keyID" type="hidden" value="' . $_SESSION['keyID'] . '" />';
             echo '<input id="passAlong_vCode" type="hidden" value="' . $_SESSION['vCode'] . '" />';
-            echo '<input id="passAlong_selectedCharacter" type="hidden" value="' . $_SESSION['selectedCharacter'] . '" />';
+            //echo '<input id="passAlong_selectedCharacter" type="hidden" value="' . $_SESSION['selectedCharacter'] . '" />';
+            echo '<input id="passAlong_selectedCharacter" type="hidden" value="' . $_GET['char'] . '" />';
         }
         ?>
 

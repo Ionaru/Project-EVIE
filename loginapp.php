@@ -44,7 +44,6 @@ class OneFileLoginApplication
     {
         // check is user wants to register
         if (isset($_GET['action'])) {
-            error_log('DEBUG: Action set');
             if ($_GET['action'] === 'register') {
                 $this->doRegistration();
             }/* elseif ($_GET['action'] === 'recover') {
@@ -56,7 +55,9 @@ class OneFileLoginApplication
                 /*} elseif ($_GET['action'] === 'change') {
                     $this->doPassChange();
                 }*/
-
+            }
+            else {
+                $this->loginStuff();
             }
         }else {
             // start the session, always needed!

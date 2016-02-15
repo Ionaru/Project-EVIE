@@ -169,7 +169,7 @@ function getUserAPIKeys()
         $apikey_isactive = $row['apikey_isactive'];
         $apikey_dateadded = $row['apikey_dateadded'];
         //var_dump($row);
-        if ($apikey_isactive === 1) {
+        if ((int)$apikey_isactive === 1) {
             echo '<tr class="success">';
             //echo '<td><i class="fa fa-check"></i>';
             echo '<td><button class="btn btn-xs" disabled><i class="fa fa-check"></i> Set active</button>';
