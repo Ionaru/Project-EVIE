@@ -90,6 +90,7 @@ include __DIR__ . '/nav.php'; ?>
                                 '<a style="cursor: pointer;" id="moreTransactions1000">1000</a> ' +
                                 '<a style="cursor: pointer;" id="moreTransactionsAll">Max</a></span> ' +
                                 '<span id="loadingiconT"></span>');
+                            i = 0;
                             while (i < charIDs.length) {
                                 var css = "characterInactive";
                                 if (i == selectedCharacter) {
