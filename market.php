@@ -43,13 +43,17 @@
                     }
                     $('#WalletContent').append('<h2>Journal</h2><table class="table"><thead><tr><th style="width: 25%">Date (EVE Time)</th><th style="width: 25%">Type</th><th style="width: 25%">Amount</th><th style="width: 25%">Balance</th></tr></thead><tbody id="WalletJournalBody' + <?php echo($selectedChar + 1) ?> +'"></tbody></table></div>');
                     $('#WalletContent').append('<h2>Transactions</h2><table class="table"><thead><tr><th style="width: 20%">Date (EVE Time)</th><th style="width: 40%">Information</th><th style="width: 40%">Price</th></tr></thead><tbody id="WalletTransactionsBody' + <?php echo($selectedChar + 1) ?> +'"></tbody></table></div>');
-                    for (var i = 0; i < charIDs.length; i++) {
-                        $("#char" + i).attr('src', 'https://image.eveonline.com/Character/' + charIDs[i] + '_50.jpg');
-                        $("#charmbl" + i).attr('src', 'https://image.eveonline.com/Character/' + charIDs[i] + '_256.jpg');
-                        $("#char" + i).css("visibility", "visible");
-                        $("#charmbl" + i).css("visibility", "visible");
-                        $("#charLink" + i).css("visibility", "visible");
-                        //$("#charlink" + i).attr('title','Hello');
+                    i = 0;
+                    while (i < charIDs.length) {
+                        var css = "characterInactive";
+                        if (i == selectedCharacter) {
+                            css = "characterActive";
+                            selectedCharacterID = charIDs[i];
+                        }
+                        $('#charLinks').css('visibility', 'visible').append('<li><a id="charLink' + i + '" class="' + css + '" href="?char=' + i + '"><img alt="char' + i + '" id="char' + i + '" style="max-height: 50px" class="img" src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" width="50" height="50"></a></li>');
+                        $('#char' + i).css('visibility', 'visible').attr('src', 'https://image.eveonline.com/Character/' + charIDs[i] + '_50.jpg');
+                        $('#charmbl' + i).css('visibility', 'visible').attr('src', 'https://image.eveonline.com/Character/' + charIDs[i] + '_256.jpg');
+                        i++;
                     }
                     //getWalletJournal(keyID, vCode, charIDs, refTypes, <?php echo $selectedChar ?>);
                     //getWalletTransactions(keyID, vCode, charIDs, refTypes, <?php echo $selectedChar ?>);

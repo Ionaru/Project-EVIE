@@ -90,11 +90,16 @@ include __DIR__ . '/nav.php'; ?>
                                 '<a style="cursor: pointer;" id="moreTransactions1000">1000</a> ' +
                                 '<a style="cursor: pointer;" id="moreTransactionsAll">Max</a></span> ' +
                                 '<span id="loadingiconT"></span>');
-                            for (i = 0; i < charIDs.length; i++) {
-                                $("#char" + i).css("visibility", "visible").attr('src', 'https://image.eveonline.com/Character/' + charIDs[i] + '_50.jpg');
-                                $("#charmbl" + i).css("visibility", "visible").attr('src', 'https://image.eveonline.com/Character/' + charIDs[i] + '_256.jpg');
-                                $("#charLink" + i).css("visibility", "visible");
-                                //$("#charlink" + i).attr('title','Hello');
+                            while (i < charIDs.length) {
+                                var css = "characterInactive";
+                                if (i == selectedCharacter) {
+                                    css = "characterActive";
+                                    selectedCharacterID = charIDs[i];
+                                }
+                                $('#charLinks').css('visibility', 'visible').append('<li><a id="charLink' + i + '" class="' + css + '" href="?char=' + i + '"><img alt="char' + i + '" id="char' + i + '" style="max-height: 50px" class="img" src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" width="50" height="50"></a></li>');
+                                $('#char' + i).css('visibility', 'visible').attr('src', 'https://image.eveonline.com/Character/' + charIDs[i] + '_50.jpg');
+                                $('#charmbl' + i).css('visibility', 'visible').attr('src', 'https://image.eveonline.com/Character/' + charIDs[i] + '_256.jpg');
+                                i++;
                             }
                             getBalance(keyID, vCode, charIDs, <?php echo $selectedChar ?>);
                             getWalletJournal(keyID, vCode, charIDs, refTypes, <?php echo $selectedChar ?>);
