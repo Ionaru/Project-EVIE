@@ -1,6 +1,6 @@
 <?php ob_start();
-include 'head.php';
-include 'nav.php'; ?>
+include __DIR__ . 'head.php';
+include __DIR__ . 'nav.php'; ?>
 
     <h2>Account Information</h2>
     <div id="AccountInfo"></div>
@@ -9,7 +9,7 @@ include 'nav.php'; ?>
     <div id="CharacterDivs" class="row placeholders">
     </div>
 
-<?php include 'foot.php'; ?>
+<?php include __DIR__ . 'foot.php'; ?>
     <script>
         $(function () {
             $('[data-toggle="tooltip"]').tooltip();

@@ -162,7 +162,7 @@
 
     $(document).ready(function () {
         var charIDs, charRequest;
-        charIDs = new Array;
+        charIDs = [];
         charRequest = new XMLHttpRequest;
         charRequest.onreadystatechange = function () {
             var charID, i, row, rows, xml;
@@ -182,12 +182,9 @@
                     if (i == selectedCharacter) {
                         css = "characterActive";
                     }
-                    $('#charLinks').append('<li><a id="charLink' + i + '" class="' + css + '" href="?char=' + i + '"><img alt="char' + i + '" id="char' + i + '" style="max-height: 50px" class="img" src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" width="50" height="50"></a></li>');
-                    $('#char' + i).attr('src', 'https://image.eveonline.com/Character/' + charIDs[i] + '_50.jpg');
-                    $('#charmbl' + i).attr('src', 'https://image.eveonline.com/Character/' + charIDs[i] + '_256.jpg');
-                    $('#char' + i).css('visibility', 'visible');
-                    $('#charmbl' + i).css('visibility', 'visible');
-                    $('#charLink' + i).css('visibility', 'visible');
+                    $('#charLinks').css('visibility', 'visible').append('<li><a id="charLink' + i + '" class="' + css + '" href="?char=' + i + '"><img alt="char' + i + '" id="char' + i + '" style="max-height: 50px" class="img" src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" width="50" height="50"></a></li>');
+                    $('#char' + i).css('visibility', 'visible').attr('src', 'https://image.eveonline.com/Character/' + charIDs[i] + '_50.jpg');
+                    $('#charmbl' + i).css('visibility', 'visible').attr('src', 'https://image.eveonline.com/Character/' + charIDs[i] + '_256.jpg');
                     i++;
                 }
                 getPlanets(keyID, vCode, charIDs, 0);
@@ -197,4 +194,4 @@
         charRequest.send();
     });
 
-}).call(this)
+}).call(this);

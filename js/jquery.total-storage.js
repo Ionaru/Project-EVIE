@@ -50,11 +50,7 @@
     if ('localStorage' in window) {
         try {
             ls = (typeof window.localStorage === 'undefined') ? undefined : window.localStorage;
-            if (typeof ls == 'undefined' || typeof window.JSON == 'undefined') {
-                supported = false;
-            } else {
-                supported = true;
-            }
+            supported = !(typeof ls == 'undefined' || typeof window.JSON == 'undefined');
 
             window.localStorage.setItem(mod, '1');
             window.localStorage.removeItem(mod);

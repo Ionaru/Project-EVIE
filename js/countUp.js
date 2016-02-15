@@ -22,7 +22,14 @@
 // duration = duration of animation in seconds, default 2
 // options = optional object of options (see below)
 
-    var CountUp = function (target, startVal, endVal, decimals, duration, options) {
+// Example:
+// var numAnim = new countUp("SomeElementYouWantToAnimate", 0, 99.99, 2, 2.5);
+// numAnim.start();
+// numAnim.update(135);
+// with optional callback:
+// numAnim.start(someMethodToCallOnComplete);
+
+    return function (target, startVal, endVal, decimals, duration, options) {
 
         // make sure requestAnimationFrame and cancelAnimationFrame are defined
         // polyfill for browsers without native support
@@ -201,14 +208,5 @@
         // format startVal on initialization
         self.printValue(self.startVal);
     };
-
-// Example:
-// var numAnim = new countUp("SomeElementYouWantToAnimate", 0, 99.99, 2, 2.5);
-// numAnim.start();
-// numAnim.update(135);
-// with optional callback:
-// numAnim.start(someMethodToCallOnComplete);
-
-    return CountUp;
 
 }));

@@ -1,6 +1,6 @@
-<?php ob_start(); ?>
-<?php include 'head.php'; ?>
-<?php include 'nav.php';
+<?php ob_start();
+include __DIR__ . 'head.php';
+include __DIR__ . 'nav.php';
 
 if (isset ($_GET['action'], $_GET['id'])) {
     doAction($_GET['action'], $_GET['id']);
@@ -31,14 +31,12 @@ function getAPIInfo($keyID, $vCode)
 
 function getAPIType($data)
 {
-    $key_type = $data->result->key['type'];
-    return $key_type;
+    return $data->result->key['type'];
 }
 
 function checkForError($data)
 {
-    $error = $data->error['code'];
-    return $error;
+    return $data->error['code'];
 }
 
 function doAction($action, $id)
@@ -66,12 +64,13 @@ function addKey()
     $keyID = $_POST['keyID'];
     $vCode = $_POST['vCode'];
     $keyXML = getAPIInfo($keyID, $vCode);
-    if ($keyXML != '') {
+    if ($keyXML !== '') {
         $keyType = getAPIType($keyXML);
         $isActive = 1;
         $sql = 'INSERT INTO apikeys (user_name,apikey_name,apikey_keyid,apikey_vcode,apikey_type,apikey_isactive) VALUES (\'' . $_SESSION['user_name'] . '\',\'' . $keyName . '\',\'' . $keyID . '\',\'' . $vCode . '\',\'' . $keyType . '\',\'' . $isActive . '\');';
-        $query = $db_connection->prepare($sql);
-        $query->execute();
+        //$query = $db_connection->prepare($sql);
+        $db_connection->exec($sql);
+        //$query->execute();
         $_SESSION['keyID'] = $keyID;
         $_SESSION['vCode'] = $vCode;
         $_SESSION['selectedCharacter'] = 0;
@@ -82,8 +81,9 @@ function setAllKeysInactive()
 {
     $db_connection = createDatabaseConnection();
     $sql2 = 'UPDATE apikeys SET apikey_isactive = 0 WHERE user_name = \'' . $_SESSION['user_name'] . '\'';
-    $query = $db_connection->prepare($sql2);
-    $query->execute();
+    //$query = $db_connection->prepare($sql2);
+    //$query->execute();
+    $db_connection->exec($sql2);
 }
 
 function setActive($id)
@@ -93,11 +93,11 @@ function setActive($id)
     foreach ($db_connection->query($sql) as $row) {
         if ($row['user_name'] === $_SESSION['user_name']) {
             $sql2 = 'UPDATE `apikeys` SET `apikey_isactive`= 1 WHERE `apikey_id`=\'' . $id . '\'';
-            $query = $db_connection->prepare($sql2);
-            $query->execute();
+            $db_connection->exec($sql2);
+            //$query->execute();
             $sql3 = 'UPDATE `apikeys` SET `apikey_isactive`= 0 WHERE `apikey_vcode`=\'' . $_SESSION['vCode'] . '\'';
-            $query = $db_connection->prepare($sql3);
-            $query->execute();
+            $db_connection->exec($sql3);
+            //$query->execute();
             $_SESSION['keyID'] = $row['apikey_keyid'];
             $_SESSION['vCode'] = $row['apikey_vcode'];
             $_SESSION['selectedCharacter'] = 0;
@@ -116,8 +116,7 @@ function deleteKey($id)
     foreach ($db_connection->query($sql) as $row) {
         if ($row['user_name'] === $_SESSION['user_name']) {
             $sql2 = 'DELETE FROM `apikeys` WHERE `user_name` =\'' . $_SESSION['user_name'] . '\' AND `apikey_id`=\'' . $id . '\'';
-            $query = $db_connection->prepare($sql2);
-            $query->execute();
+            $db_connection->exec($sql2);
             unset($_SESSION['keyID'], $_SESSION['vCode']);
         } else {
             echo '<script type="text/javascript">';
@@ -240,7 +239,7 @@ function getUserAPIKeys()
         </div>
     </div>
 
-<?php include 'foot.php'; ?>
+<?php include __DIR__ . 'foot.php'; ?>
     </body>
     </html>
 <?php ob_flush(); ?>

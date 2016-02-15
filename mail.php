@@ -1,23 +1,23 @@
 <?php ob_start(); ?>
-<?php include 'head.php'; ?>
-<?php include 'nav.php'; ?>
+<?php include __DIR__ . 'head.php'; ?>
+<?php include __DIR__ . 'nav.php'; ?>
 
     <div id="mailTop">
     </div>
     <div id="mailBody">
     </div>
 
-<?php include 'foot.php'; ?>
+<?php include __DIR__ . 'foot.php'; ?>
     <script>
 
         $("#myTabs").find('a').click(function (e) {
             e.preventDefault();
             $(this).tab('show')
-        })
+        });
 
         $(function () {
             $('[data-toggle="tooltip"]').tooltip()
-        })
+        });
 
         $(document).ready(function () {
             var charIDs = [];
@@ -203,7 +203,7 @@
                 var y = name.childNodes[0];
                 z = y.nodeValue;
                 if (bool) {
-                    li = '<li role="presentation" class="active">'
+                    li = '<li role="presentation" class="active">';
                     bool = false;
                 }
             }

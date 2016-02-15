@@ -1,6 +1,6 @@
 <?php ob_start(); ?>
-<?php include 'head.php'; ?>
-<?php include 'nav.php'; ?>
+<?php include __DIR__ . 'head.php'; ?>
+<?php include __DIR__ . 'nav.php'; ?>
 <?php //include "loginapp.php";?>
     <div id="alertbox" role="alert"></div>
     <div class="hidden-xs" id="accountLarge">
@@ -55,11 +55,11 @@
                 and will be deleted once you log out.</p>
             <?php echo '<form method="post" action="' . $_SERVER['SCRIPT_NAME'] . '?char=0&action=temp" name="temporaryform">'; ?>
             <div class="form-group">
-                <label for="exampleInputEmail1">Key ID</label>
+                <label for="keyID">Key ID</label>
                 <input type="text" class="form-control" id="keyID" name="keyID" required>
             </div>
             <div class="form-group">
-                <label for="exampleInputPassword1">Verification Code</label>
+                <label for="vCode">Verification Code</label>
                 <input type="text" class="form-control" id="vCode" name="vCode" required>
             </div>
             <input type="submit" class="btn btn-info" name="login" value="Use Key"/>
@@ -136,7 +136,7 @@
                             <h4 class="modal-title">Reset your password</h4>
                         </div>
                         <div class="modal-body">
-                            <label for="login_input_username">Enter your Email:</label>
+                            <label for="login_input_email">Enter your Email:</label>
                             <input id="login_input_email" class="form-control" type="email" name="user_email" required/>
                         </div>
                         <div class="modal-footer">
@@ -204,7 +204,7 @@
                                 echo $_SESSION['user_name'];
                             }
                             ?>">
-                            <label for="uname">Current Password:</label>
+                            <label for="user_password_old">Current Password:</label>
                             <input id="user_password_old" class="form-control" type="password" name="user_password_old"
                                    pattern=".{6,}" required autocomplete="off"/>
                             <br>
@@ -234,7 +234,7 @@
     </div>
 
 
-<?php include 'foot.php'; ?>
+<?php include __DIR__ . 'foot.php'; ?>
     </body>
     </html>
 <?php ob_flush(); ?>
