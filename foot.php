@@ -52,3 +52,18 @@
 <script type="text/javascript" src="js/jquery.total-storage.js"></script>
 <script type="text/javascript" src="js/helperFunctions.js"></script>
 <script type="text/javascript" src="js/footerJS.js"></script>
+<script>
+    //Enable Bootstrap modals, tabs and tooltips
+    $('#myModal').on('shown.bs.modal', function () {
+        $('#myInput').focus()
+    });
+
+    $('#myTabs a').click(function (e) {
+        e.preventDefault();
+        $(this).tab('show')
+    });
+
+    $(function () {
+        $('[data-toggle="tooltip"]').tooltip()
+    });
+</script>

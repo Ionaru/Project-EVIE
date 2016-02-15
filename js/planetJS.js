@@ -25,7 +25,7 @@
         request.send();
     };
 
-    getPlanets = function (keyID, vCode, charIDs, i) {
+    getPlanets = function (keyID, vCode, selectedCharacterID) {
         var request;
         request = new XMLHttpRequest;
         request.onreadystatechange = function () {
@@ -45,15 +45,15 @@
                     src = 'items/' + planetTypeID + '_64.png';
                     $('#planetsNew').append('<div class="planetcontainer col-sm-12 col-md-12"><div id="planetDivNew' + planetID + '" class="planet"><span class="floating-box"><img class="img img-circle planetimg" src="' + src + '" alt="PlanetImg' + planetID + '" id="planetImgNew' + planetID + '">' + planetName + planetTypeName.replace('Planet', '') + '</span><span class="floating-box">Command Center Level ' + upgradeLevel + '</span><span class="floating-box" id="installations' + planetID + '">' + numberOfPins + ' Installations</span><span class="floating-box" id="harvesterActive' + planetID + 'New"></span><span class="floating-box text-right"><a class="btn btn-primary btn-xl">Expand</a></span></div></div>');
                     $('#planets').append('<div class="planetcontainer text-center col-sm-6 col-md-4"><div id="planetDiv' + planetID + '" class="planet"><img class="img img-circle planetimg" src="' + src + '" alt="PlanetImg' + planetID + '" id="planetImg' + planetID + '"><p>' + planetName + planetTypeName.replace('Planet', '') + '<br>Command Center Level ' + upgradeLevel + '<br>' + numberOfPins + ' Installations</p></div></div>');
-                    getPlanetInstallations(keyID, vCode, charIDs, i, planetID);
+                    getPlanetInstallations(keyID, vCode, selectedCharacterID, planetID);
                 }
             }
         };
-        request.open('GET', 'https://api.eveonline.com/char/PlanetaryColonies.xml.aspx?keyID=' + keyID + '&vCode=' + vCode + '&characterID=' + charIDs[0], true);
+        request.open('GET', 'https://api.eveonline.com/char/PlanetaryColonies.xml.aspx?keyID=' + keyID + '&vCode=' + vCode + '&characterID=' + selectedCharacterID, true);
         request.send();
     };
 
-    getPlanetInstallations = function (keyID, vCode, charIDs, i, planetID) {
+    getPlanetInstallations = function (keyID, vCode, selectedCharacterID, planetID) {
         var request;
         request = new XMLHttpRequest;
         request.onreadystatechange = function () {
@@ -99,7 +99,7 @@
                 $('#installations' + planetID).append(', ' + totalHarvesters + ' ' + Pluralize('Harvester', 'Harvesters', totalHarvesters));
             }
         };
-        request.open('GET', 'https://api.eveonline.com/char/PlanetaryPins.xml.aspx?keyID=' + keyID + '&vCode=' + vCode + '&characterID=' + charIDs[i] + '&planetID=' + planetID, true);
+        request.open('GET', 'https://api.eveonline.com/char/PlanetaryPins.xml.aspx?keyID=' + keyID + '&vCode=' + vCode + '&characterID=' + selectedCharacterID + '&planetID=' + planetID, true);
         request.send();
     };
 
@@ -161,7 +161,39 @@
     };
 
     $(document).ready(function () {
-        getPlanets(keyID, vCode, selectedCharacterID, 0);
+        var charIDs, charRequest;
+        charIDs = [];
+        charRequest = new XMLHttpRequest;
+        charRequest.onreadystatechange = function () {
+            var charID, i, row, rows, xml;
+            if (charRequest.readyState === 4 && charRequest.status === 200) {
+                xml = charRequest.responseXML;
+                rows = xml.getElementsByTagName('row');
+                i = 0;
+                while (i < rows.length) {
+                    row = rows[i];
+                    charID = row.getAttribute('characterID');
+                    charIDs[i] = charID;
+                    i++;
+                }
+                i = 0;
+                while (i < charIDs.length) {
+                    var css = "characterInactive";
+                    if (i == selectedCharacter) {
+                        css = "characterActive";
+                        selectedCharacterID = charIDs[i];
+                    }
+                    $('#charLinks').css('visibility', 'visible').append('<li><a id="charLink' + i + '" class="' + css + '" href="?char=' + i + '"><img alt="char' + i + '" id="char' + i + '" style="max-height: 50px" class="img" src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" width="50" height="50"></a></li>');
+                    $('#char' + i).css('visibility', 'visible').attr('src', 'https://image.eveonline.com/Character/' + charIDs[i] + '_50.jpg');
+                    $('#charmbl' + i).css('visibility', 'visible').attr('src', 'https://image.eveonline.com/Character/' + charIDs[i] + '_256.jpg');
+                    i++;
+                }
+                getPlanets(keyID, vCode, selectedCharacterID);
+            }
+        };
+        charRequest.open('GET', 'https://api.eveonline.com/account/Characters.xml.aspx?keyID=' + keyID + '&vCode=' + vCode, true);
+        charRequest.send();
+
     });
 
 }).call(this);

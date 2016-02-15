@@ -5,21 +5,6 @@ if (document.getElementById("passAlong_keyID") !== null) {
     var selectedCharacterID;
 }
 
-//Enable Bootstrap modals, tabs and tooltips
-$('#myModal').on('shown.bs.modal', function () {
-    $('#myInput').focus()
-});
-
-$('#myTabs a').click(function (e) {
-    e.preventDefault();
-    $(this).tab('show')
-});
-
-$(function () {
-    $('[data-toggle="tooltip"]').tooltip()
-});
-
-
 //Fix the icons in case people are viewing this in Internet Explorer
 jQuery(document).ready(function () {
     $('#browser').append(window.navigator.userAgent);
@@ -36,7 +21,7 @@ jQuery(document).ready(function () {
         $("#imageCalendar").attr('src', 'icons/calendar.png');
         $("#imageSettings").attr('src', 'icons/settings.png');
     }
-
+    /*
     var charIDs, charRequest;
     charIDs = [];
     charRequest = new XMLHttpRequest;
@@ -68,6 +53,7 @@ jQuery(document).ready(function () {
     };
     charRequest.open('GET', 'https://api.eveonline.com/account/Characters.xml.aspx?keyID=' + keyID + '&vCode=' + vCode, true);
     charRequest.send();
+    */
 });
 
 //Get Character ID from a name
