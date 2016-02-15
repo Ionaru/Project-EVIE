@@ -3,7 +3,7 @@
 Start session and load loginapp 
 */
 session_start();
-include __DIR__ . 'loginapp.php';
+include __DIR__ . '/loginapp.php';
 
 $title = '';
 $dashboardactive = '';

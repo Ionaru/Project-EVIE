@@ -1,13 +1,13 @@
 <?php ob_start(); ?>
-<?php include __DIR__ . 'head.php'; ?>
-<?php include __DIR__ . 'nav.php'; ?>
+<?php include __DIR__ . '/head.php'; ?>
+<?php include __DIR__ . '/nav.php'; ?>
 
     <div id="mailTop">
     </div>
     <div id="mailBody">
     </div>
 
-<?php include __DIR__ . 'foot.php'; ?>
+<?php include __DIR__ . '/foot.php'; ?>
     <script>
 
         $("#myTabs").find('a').click(function (e) {

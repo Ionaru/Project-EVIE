@@ -1,6 +1,6 @@
 <?php ob_start();
-include __DIR__ . 'head.php';
-include __DIR__ . 'nav.php';
+include __DIR__ . '/head.php';
+include __DIR__ . '/nav.php';
 
 if (isset ($_GET['action'], $_GET['id'])) {
     doAction($_GET['action'], $_GET['id']);
@@ -239,7 +239,7 @@ function getUserAPIKeys()
         </div>
     </div>
 
-<?php include __DIR__ . 'foot.php'; ?>
+<?php include __DIR__ . '/foot.php'; ?>
     </body>
     </html>
 <?php ob_flush(); ?>

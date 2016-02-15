@@ -1,6 +1,6 @@
 <?php ob_start(); ?>
-<?php include __DIR__ . 'head.php'; ?>
-<?php include __DIR__ . 'nav.php'; ?>
+<?php include __DIR__ . '/head.php'; ?>
+<?php include __DIR__ . '/nav.php'; ?>
 
     <div id="CurrentlyTraining" class="container-fluid">
 
@@ -22,7 +22,7 @@
         </div>
     </div>
 
-<?php include __DIR__ . 'foot.php'; ?>
+<?php include __DIR__ . '/foot.php'; ?>
     <script>
 
         $('#myTabs a').click(function (e) {

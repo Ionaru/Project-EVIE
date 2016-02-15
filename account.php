@@ -1,6 +1,6 @@
 <?php ob_start(); ?>
-<?php include __DIR__ . 'head.php'; ?>
-<?php include __DIR__ . 'nav.php'; ?>
+<?php include __DIR__ . '/head.php'; ?>
+<?php include __DIR__ . '/nav.php'; ?>
 <?php //include "loginapp.php";?>
     <div id="alertbox" role="alert"></div>
     <div class="hidden-xs" id="accountLarge">
@@ -234,7 +234,7 @@
     </div>
 
 
-<?php include __DIR__ . 'foot.php'; ?>
+<?php include __DIR__ . '/foot.php'; ?>
     </body>
     </html>
 <?php ob_flush(); ?>
