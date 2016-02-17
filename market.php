@@ -16,7 +16,7 @@
 
         });
 
-        $('#myTabs a').click(function (e) {
+        $('#myTabs').find('a').click(function (e) {
             e.preventDefault();
             $(this).tab('show')
         });
@@ -34,8 +34,7 @@
                     var rows = xml.getElementsByTagName("row");
                     for (var i = 0; i < rows.length; i++) {
                         var row = rows[i];
-                        charID = row.getAttribute("characterID");
-                        charIDs[i] = charID;
+                        charIDs[i] = row.getAttribute("characterID");
                     }
                     $('#Orders').append('' +
                         '<h2>Current balance: ' +
@@ -126,7 +125,7 @@
             var request = new XMLHttpRequest();
             request.onreadystatechange = function () {
                 if (request.readyState == 4 && request.status == 200) {
-                    var refTypes = new Object();
+                    var refTypes = {};
                     var xml = request.responseXML;
                     var rows = xml.getElementsByTagName("row");
                     for (var i = 0; i < rows.length; i++) {
@@ -169,7 +168,7 @@
                                 for (var i2 = 0; i2 < rows.length; i2++) {
                                     var row = rows[i2];
                                     //console.log(row);
-                                    skillName = row.getAttribute("typeName");
+                                    var skillName = row.getAttribute("typeName");
                                 }
                                 $("#CurrentlyTraining").html('<a style="color: black;" href="skills.php?char=' + i + '">' + skillName + " " + skillLvl + "</a>");
                             }
@@ -187,35 +186,6 @@
             request.send();
         }
 
-        function getCharacterSheet(keyID, vCode, charIDs, i) {
-            var infoRequest = new XMLHttpRequest();
-            infoRequest.onreadystatechange = function () {
-                if (infoRequest.readyState == 4 && infoRequest.status == 200) {
-                    var xml = infoRequest.responseXML;
-                    charName = xml.getElementsByTagName("name")[0].childNodes[0].nodeValue;
-                    charRace = xml.getElementsByTagName("race")[0].childNodes[0].nodeValue;
-                    bloodline = xml.getElementsByTagName("bloodLine")[0].childNodes[0].nodeValue;
-                    ancestry = xml.getElementsByTagName("ancestry")[0].childNodes[0].nodeValue;
-                    corpName = xml.getElementsByTagName("corporationName")[0].childNodes[0].nodeValue;
-                    //corpDate = xml.getElementsByTagName("corporationDate")[0].childNodes[0].nodeValue;
-                    allianceName = "";
-                    if (xml.getElementsByTagName("allianceName")[0] != null) {
-                        allianceName = xml.getElementsByTagName("allianceName")[0].childNodes[0].nodeValue;
-                        //allianceDate = xml.getElementsByTagName("allianceDate")[0].childNodes[0].nodeValue;
-                    }
-                    //securityStatus = xml.getElementsByTagName("securityStatus")[0].childNodes[0].nodeValue;
-                    //console.log(charName);
-                    $("#CharacterSheet").html('<h2>' + charName + '</h2>');
-                    $("#CharacterSheet").append('<h3>' + corpName + '</h3>');
-                    if (allianceName != null) {
-                        $("#CharacterSheet").append('<h3>' + allianceName + '</h3>');
-                    }
-                }
-            };
-            infoRequest.open("GET", "https://api.eveonline.com/char/CharacterSheet.xml.aspx?keyID=" + keyID + "&vCode=" + vCode + "&characterID=" + charIDs[i], true);
-            infoRequest.send();
-        }
-
         function getItemName(typeID, level) {
             var request2 = new XMLHttpRequest();
             request2.onreadystatechange = function () {
@@ -227,7 +197,7 @@
                     for (var i2 = 0; i2 < rows.length; i2++) {
                         var row = rows[i2];
                         //console.log(row);
-                        skillName = row.getAttribute("typeName");
+                        var skillName = row.getAttribute("typeName");
                     }
                     $('#skill' + typeID).html(skillName + ' ' + level);
                 }
@@ -236,27 +206,22 @@
             request2.send();
         }
 
-        function getName(keyID, vCode, charIDs) {
-            var bool = true;
-            for (var i = 0; i < charIDs.length; i++) {
-                var li = '<li role="presentation">';
-                var request = new XMLHttpRequest();
-                request.open("GET", "https://api.eveonline.com/char/CharacterSheet.xml.aspx?keyID=" + keyID + "&vCode=" + vCode + "&characterID=" + charIDs[i], false);
-                request.send();
-                var xml = request.responseXML;
-                var name = xml.getElementsByTagName("name")[0];
-                var y = name.childNodes[0];
-                z = y.nodeValue;
-                if (bool) {
-                    li = '<li role="presentation" class="active">';
-                    bool = false;
-                }
-            }
-        }
-
         function getOrders(keyID, vCode, charIDs, i) {
             var request = new XMLHttpRequest();
             request.onreadystatechange = function () {
+                var stationID;
+                var volEntered;
+                var volRemaining;
+                var orderState;
+                var typeID;
+                var range;
+                var duration;
+                var escrow;
+                var price;
+                var bid;
+                var issued;
+                var currentTime;
+                var expiry;
                 if (request.readyState == 4 && request.status == 200) {
                     var sellOrders = 0;
                     var buyOrders = 0;
@@ -278,26 +243,27 @@
                             price = row.getAttribute("price");
                             bid = row.getAttribute("bid");
                             issued = row.getAttribute("issued");
-                            Date.parse(nowDate.replace(/\-/ig, '/').split('.')[0]);
-                            var expiry = issued + (duration * 86400000);
-                            console.log(expiry);
-                            if(orderState == 0) {
+                            currentTime = xml.getElementsByTagName('currentTime')[0].childNodes[0].nodeValue;
+                            currentTime = Date.parse(currentTime.replace(/\-/ig, '/').split('.')[0]);
+                            issued = Date.parse(issued.replace(/\-/ig, '/').split('.')[0]);
+                            expiry = issued + (duration * 86400000);
+                            if (orderState == 0) {
                                 items.push(typeID);
                                 if (bid == 0) {
                                     sellOrders++;
-                                    $('#SellOrders').append('<tr><td id="'+typeID+'">'+typeID+'</td><td>'+volRemaining+' / '+volEntered+'</td><td>'+(parseFloat(price)).formatMoney(2, ',', '.')+' ISK</td><td>'+stationID+' ( '+range+' ) </td><td>'+issued+'</td></tr>');
+                                    $('#SellOrders').append('<tr><td id="' + typeID + '">' + typeID + '</td><td>' + volRemaining + ' / ' + volEntered + '</td><td>' + (parseFloat(price)).formatMoney(2, ',', '.') + ' ISK</td><td>' + stationID + ' ( range: ' + range + ' ) </td><td>' + parseTimeRemaining(currentTime, expiry) + '</td></tr>');
                                 }
                                 else if (bid == 1) {
                                     buyOrders++;
-                                    $('#BuyOrders').append('<tr><td id="'+typeID+'">'+typeID+'</td><td>'+volRemaining+' / '+volEntered+'</td><td>'+(parseFloat(price)).formatMoney(2, ',', '.')+' ISK</td><td>'+stationID+' ( '+range+' ) </td><td>'+issued+'</td></tr>');
+                                    $('#BuyOrders').append('<tr><td id="' + typeID + '">' + typeID + '</td><td>' + volRemaining + ' / ' + volEntered + '</td><td>' + (parseFloat(price)).formatMoney(2, ',', '.') + ' ISK</td><td>' + stationID + ' ( range: ' + range + ' ) </td><td>' + parseTimeRemaining(currentTime, expiry) + '</td></tr>');
                                 }
                             }
                         }
                     }
-                    if(sellOrders == 0){
+                    if (sellOrders == 0) {
                         $('#sellOrdersTable').html('');
                     }
-                    if(buyOrders == 0){
+                    if (buyOrders == 0) {
                         $('#buyOrdersTable').html('');
                     }
                     getItemNames(items);
@@ -324,6 +290,8 @@
             //console.log(skillIDs);
             var request = new XMLHttpRequest();
             request.onreadystatechange = function () {
+                var typeID;
+                var skillName;
                 if (request.readyState == 4 && request.status == 200) {
                     var xml2 = request.responseXML;
                     //console.log(xml2)
@@ -333,48 +301,12 @@
                         //console.log(row);
                         typeID = row.getAttribute("typeID");
                         skillName = row.getAttribute("typeName");
-                        $('#'+typeID).html(skillName);
+                        $('#' + typeID).html(skillName);
                     }
 
                 }
             };
             request.open("GET", "https://api.eveonline.com/eve/TypeName.xml.aspx?ids=" + skillIDs, true);
-            request.send();
-        }
-
-        function getWalletTransactions(keyID, vCode, charIDs, refTypes, i) {
-            var request = new XMLHttpRequest();
-            request.onreadystatechange = function () {
-                if (request.readyState == 4 && request.status == 200) {
-                    var xml = request.responseXML;
-                    var rows = xml.getElementsByTagName("row");
-                    if (rows.length != 0) {
-                        for (var i2 = 0; i2 < rows.length; i2++) {
-                            var row = rows[i2];
-                            date = row.getAttribute("transactionDateTime");
-                            quantity = row.getAttribute("quantity");
-                            typeName = row.getAttribute("typeName");
-                            price = row.getAttribute("price");
-                            clientName = row.getAttribute("clientName");
-                            transactionType = row.getAttribute("transactionType");
-                            if (transactionType == "buy") {
-                                var color = "red";
-                                var info = " bought from ";
-                            }
-                            else {
-                                var color = "green";
-                                var info = " sold to ";
-                            }
-                            $('#WalletTransactionsBody' + (i + 1)).append('<tr><td data-label="Date">' + date + '</td><td data-label="Information">' + quantity + ' x <a>' + typeName + '</a>' + info + '<a>' + clientName + '</a></td><td data-label="Price" style="color: ' + color + '">' + (parseFloat(price * quantity)).formatMoney(2, ',', '.') + ' ISK (' + (parseFloat(price)).formatMoney(2, ',', '.') + ' ISK per item)</td></tr>');
-                        }
-                    }
-                    else {
-                        $('#WalletTransactionsBody' + (i + 1)).append('<tr><td data-label="Date">There is no transaction info available.</td><td></td><td></td>"></tr>');
-
-                    }
-                }
-            };
-            request.open("GET", "https://api.eveonline.com/char/WalletTransactions.xml.aspx?keyID=" + keyID + "&vCode=" + vCode + "&characterID=" + charIDs[i] + "&rowCount=50", true);
             request.send();
         }
     </script>
