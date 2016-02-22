@@ -266,7 +266,13 @@
                     if (buyOrders == 0) {
                         $('#buyOrdersTable').html('');
                     }
-                    getItemNames(items);
+                    if (sellOrders == 0 && buyOrders == 0){
+                        $('#sellOrdersTable').html('<p>You have no open market orders.</p>');
+                    }
+                    else {
+                        getItemNames(items);
+                    }
+
                 }
             };
             request.open("GET", "https://api.eveonline.com/char/MarketOrders.xml.aspx?keyID=" + keyID + "&vCode=" + vCode + "&characterID=" + charIDs[i], true);
