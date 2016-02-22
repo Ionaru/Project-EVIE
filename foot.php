@@ -45,25 +45,10 @@
     </div>
 </div>
 
-<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-<script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="js/jquery.js"></script>
+<script type="text/javascript" src="js/bootstrap.js"></script>
 <script type="text/javascript" src="js/jquery.timeago.js"></script>
 <script type="text/javascript" src="js/countUp.js"></script>
 <script type="text/javascript" src="js/jquery.total-storage.js"></script>
 <script type="text/javascript" src="js/helperFunctions.js"></script>
 <script type="text/javascript" src="js/footerJS.js"></script>
-<script>
-    //Enable Bootstrap modals, tabs and tooltips
-    $('#myModal').on('shown.bs.modal', function () {
-        $('#myInput').focus()
-    });
-
-    $('#myTabs a').click(function (e) {
-        e.preventDefault();
-        $(this).tab('show')
-    });
-
-    $(function () {
-        $('[data-toggle="tooltip"]').tooltip()
-    });
-</script>

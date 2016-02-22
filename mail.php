@@ -9,16 +9,6 @@
 
 <?php include __DIR__ . '/foot.php'; ?>
     <script>
-
-        $("#myTabs").find('a').click(function (e) {
-            e.preventDefault();
-            $(this).tab('show')
-        });
-
-        $(function () {
-            $('[data-toggle="tooltip"]').tooltip()
-        });
-
         $(document).ready(function () {
             var charIDs = [];
             var charRequest = new XMLHttpRequest();

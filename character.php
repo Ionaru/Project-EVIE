@@ -10,22 +10,6 @@
 
 <?php include __DIR__ . '/foot.php'; ?>
     <script>
-
-        $('#myModal').on('shown.bs.modal', function () {
-            console.log("Modal Opened");
-            $('#myInput').focus()
-
-        });
-
-        $('#myTabs a').click(function (e) {
-            e.preventDefault();
-            $(this).tab('show')
-        });
-
-        $(function () {
-            $('[data-toggle="tooltip"]').tooltip()
-        });
-
         $(document).ready(function () {
 
 

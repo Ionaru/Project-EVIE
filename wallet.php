@@ -7,10 +7,6 @@ include __DIR__ . '/nav.php'; ?>
 <?php include __DIR__ . '/foot.php'; ?>
 
     <script>
-        $(function () {
-            $('[data-toggle="tooltip"]').tooltip()
-        });
-
         var refTypes = [];
 
         var amountScrolled = 300;
