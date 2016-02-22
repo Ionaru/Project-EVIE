@@ -9,22 +9,6 @@
 
 <?php include __DIR__ . '/foot.php'; ?>
     <script>
-
-        $('#myModal').on('shown.bs.modal', function () {
-            console.log("Modal Opened");
-            $('#myInput').focus()
-
-        });
-
-        $('#myTabs').find('a').click(function (e) {
-            e.preventDefault();
-            $(this).tab('show')
-        });
-
-        $(function () {
-            $('[data-toggle="tooltip"]').tooltip()
-        });
-
         $(document).ready(function () {
             var charIDs = [];
             var charRequest = new XMLHttpRequest();
@@ -119,91 +103,6 @@
             };
             request.open("GET", "https://api.eveonline.com/char/AccountBalance.xml.aspx?keyID=" + keyID + "&vCode=" + vCode + "&characterID=" + charIDs[i], true);
             request.send();
-        }
-
-        function getRefTypes() {
-            var request = new XMLHttpRequest();
-            request.onreadystatechange = function () {
-                if (request.readyState == 4 && request.status == 200) {
-                    var refTypes = {};
-                    var xml = request.responseXML;
-                    var rows = xml.getElementsByTagName("row");
-                    for (var i = 0; i < rows.length; i++) {
-                        var row = rows[i];
-                        refTypes[row.getAttribute("refTypeID")] = row.getAttribute("refTypeName");
-                    }
-                    console.log(refTypes);
-                    return refTypes;
-                }
-            };
-            request.open("GET", "https://api.eveonline.com/eve/RefTypes.xml.aspx", true);
-            request.send();
-        }
-
-        function getSkillInTraining(keyID, vCode, charIDs, i) {
-            //console.log(charIDs.length);
-            var request = new XMLHttpRequest();
-            request.onreadystatechange = function () {
-                if (request.readyState == 4 && request.status == 200) {
-
-                    var xml = request.responseXML;
-                    //console.log(xml);
-                    if (xml.getElementsByTagName("trainingTypeID")[0] != null) {
-                        var skillIDxml = xml.getElementsByTagName("trainingTypeID")[0];
-                        var skillLvlxml = xml.getElementsByTagName("trainingToLevel")[0];
-                        //console.log(skillLvlxml);
-                        var skillIDnode = skillIDxml.childNodes[0];
-                        var skillLvlnode = skillLvlxml.childNodes[0];
-                        //console.log(skillLvlnode);
-                        var skillID = skillIDnode.nodeValue;
-                        var skillLvl = skillLvlnode.nodeValue;
-                        //console.log(skillLvl);
-                        var request2 = new XMLHttpRequest();
-                        request2.onreadystatechange = function () {
-                            if (request2.readyState == 4 && request2.status == 200) {
-
-                                var xml2 = request2.responseXML;
-                                //console.log(xml2)
-                                var rows = xml2.getElementsByTagName("row");
-                                for (var i2 = 0; i2 < rows.length; i2++) {
-                                    var row = rows[i2];
-                                    //console.log(row);
-                                    var skillName = row.getAttribute("typeName");
-                                }
-                                $("#CurrentlyTraining").html('<a style="color: black;" href="skills.php?char=' + i + '">' + skillName + " " + skillLvl + "</a>");
-                            }
-                        };
-                        request2.open("GET", "https://api.eveonline.com/eve/TypeName.xml.aspx?ids=" + skillID, true);
-                        request2.send();
-                    }
-                    else {
-                        $("#CurrentlyTraining").html('<a style="color: black;" href="skills.php?char=' + i + '">No skill in training</a>');
-                    }
-
-                }
-            };
-            request.open("GET", "https://api.eveonline.com/char/SkillInTraining.xml.aspx?keyID=" + keyID + "&vCode=" + vCode + "&characterID=" + charIDs[i], true);
-            request.send();
-        }
-
-        function getItemName(typeID, level) {
-            var request2 = new XMLHttpRequest();
-            request2.onreadystatechange = function () {
-                if (request2.readyState == 4 && request2.status == 200) {
-
-                    var xml2 = request2.responseXML;
-                    //console.log(xml2)
-                    var rows = xml2.getElementsByTagName("row");
-                    for (var i2 = 0; i2 < rows.length; i2++) {
-                        var row = rows[i2];
-                        //console.log(row);
-                        var skillName = row.getAttribute("typeName");
-                    }
-                    $('#skill' + typeID).html(skillName + ' ' + level);
-                }
-            };
-            request2.open("GET", "https://api.eveonline.com/eve/TypeName.xml.aspx?ids=" + typeID, true);
-            request2.send();
         }
 
         function getOrders(keyID, vCode, charIDs, i) {
