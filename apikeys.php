@@ -159,7 +159,7 @@ function getUserAPIKeys()
     global $apikey_type;
     global $apikey_isactive;
     global $apikey_dateadded;
-    $sql = 'SELECT * FROM apikeys WHERE user_name = \''.$_SESSION['user_name'].'\'';
+    $sql = 'SELECT * FROM apikeys WHERE user_name = \'' . $_SESSION['user_name'] . '\'';
     foreach ($db_connection->query($sql) as $row) {
         $apikey_id = $row['apikey_id'];
         $apikey_name = $row['apikey_name'];
@@ -199,12 +199,12 @@ function getUserAPIKeys()
     <table class="table table-hover table-condensed" style="width:100%">
         <thead>
         <tr>
-        <th>Actions</th>
-        <th>Key Name</th>
-        <th>Key ID</th>
-        <th>Verification Code</th>
-        <th>Key Type</th>
-        <th>Date Added</th>
+            <th>Actions</th>
+            <th>Key Name</th>
+            <th>Key ID</th>
+            <th>Verification Code</th>
+            <th>Key Type</th>
+            <th>Date Added</th>
         </tr>
         </thead>
         <tbody>
@@ -217,23 +217,24 @@ function getUserAPIKeys()
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <form method="post" action="?char=0&action=addKey" name="temporaryform">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h4 class="modal-title">Add an API Key</h4>
-                </div>
-                <div class="modal-body">
-                    <label for="input_KeyName">Name your API Key</label>
-                    <input type="text" class="form-control" id="keyName" name="keyName" required title="input_KeyName">
-                    <hr>
-                    <label for="login_KeyID">Key ID</label>
-                    <input type="text" class="form-control" id="keyID" name="keyID" required title="login_KeyID">
-                    <br>
-                    <label for="login_vCode">Verification Code</label>
-                    <input type="text" class="form-control" id="vCode" name="vCode" required title="login_vCode">
-                </div>
-                <div class="modal-footer">
-                    <input type="submit" class="btn btn-info" name="login" value="Add Key"/>
-                </div>
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Add an API Key</h4>
+                    </div>
+                    <div class="modal-body">
+                        <label for="input_KeyName">Name your API Key</label>
+                        <input type="text" class="form-control" id="keyName" name="keyName" required
+                               title="input_KeyName">
+                        <hr>
+                        <label for="login_KeyID">Key ID</label>
+                        <input type="text" class="form-control" id="keyID" name="keyID" required title="login_KeyID">
+                        <br>
+                        <label for="login_vCode">Verification Code</label>
+                        <input type="text" class="form-control" id="vCode" name="vCode" required title="login_vCode">
+                    </div>
+                    <div class="modal-footer">
+                        <input type="submit" class="btn btn-info" name="login" value="Add Key"/>
+                    </div>
                 </form>
             </div>
         </div>

@@ -7,7 +7,7 @@ if (document.getElementById("passAlong_keyID") !== null) {
 
 $(function () {
     $('[data-toggle="tooltip"]').tooltip()
-})
+});
 
 //Fix the icons in case people are viewing this in Internet Explorer
 jQuery(document).ready(function () {
@@ -43,6 +43,7 @@ function getCharData(charName) {
                 getCharDataFromID(charID)
             }
             else {
+                //noinspection JSUnresolvedVariable,JSUnresolvedFunction
                 CCPEVE.showInfo(1377, charID)
             }
         }
@@ -96,6 +97,7 @@ function getCharDataFromID(charID) {
         infoRequest.send();
     }
     else {
+        //noinspection JSUnresolvedVariable,JSUnresolvedFunction
         CCPEVE.showInfo(1377, charID)
     }
 }
@@ -105,6 +107,7 @@ function getItemData(itemID) {
     if (window.navigator.userAgent.indexOf("EVE-IGB") == -1) {
     }
     else {
+        //noinspection JSUnresolvedVariable,JSUnresolvedFunction
         CCPEVE.showInfo(itemID)
     }
 }
