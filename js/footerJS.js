@@ -5,6 +5,10 @@ if (document.getElementById("passAlong_keyID") !== null) {
     var selectedCharacterID;
 }
 
+$(function () {
+    $('[data-toggle="tooltip"]').tooltip()
+})
+
 //Fix the icons in case people are viewing this in Internet Explorer
 jQuery(document).ready(function () {
     $('#browser').append(window.navigator.userAgent);
