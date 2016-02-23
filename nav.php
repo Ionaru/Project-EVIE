@@ -43,7 +43,7 @@ $url = $_SERVER['REQUEST_URI'];
             }
             if ((strpos($url, 'index.php') === false) && (strpos($url, 'account.php') === false) && (strpos($url, 'apikeys.php') === false)) {
                 echo '
-                <ul id="charLinks" class="nav navbar-nav navbar-right hidden-xs" style="max-height: 50px;"></ul>';
+                <ul id="charLinks" class="nav navbar-nav navbar-right hidden-xs"></ul>';
                 }
             ?>
 
