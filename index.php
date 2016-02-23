@@ -39,7 +39,7 @@ include __DIR__ . '/nav.php'; ?>
                             '<img id="ImageAccount1Character' + (i + 1) + '" src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" width="200" height="200" class="img-responsive" alt="Generic placeholder thumbnail">' +
                             '<h4 id="NameAccount1Character' + (i + 1) + '"></h4>' +
                             '</a>' +
-                            '<span style="font-family:Calibri;" id="BalanceAccount1Character' + (i + 1) + '" class="text-muted"></span>' +
+                            '<span id="BalanceAccount1Character' + (i + 1) + '" class="text-muted"></span>' +
                             '<p id="SkillAccount1Character' + (i + 1) + '"></p>' +
                             '<div id="countdown"></div>' +
                             '</div>');

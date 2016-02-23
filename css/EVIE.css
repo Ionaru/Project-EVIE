@@ -11,7 +11,7 @@ body.modal-open {
 }
 
 div.planet {
-    border: 2px solid #337ab7;
+    border: 2px solid #205079;
 }
 
 div.planetcontainer {
@@ -20,7 +20,7 @@ div.planetcontainer {
 
 img.planetimg {
     margin: 5px;
-    border: 2px solid #337ab7;
+    border: 2px solid #205079;
 }
 
 ul.bottom {
@@ -46,11 +46,15 @@ ul.bottom {
     padding-top: 12px;
     max-height: 50px;
     background-color: #404040;
-    border-top: 3px solid #337ab7;
+    border-top: 3px solid #205079;
 }
 
 .chatacterActive > img {
     margin-top: -3px;
+}
+
+a {
+    color: #205079;
 }
 
 .characterInactive {
@@ -77,17 +81,21 @@ a.back-to-top {
     background: #202020 url("../icons/fleet.png") no-repeat center 43%;
 }
 
-.nav>li>a:focus, .nav>li>a:hover {
-
+.nav>li>a {
+    background-size: 200% 100%;
+    background-image: linear-gradient(to right, #202020 50%, #205079 50%);
+    -webkit-transition: background-position .15s;
+    -moz-transition: background-position .15s;
+    transition: background-position .15s;
 }
 
-path {
-    fill: white !important;
+.nav>li>a:focus, .nav>li>a:hover {
+    background-position: 100% 0;
 }
 
 table {
     /*max-width: auto;*/
-    border: 2px solid #337ab7;
+    border: 2px solid #205079;
     width: 100%;
     margin: 0;
     padding: 0;
@@ -96,7 +104,7 @@ table {
 }
 
 table tr {
-    border: 1px solid #337ab7;
+    border: 1px solid #205079;
     padding: 10px;
 }
 
@@ -124,14 +132,14 @@ table th {
     table tr {
         margin-bottom: 10px;
         display: block;
-        border-bottom: 2px solid #337ab7;
+        border-bottom: 2px solid #205079;
     }
 
     table td {
         display: block;
         text-align: right;
         font-size: 13px;
-        border-bottom: 1px #337ab7;
+        border-bottom: 1px #205079;
     }
 
     table td:last-child {
@@ -144,4 +152,17 @@ table th {
         text-transform: uppercase;
         font-weight: bold;
     }
+}
+
+.navbar-inverse .navbar-nav>li>a {
+    background: -webkit-linear-gradient(#eff9ff, #6F6F70);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.navbar-brand {
+    background: -webkit-linear-gradient(#eff9ff, #6F6F70);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    cursor:default;
 }
