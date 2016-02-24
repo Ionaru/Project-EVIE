@@ -130,7 +130,7 @@ body {
 }
 
 .top_active, .top_active:hover, .top_active:focus {
-    background-color: #205079;
+    background-color: #205079 !important;
     background-image: initial;
 }
 
@@ -147,13 +147,13 @@ body {
 }
 
 .sidebar_active {
-    background-color: #205079;
+    background-color: #205079 !important;
     background-image: initial;
 }
 
 .characterActive {
     max-height: 50px;
-    background-color: #205079;
+    background-color: #205079 !important;
 }
 
 .characterInactive {
