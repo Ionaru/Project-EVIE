@@ -107,7 +107,7 @@ $url = $_SERVER['REQUEST_URI'];
                                                                                              class="img"
                                                                                              src="icons/calendar.svg"></a>
                 </div>
-                <div <?php echo $settingsactivembl ?> class="col-xs-3 visible-xs"><a
+                <div <?php echo $apikeysactivembl ?> class="col-xs-3 visible-xs"><a
                         href=<?php echo '"apikeys.php?char=' . $selectedChar . '"'; ?>><img alt="Settings"
                                                                                             style="width: 100%;"
                                                                                             class="img"
