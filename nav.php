@@ -99,17 +99,11 @@ $url = $_SERVER['REQUEST_URI'];
                                                                                              src="icons/calendar.svg"></a>
                 </div>
                 <?php if (!empty($_SESSION['user_name'])) {
-                    echo '
-                }
-                <div ' . $apikeysactivembl . '> class="col-xs-3 visible-xs"><a
-                        href="apikeys.php?char=' . $selectedChar . '"><img alt="Apikeys"
-                                                                                            class="img mobile_nav_image"
-                                                                                            src="icons/settings.svg"></a>
-                </div>
-                ';
-                    echo '
-                <div class="col-xs-3 visible-xs"><a href="' . $_SERVER['SCRIPT_NAME'] . '?action=logout">
-                    <img alt="Logout" class="img mobile_nav_image" src="icons/lockedcontainer.svg"></a></div>';
+                    echo '<div ' . $apikeysactivembl . ' class="col-xs-3 visible-xs">';
+                    echo '<a href="apikeys.php?char=' . $selectedChar . '">';
+                    echo '<img alt="Apikeys" class="img mobile_nav_image" src="icons/settings.svg"></a></div>';
+                    echo '<div class="col-xs-3 visible-xs"><a href="' . $_SERVER['SCRIPT_NAME'] . '?action=logout">';
+                    echo '<img alt="Logout" class="img mobile_nav_image" src="icons/lockedcontainer.svg"></a></div>';
                 } ?>
             </div>
         </div>
