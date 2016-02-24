@@ -84,18 +84,6 @@ a.back-to-top {
     background: #202020 url("../icons/fleet.png") no-repeat center 43%;
 }
 
-.nav>li>a {
-    background-size: 200% 100%;
-    background-image: linear-gradient(to right, #202020 50%, #205079 50%);
-    -webkit-transition: background-position .15s;
-    -moz-transition: background-position .15s;
-    transition: background-position .15s;
-}
-
-.nav>li>a:focus, .nav>li>a:hover {
-    background-position: 100% 0;
-}
-
 table {
     /*max-width: auto;*/
     border: 2px solid #205079;
@@ -155,14 +143,6 @@ table th {
         text-transform: uppercase;
         font-weight: bold;
     }
-}
-
-.navbar-inverse .navbar-nav>li>a {
-    background-size: 200% 100%;
-    background-image: linear-gradient(to bottom, #202020 50%, #205079 50%);
-    -webkit-transition: background-position .15s;
-    -moz-transition: background-position .15s;
-    transition: background-position .15s;
 }
 
 .navbar-brand {

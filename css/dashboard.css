@@ -28,13 +28,6 @@ body {
     background-color: #202020;
 }
 
-.navbar-fixed-top > .active > a,
-.navbar-fixed-top > .active > a:hover,
-.navbar-fixed-top > .active > a:focus {
-    color: #fff;
-    background-color: #404040;
-}
-
 /*
  * Sidebar
  */
@@ -71,13 +64,6 @@ body {
 .nav-sidebar > li > a {
     padding-right: 20px;
     padding-left: 20px;
-}
-
-.nav-sidebar > .active > a,
-.nav-sidebar > .active > a:hover,
-.nav-sidebar > .active > a:focus {
-    background-color: #205079;
-    background-image: initial;
 }
 
 /*
@@ -129,4 +115,33 @@ body {
 .sidebarimg {
     width: 40px;
     height: 40px;
+}
+
+.top_bar_button {
+    background-size: 100% 200%;
+    background-image: linear-gradient(to bottom, #202020 50%, #205079 50%);
+    -webkit-transition: background-position .15s;
+    -moz-transition: background-position .15s;
+    transition: background-position .15s;
+}
+
+.top_bar_button:focus, .top_bar_button:hover {
+    background-position: 0 -100%;
+}
+
+.top_active, .top_active:hover, .top_active:focus {
+    background-color: #205079 !important;
+    background-image: initial;
+}
+
+.sidebar_button {
+    background-size: 200% 100%;
+    background-image: linear-gradient(to right, #202020 50%, #205079 50%);
+    -webkit-transition: background-position .15s;
+    -moz-transition: background-position .15s;
+    transition: background-position .15s;
+}
+
+.sidebar_button:focus, .sidebar_button:hover {
+    background-position: 100% 0;
 }

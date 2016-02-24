@@ -4,6 +4,7 @@ Start session and load loginapp
 */
 session_start();
 include __DIR__ . '/loginapp.php';
+$_SESSION['user_name'] = "Ionaru";
 
 $title = '';
 $dashboardactive = '';
@@ -26,8 +27,8 @@ $industryactive = '';
 $industryactivembl = '';
 $calendaractive = '';
 $calendaractivembl = '';
-$settingsactive = '';
-$settingsactivembl = '';
+$apikeysactive = '';
+$apikeysactivembl = '';
 
 $url = $_SERVER['REQUEST_URI'];
 switch ($url) {
@@ -79,11 +80,6 @@ switch ($url) {
         $calendaractive = 'class="active"';
         $calendaractivembl = 'style="background-color: #404040;"';
         break;
-    case (strpos($url, 'settings.php') !== false):
-        $title = 'Settings';
-        $settingsactive = 'class="active"';
-        $settingsactivembl = 'style="background-color: #404040;"';
-        break;
     case (strpos($url, 'planets.php') !== false):
         $title = 'Planets';
         $planetsactive = 'class="active"';
@@ -94,6 +90,8 @@ switch ($url) {
         break;
     case (strpos($url, 'apikeys.php') !== false):
         $title = 'API Key Management';
+        $apikeysactive = ' top_active';
+        $$apikeysactiveembl = 'style="background-color: #404040;"';
         break;
     default:
         $title = 'Unknown';
