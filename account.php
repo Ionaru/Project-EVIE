@@ -64,7 +64,7 @@
                     <label for="vCode">Verification Code</label>
                     <input type="text" class="form-control" id="vCode" name="vCode" required>
                 </div>
-                <input type="submit" class="btn btn-info" name="login" value="Use Key"/>
+                <input type="submit" class="btn btn-info" name="templogin" value="Use Key"/>
             </form>
         </div>
     </div>
@@ -85,7 +85,7 @@
         <div id="loginModal" class="modal fade">
             <div class="modal-dialog modal-sm">
                 <div class="modal-content">
-                    <form name="loginform" method="post" action=<?php echo $_SERVER['SCRIPT_NAME']; ?>>
+                    <form name="loginform" method="post" action="<?php echo $_SERVER['SCRIPT_NAME']; ?>">
                         <div class="modal-header">
                             <button type="button" class="close" data-dismiss="modal">&times;</button>
                             <h4 class="modal-title">Login</h4>

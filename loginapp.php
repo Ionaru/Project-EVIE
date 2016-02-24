@@ -5,7 +5,6 @@
  *
  * An entire php application with user registration, login and logout in one file.
  * Uses very modern password hashing via the PHP 5.5 password hashing functions.
- * This project includes a compatibility file to make these functions available in PHP 5.3.7+ and PHP 5.4+.
  *
  * @author Panique
  * @link https://github.com/panique/php-login-one-file/

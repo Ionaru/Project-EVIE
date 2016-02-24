@@ -4,7 +4,7 @@
 
 /* Move down content because we have a fixed navbar that is 50px tall */
 body {
-    padding-top: 50px;
+    padding-top: 53px;
     overflow-y: scroll;
 }
 
@@ -22,7 +22,9 @@ body {
  * Hide default border to remove 1px line.
  */
 .navbar-fixed-top {
+    box-sizing: border-box;
     border: 0;
+    border-top: 3px solid #205079;
     background-color: #202020;
 }
 
@@ -74,8 +76,8 @@ body {
 .nav-sidebar > .active > a,
 .nav-sidebar > .active > a:hover,
 .nav-sidebar > .active > a:focus {
-    color: #fff;
-    background-color: #404040;
+    background-color: #205079;
+    background-image: initial;
 }
 
 /*
@@ -122,4 +124,9 @@ body {
     width: 50px;
     height: 50px;
     background: #202020;
+}
+
+.sidebarimg {
+    width: 40px;
+    height: 40px;
 }

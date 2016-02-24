@@ -44,11 +44,15 @@ ul.bottom {
 .characterActive {
     padding-top: 12px;
     max-height: 50px;
-    background-color: #404040;
     border-top: 3px solid #205079;
+    background-size: 200% 100%;
+    background-image: linear-gradient(to bottom, #202020 50%, #205079 50%);
+    -webkit-transition: background-position .15s;
+    -moz-transition: background-position .15s;
+    transition: background-position .15s;
 }
 
-.chatacterActive > img {
+.chatacterActive > .img {
     margin-top: -3px;
 }
 
@@ -154,9 +158,11 @@ table th {
 }
 
 .navbar-inverse .navbar-nav>li>a {
-    background: -webkit-linear-gradient(#eff9ff, #6F6F70);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+    background-size: 200% 100%;
+    background-image: linear-gradient(to bottom, #202020 50%, #205079 50%);
+    -webkit-transition: background-position .15s;
+    -moz-transition: background-position .15s;
+    transition: background-position .15s;
 }
 
 .navbar-brand {
