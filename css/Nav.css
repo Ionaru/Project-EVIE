@@ -150,3 +150,21 @@ body {
     background-color: #205079;
     background-image: initial;
 }
+
+.characterActive {
+    max-height: 50px;
+    background-color: #205079;
+}
+
+.characterInactive {
+    max-height: 50px;
+    background-size: 100% 200%;
+    background-image: linear-gradient(to bottom, #202020 50%, #205079 50%);
+    -webkit-transition: background-position .15s;
+    -moz-transition: background-position .15s;
+    transition: background-position .15s;
+}
+
+.characterInactive:hover, .characterInactive:focus {
+    background-position: 0 -100%;
+}

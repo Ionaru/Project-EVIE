@@ -34,7 +34,7 @@ $url = $_SERVER['REQUEST_URI'];
             <span class="navbar-brand">Project EVIE - <?php echo $title; ?></span></div>
         <div id="navbar" class="navbar-collapse collapse container-fluid">
             <?php if (count($_SESSION) !== 0) {
-                echo '<ul class="nav navbar-nav hidden-xs" style="max-height: 50px;">';
+                echo '<ul class="nav navbar-nav hidden-xs">';
                 if (($url !== 'apikeys.php') && (!empty($_SESSION['user_name']))) {
                     echo '<li><a class="top_bar_button'. $apikeysactive .'" href="apikeys.php?char=' . $selectedChar . '">API Keys</a></li>';
                 }

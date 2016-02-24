@@ -41,28 +41,8 @@ ul.bottom {
     padding: 10px;
 }
 
-.characterActive {
-    padding-top: 12px;
-    max-height: 50px;
-    border-top: 3px solid #205079;
-    background-size: 200% 100%;
-    background-image: linear-gradient(to bottom, #202020 50%, #205079 50%);
-    -webkit-transition: background-position .15s;
-    -moz-transition: background-position .15s;
-    transition: background-position .15s;
-}
-
-.chatacterActive > .img {
-    margin-top: -3px;
-}
-
 a {
     color: #205079;
-}
-
-.characterInactive {
-    max-height: 50px;
-    visibility: hidden;
 }
 
 a.anchor {
