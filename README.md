@@ -7,7 +7,7 @@ My goal is to build a mobile-friendly website that will always display the most 
 The website is created using:
 - HTML5
 - CSS 3
-- PHP 5 (Might be upgraded to 7)
+- PHP 7+
 - JavaScript 3
 
 
