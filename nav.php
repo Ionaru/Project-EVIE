@@ -35,8 +35,8 @@ $url = $_SERVER['REQUEST_URI'];
         <div id="navbar" class="navbar-collapse collapse container-fluid">
             <?php if (count($_SESSION) !== 0) {
                 echo '<ul class="nav navbar-nav hidden-xs">';
-                if (($url !== 'apikeys.php') && (!empty($_SESSION['user_name']))) {
-                    echo '<li><a class="top_bar_button'. $apikeysactive .'" href="apikeys.php?char=' . $selectedChar . '">API Keys</a></li>';
+                if (($url !== 'apikeys.php') || (!empty($_SESSION['user_name']))) {
+                    echo '<li><a class="top_bar_button' . $apikeysactive . '" href="apikeys.php?char=' . $selectedChar . '">API Keys</a></li>';
                 }
                 echo '<li><a class="top_bar_button" href="' . $_SERVER['SCRIPT_NAME'] . '?action=logout">Log out</a></li>';
                 echo '</ul>';
@@ -44,7 +44,7 @@ $url = $_SERVER['REQUEST_URI'];
             if ((strpos($url, 'index.php') === false) && (strpos($url, 'account.php') === false) && (strpos($url, 'apikeys.php') === false)) {
                 echo '
                 <ul id="charLinks" class="nav navbar-nav navbar-right hidden-xs"></ul>';
-                }
+            }
             ?>
 
             <div class="row visible-xs mobile_nav_box">
@@ -98,14 +98,19 @@ $url = $_SERVER['REQUEST_URI'];
                                                                                              class="img mobile_nav_image"
                                                                                              src="icons/calendar.svg"></a>
                 </div>
+                <?php if (!empty($_SESSION['user_name'])) {
+                    echo '
+                }
                 <div <?php echo $apikeysactivembl ?> class="col-xs-3 visible-xs"><a
-                        href=<?php echo '"apikeys.php?char=' . $selectedChar . '"'; ?>><img alt="Settings"
+                        href="apikeys.php?char=' . $selectedChar . '"><img alt="Apikeys"
                                                                                             class="img mobile_nav_image"
                                                                                             src="icons/settings.svg"></a>
                 </div>
-                <?php echo '
+                ';
+                    echo '
                 <div class="col-xs-3 visible-xs"><a href="' . $_SERVER['SCRIPT_NAME'] . '?action=logout">
-                    <img alt="Settings" class="img mobile_nav_image" src="icons/lockedcontainer.svg"></a></div>';?>
+                    <img alt="Logout" class="img mobile_nav_image" src="icons/lockedcontainer.svg"></a></div>';
+                } ?>
             </div>
         </div>
     </div>
@@ -115,64 +120,74 @@ $url = $_SERVER['REQUEST_URI'];
         <div class="col-sm-2 col-md-1">
             <div class="sidebar">
                 <ul class="nav nav-sidebar">
-                    <li><a class="sidebar_button<?php echo $dashboardactive ?>" data-toggle="tooltip" data-html="true" data-placement="right"
-                                                          data-container="body"
-                                                          title='<div class="text-left"><strong>Dashboard</strong><br>The main Hub for all your Characters.</div>'
-                                                          href=<?php echo '"index.php?char=' . $selectedChar . '"'; ?>><img
+                    <li><a class="sidebar_button<?php echo $dashboardactive ?>" data-toggle="tooltip" data-html="true"
+                           data-placement="right"
+                           data-container="body"
+                           title='<div class="text-left"><strong>Dashboard</strong><br>The main Hub for all your Characters.</div>'
+                           href=<?php echo '"index.php?char=' . $selectedChar . '"'; ?>><img
                                 id="imageDashboard" alt="Dashboard" class="img sidebarimg"
                                 src="icons/charactersheet.svg"></a></li>
-                    <li><a class="sidebar_button<?php echo $skillsactive ?>" data-toggle="tooltip" data-html="true" data-placement="right"
-                                                       data-container="body"
-                                                       title='<div class="text-left"><strong>Skills</strong><br>Admit it, you have 5 million SP in mining.</div>'
-                                                       href=<?php echo '"skills.php?char=' . $selectedChar . '"'; ?>><img
+                    <li><a class="sidebar_button<?php echo $skillsactive ?>" data-toggle="tooltip" data-html="true"
+                           data-placement="right"
+                           data-container="body"
+                           title='<div class="text-left"><strong>Skills</strong><br>Admit it, you have 5 million SP in mining.</div>'
+                           href=<?php echo '"skills.php?char=' . $selectedChar . '"'; ?>><img
                                 id="imageSkills" alt="Skills" class="img sidebarimg"
                                 src="icons/skills.svg"></a></li>
-                    <li><a class="sidebar_button<?php echo $mailactive ?>" data-toggle="tooltip" data-html="true" data-placement="right"
-                                                     data-container="body"
-                                                     title='<div class="text-left"><strong>Mail</strong><br>Mostly spam.</div>'
-                                                     href=<?php echo '"mail.php?char=' . $selectedChar . '"'; ?>><img
+                    <li><a class="sidebar_button<?php echo $mailactive ?>" data-toggle="tooltip" data-html="true"
+                           data-placement="right"
+                           data-container="body"
+                           title='<div class="text-left"><strong>Mail</strong><br>Mostly spam.</div>'
+                           href=<?php echo '"mail.php?char=' . $selectedChar . '"'; ?>><img
                                 id="imageMail" alt="Mail" class="img sidebarimg" src="icons/evemail.svg"></a>
                     </li>
-                    <li><a class="sidebar_button<?php echo $marketactive ?>" data-toggle="tooltip" data-html="true" data-placement="right"
-                                                       data-container="body"
-                                                       title='<div class="text-left"><strong>Market</strong><br>Info from eve-central.com</div>'
-                                                       href=<?php echo '"market.php?char=' . $selectedChar . '"'; ?>><img
+                    <li><a class="sidebar_button<?php echo $marketactive ?>" data-toggle="tooltip" data-html="true"
+                           data-placement="right"
+                           data-container="body"
+                           title='<div class="text-left"><strong>Market</strong><br>Info from eve-central.com</div>'
+                           href=<?php echo '"market.php?char=' . $selectedChar . '"'; ?>><img
                                 id="imageMarket" alt="Market" class="img sidebarimg"
                                 src="icons/market.svg"></a></li>
-                    <li><a class="sidebar_button<?php echo $walletactive ?>" data-toggle="tooltip" data-html="true" data-placement="right"
-                                                       data-container="body"
-                                                       title='<div class="text-left"><strong>Wallet</strong><br>Where your sweet sweet ISKies are kept.</div>'
-                                                       href=<?php echo '"wallet.php?char=' . $selectedChar . '"'; ?>><img
+                    <li><a class="sidebar_button<?php echo $walletactive ?>" data-toggle="tooltip" data-html="true"
+                           data-placement="right"
+                           data-container="body"
+                           title='<div class="text-left"><strong>Wallet</strong><br>Where your sweet sweet ISKies are kept.</div>'
+                           href=<?php echo '"wallet.php?char=' . $selectedChar . '"'; ?>><img
                                 id="imageWallet" alt="Wallet" class="img sidebarimg"
                                 src="icons/wallet.svg"></a></li>
-                    <li><a class="sidebar_button<?php echo $assetsactive ?>" data-toggle="tooltip" data-html="true" data-placement="right"
-                                                       data-container="body"
-                                                       title='<div class="text-left"><strong>Assets</strong><br>All your exotic dancers, male.</div>'
-                                                       href=<?php echo '"assets.php?char=' . $selectedChar . '"'; ?>><img
+                    <li><a class="sidebar_button<?php echo $assetsactive ?>" data-toggle="tooltip" data-html="true"
+                           data-placement="right"
+                           data-container="body"
+                           title='<div class="text-left"><strong>Assets</strong><br>All your exotic dancers, male.</div>'
+                           href=<?php echo '"assets.php?char=' . $selectedChar . '"'; ?>><img
                                 id="imageAssets" alt="Assets" class="img sidebarimg"
                                 src="icons/assets.svg"></a></li>
-                    <li><a class="sidebar_button<?php echo $contactsactive ?>" data-toggle="tooltip" data-html="true" data-placement="right"
-                                                         data-container="body"
-                                                         title='<div class="text-left"><strong>Contacts</strong><br>CCP knows you stalk Spaceship Barbie.</div>'
-                                                         href=<?php echo '"contacts.php?char=' . $selectedChar . '"'; ?>><img
+                    <li><a class="sidebar_button<?php echo $contactsactive ?>" data-toggle="tooltip" data-html="true"
+                           data-placement="right"
+                           data-container="body"
+                           title='<div class="text-left"><strong>Contacts</strong><br>CCP knows you stalk Spaceship Barbie.</div>'
+                           href=<?php echo '"contacts.php?char=' . $selectedChar . '"'; ?>><img
                                 id="imageContacts" alt="Contacts" class="img sidebarimg"
                                 src="icons/contacts.svg"></a></li>
-                    <li><a class="sidebar_button<?php echo $planetsactive ?>" data-toggle="tooltip" data-html="true" data-placement="right"
-                                                        data-container="body"
-                                                        title='<div class="text-left"><strong>Planets</strong><br>Because strip mining is amazing.</div>'
-                                                        href=<?php echo '"planets.php?char=' . $selectedChar . '"'; ?>><img
+                    <li><a class="sidebar_button<?php echo $planetsactive ?>" data-toggle="tooltip" data-html="true"
+                           data-placement="right"
+                           data-container="body"
+                           title='<div class="text-left"><strong>Planets</strong><br>Because strip mining is amazing.</div>'
+                           href=<?php echo '"planets.php?char=' . $selectedChar . '"'; ?>><img
                                 id="imagePlanets" alt="Planets" class="img sidebarimg"
                                 src="icons/planets.svg"></a></li>
-                    <li><a class="sidebar_button<?php echo $industryactive ?>" data-toggle="tooltip" data-html="true" data-placement="right"
-                                                         data-container="body"
-                                                         title='<div class="text-left"><strong>Industry</strong><br>Building things for profit!</div>'
-                                                         href=<?php echo '"industry.php?char=' . $selectedChar . '"'; ?>><img
+                    <li><a class="sidebar_button<?php echo $industryactive ?>" data-toggle="tooltip" data-html="true"
+                           data-placement="right"
+                           data-container="body"
+                           title='<div class="text-left"><strong>Industry</strong><br>Building things for profit!</div>'
+                           href=<?php echo '"industry.php?char=' . $selectedChar . '"'; ?>><img
                                 id="imageIndustry" alt="Industry" class="img sidebarimg"
                                 src="icons/industry.svg"></a></li>
-                    <li><a class="sidebar_button<?php echo $calendaractive ?>" data-toggle="tooltip" data-html="true" data-placement="right"
-                                                         data-container="body"
-                                                         title='<div class="text-left"><strong>Calendar</strong><br>You forgot that birthday, again!</div>'
-                                                         href=<?php echo '"calendar.php?char=' . $selectedChar . '"'; ?>><img
+                    <li><a class="sidebar_button<?php echo $calendaractive ?>" data-toggle="tooltip" data-html="true"
+                           data-placement="right"
+                           data-container="body"
+                           title='<div class="text-left"><strong>Calendar</strong><br>You forgot that birthday, again!</div>'
+                           href=<?php echo '"calendar.php?char=' . $selectedChar . '"'; ?>><img
                                 id="imageCalendar" alt="Calendar" class="img sidebarimg"
                                 src="icons/calendar.svg"></a></li>
                 </ul>
