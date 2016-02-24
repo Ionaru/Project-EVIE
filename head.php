@@ -34,7 +34,7 @@ $url = $_SERVER['REQUEST_URI'];
 switch ($url) {
     case (strpos($url, 'index.php') !== false):
         $title = 'Dashboard';
-        $dashboardactive = 'class="active"';
+        $dashboardactive = ' sidebar_active';
         $dashboardactivembl = 'style="background-color: #404040;"';
         break;
     case (strpos($url, 'character.php') !== false):
@@ -42,47 +42,47 @@ switch ($url) {
         break;
     case (strpos($url, 'mail.php') !== false):
         $title = 'Eve Mail';
-        $mailactive = 'class="active"';
+        $mailactive = ' sidebar_active';
         $mailactivembl = 'style="background-color: #404040;"';
         break;
     case (strpos($url, 'skills.php') !== false):
         $title = 'Skills';
-        $skillsactive = 'class="active"';
+        $skillsactive = ' sidebar_active';
         $skillsactivembl = 'style="background-color: #404040;"';
         break;
     case (strpos($url, 'market.php') !== false):
         $title = 'Market';
-        $marketactive = 'class="active"';
+        $marketactive = ' sidebar_active';
         $marketactivembl = 'style="background-color: #404040;"';
         break;
     case (strpos($url, 'wallet.php') !== false):
         $title = 'Wallet';
-        $walletactive = 'class="active"';
+        $walletactive = ' sidebar_active';
         $walletactivembl = 'style="background-color: #404040;"';
         break;
     case (strpos($url, 'assets.php') !== false):
         $title = 'Assets';
-        $assetsactive = 'class="active"';
+        $assetsactive = ' sidebar_active';
         $assetsactivembl = 'style="background-color: #404040;"';
         break;
     case (strpos($url, 'contacts.php') !== false):
         $title = 'Contacts';
-        $contactsactive = 'class="active"';
+        $contactsactive = ' sidebar_active';
         $contactsactivembl = 'style="background-color: #404040;"';
         break;
     case (strpos($url, 'industry.php') !== false):
         $title = 'Industry';
-        $industryactive = 'class="active"';
+        $industryactive = ' sidebar_active';
         $industryactivembl = 'style="background-color: #404040;"';
         break;
     case (strpos($url, 'calendar.php') !== false):
         $title = 'Calendar';
-        $calendaractive = 'class="active"';
+        $calendaractive = ' sidebar_active';
         $calendaractivembl = 'style="background-color: #404040;"';
         break;
     case (strpos($url, 'planets.php') !== false):
         $title = 'Planets';
-        $planetsactive = 'class="active"';
+        $planetsactive = ' sidebar_active';
         $planetsactivembl = 'style="background-color: #404040;"';
         break;
     case (strpos($url, 'account.php') !== false):

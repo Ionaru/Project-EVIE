@@ -146,7 +146,7 @@ body {
     background-position: 100% 0;
 }
 
-.active {
+.sidebar_active {
     background-color: #205079;
     background-image: initial;
 }
