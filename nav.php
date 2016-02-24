@@ -101,7 +101,7 @@ $url = $_SERVER['REQUEST_URI'];
                 <?php if (!empty($_SESSION['user_name'])) {
                     echo '
                 }
-                <div <?php echo $apikeysactivembl ?> class="col-xs-3 visible-xs"><a
+                <div ' . $apikeysactivembl . '> class="col-xs-3 visible-xs"><a
                         href="apikeys.php?char=' . $selectedChar . '"><img alt="Apikeys"
                                                                                             class="img mobile_nav_image"
                                                                                             src="icons/settings.svg"></a>
