@@ -80,7 +80,7 @@ $url = $_SERVER['REQUEST_URI'];
                 </div>
                 <div <?php echo $contactsactivembl ?> class="col-xs-3 visible-xs"><a
                         href=<?php echo '"contacts.php?char=' . $selectedChar . '"'; ?>><img alt="Contacts"
-                                                                                             class="img"
+                                                                                             class="img mobile_nav_image"
                                                                                              src="icons/contacts.svg"></a>
                 </div>
                 <div <?php echo $planetsactivembl ?> class="col-xs-3 visible-xs"><a
