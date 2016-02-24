@@ -25,8 +25,6 @@
 <?php include __DIR__ . '/foot.php'; ?>
     <script>
         $(document).ready(function () {
-
-
             var charIDs = [];
             var charRequest = new XMLHttpRequest();
             charRequest.onreadystatechange = function () {
@@ -50,10 +48,10 @@
                         $('#charmbl' + i).css('visibility', 'visible').attr('src', 'https://image.eveonline.com/Character/' + charIDs[i] + '_256.jpg');
                         i++;
                     }
-                    //getWalletJournal(keyID, vCode, charIDs, refTypes, <?php echo $selectedChar ?>);
-                    //getWalletTransactions(keyID, vCode, charIDs, refTypes, <?php echo $selectedChar ?>);
                     getSkillInTraining(keyID, vCode, charIDs, <?php echo $selectedChar ?>);
+                    //getSkillQueue(keyID, vCode, charIDs, <?php //echo $selectedChar ?>);
                     getAllSkills(keyID, vCode, charIDs, <?php echo $selectedChar ?>);
+                    //getTypeNames("Skill", typeIDs);
                 }
             };
             charRequest.open("GET", "https://api.eveonline.com/account/Characters.xml.aspx?keyID=" + keyID + "&vCode=" + vCode, true);

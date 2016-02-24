@@ -66,9 +66,6 @@
                     }
                     getBalance(keyID, vCode, charIDs, <?php echo $selectedChar ?>);
                     getOrders(keyID, vCode, charIDs, <?php echo $selectedChar ?>);
-                    //getWalletTransactions(keyID, vCode, charIDs, refTypes, <?php echo $selectedChar ?>);
-                    //getSkillInTraining(keyID, vCode, charIDs, <?php echo $selectedChar ?>);
-                    //getCharacterSheet(keyID, vCode, charIDs, <?php echo $selectedChar ?>);
                 }
             };
             charRequest.open("GET", "https://api.eveonline.com/account/Characters.xml.aspx?keyID=" + keyID + "&vCode=" + vCode, true);
