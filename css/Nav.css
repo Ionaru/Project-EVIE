@@ -8,19 +8,6 @@ body {
     overflow-y: scroll;
 }
 
-/*
- * Global add-ons
- */
-
-.sub-header {
-    padding-bottom: 10px;
-    border-bottom: 1px solid #eee;
-}
-
-/*
- * Top navigation
- * Hide default border to remove 1px line.
- */
 .navbar-fixed-top {
     box-sizing: border-box;
     border: 0;
@@ -140,4 +127,13 @@ body {
 
 .characterInactive:hover, .characterInactive:focus {
     background-position: 0 -100%;
+}
+
+.mobile_nav_box{
+    border-bottom: 5px solid #205079;
+}
+
+.mobile_nav_image {
+    width: 100%;
+
 }

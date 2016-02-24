@@ -47,70 +47,60 @@ $url = $_SERVER['REQUEST_URI'];
                 }
             ?>
 
-            <div class="row visible-xs" style="border-bottom: 3px solid #337ab7;">
+            <div class="row visible-xs mobile_nav_box">
                 <div <?php echo $dashboardactivembl ?> class="col-xs-3 visible-xs"><a
                         href=<?php echo '"index.php?char=' . $selectedChar . '"'; ?>><img alt="Dashboard"
-                                                                                          style="width: 100%;"
-                                                                                          class="img"
+                                                                                          class="img mobile_nav_image"
                                                                                           src="icons/charactersheet.svg"></a>
                 </div>
                 <div <?php echo $skillsactivembl ?> class="col-xs-3 visible-xs"><a
                         href=<?php echo '"skills.php?char=' . $selectedChar . '"'; ?>><img alt="Skills"
-                                                                                           style="width: 100%;"
-                                                                                           class="img"
+                                                                                           class="img mobile_nav_image"
                                                                                            src="icons/skills.svg"></a>
                 </div>
                 <div <?php echo $mailactivembl ?> class="col-xs-3 visible-xs"><a
-                        href=<?php echo '"mail.php?char=' . $selectedChar . '"'; ?>><img alt="Mail" style="width: 100%;"
-                                                                                         class="img"
+                        href=<?php echo '"mail.php?char=' . $selectedChar . '"'; ?>><img alt="Mail"
+                                                                                         class="img mobile_nav_image"
                                                                                          src="icons/evemail.svg"></a>
                 </div>
                 <div <?php echo $marketactivembl ?> class="col-xs-3 visible-xs"><a
                         href=<?php echo '"market.php?char=' . $selectedChar . '"'; ?>><img alt="Market"
-                                                                                           style="width: 100%;"
-                                                                                           class="img"
+                                                                                           class="img mobile_nav_image"
                                                                                            src="icons/market.svg"></a>
                 </div>
                 <div <?php echo $walletactivembl ?> class="col-xs-3 visible-xs"><a
                         href=<?php echo '"wallet.php?char=' . $selectedChar . '"'; ?>><img alt="Wallet"
-                                                                                           style="width: 100%;"
-                                                                                           class="img"
+                                                                                           class="img mobile_nav_image"
                                                                                            src="icons/wallet.svg"></a>
                 </div>
                 <div <?php echo $assetsactivembl ?> class="col-xs-3 visible-xs"><a
                         href=<?php echo '"assets.php?char=' . $selectedChar . '"'; ?>><img alt="Assets"
-                                                                                           style="width: 100%;"
-                                                                                           class="img"
+                                                                                           class="img mobile_nav_image"
                                                                                            src="icons/assets.svg"></a>
                 </div>
                 <div <?php echo $contactsactivembl ?> class="col-xs-3 visible-xs"><a
                         href=<?php echo '"contacts.php?char=' . $selectedChar . '"'; ?>><img alt="Contacts"
-                                                                                             style="width: 100%;"
                                                                                              class="img"
                                                                                              src="icons/contacts.svg"></a>
                 </div>
                 <div <?php echo $planetsactivembl ?> class="col-xs-3 visible-xs"><a
                         href=<?php echo '"planets.php?char=' . $selectedChar . '"'; ?>><img alt="Planets"
-                                                                                            style="width: 100%;"
-                                                                                            class="img"
+                                                                                            class="img mobile_nav_image"
                                                                                             src="icons/planets.svg"></a>
                 </div>
                 <div <?php echo $industryactivembl ?> class="col-xs-3 visible-xs"><a
                         href=<?php echo '"industry.php?char=' . $selectedChar . '"'; ?>><img alt="Industry"
-                                                                                             style="width: 100%;"
-                                                                                             class="img"
+                                                                                             class="img mobile_nav_image"
                                                                                              src="icons/industry.svg"></a>
                 </div>
                 <div <?php echo $calendaractivembl ?> class="col-xs-3 visible-xs"><a
                         href=<?php echo '"calendar.php?char=' . $selectedChar . '"'; ?>><img alt="Calendar"
-                                                                                             style="width: 100%;"
-                                                                                             class="img"
+                                                                                             class="img mobile_nav_image"
                                                                                              src="icons/calendar.svg"></a>
                 </div>
                 <div <?php echo $apikeysactivembl ?> class="col-xs-3 visible-xs"><a
                         href=<?php echo '"apikeys.php?char=' . $selectedChar . '"'; ?>><img alt="Settings"
-                                                                                            style="width: 100%;"
-                                                                                            class="img"
+                                                                                            class="img mobile_nav_image"
                                                                                             src="icons/settings.svg"></a>
                 </div>
             </div>
