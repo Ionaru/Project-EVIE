@@ -4,7 +4,6 @@ Start session and load loginapp
 */
 session_start();
 include __DIR__ . '/loginapp.php';
-$_SESSION['user_name'] = "Ionaru";
 
 $title = '';
 $dashboardactive = '';
