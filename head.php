@@ -91,7 +91,7 @@ switch ($url) {
     case (strpos($url, 'apikeys.php') !== false):
         $title = 'API Key Management';
         $apikeysactive = ' top_active';
-        $$apikeysactiveembl = 'style="background-color: #404040;"';
+        $$apikeysactivembl = 'style="background-color: #404040;"';
         break;
     default:
         $title = 'Unknown';

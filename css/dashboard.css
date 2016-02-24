@@ -130,7 +130,7 @@ body {
 }
 
 .top_active, .top_active:hover, .top_active:focus {
-    background-color: #205079 !important;
+    background-color: #205079;
     background-image: initial;
 }
 
@@ -144,4 +144,9 @@ body {
 
 .sidebar_button:focus, .sidebar_button:hover {
     background-position: 100% 0;
+}
+
+.active {
+    background-color: #205079;
+    background-image: initial;
 }
