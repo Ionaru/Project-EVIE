@@ -48,10 +48,9 @@
                         $('#charmbl' + i).css('visibility', 'visible').attr('src', 'https://image.eveonline.com/Character/' + charIDs[i] + '_256.jpg');
                         i++;
                     }
-                    getSkillInTraining(keyID, vCode, charIDs, <?php echo $selectedChar ?>);
+                    getSkillInTraining(keyID, vCode, charIDs, <?php //echo $selectedChar ?>);
                     //getSkillQueue(keyID, vCode, charIDs, <?php //echo $selectedChar ?>);
-                    getAllSkills(keyID, vCode, charIDs, <?php echo $selectedChar ?>);
-                    //getTypeNames(typeIDs);
+                    getAllSkills(keyID, vCode, charIDs, <?php //echo $selectedChar ?>);
                 }
             };
             charRequest.open("GET", "https://api.eveonline.com/account/Characters.xml.aspx?keyID=" + keyID + "&vCode=" + vCode, true);
@@ -208,7 +207,6 @@
                     else {
                         $("#CurrentlyTraining").html('<p>No skill in training</p>');
                     }
-
                 }
             };
             request.open("GET", "https://api.eveonline.com/char/SkillInTraining.xml.aspx?keyID=" + keyID + "&vCode=" + vCode + "&characterID=" + charIDs[i], true);
@@ -236,6 +234,7 @@
                         typeIDs.push(typeID);
                         $("#skilllist").append('<p id="skill"><span id="' + typeID + '">Placeholder Skill</span> ' + level + '</p>');
                     }
+                    getTypeNames(typeIDs);
                 }
             };
             request.open("GET", "https://api.eveonline.com/char/CharacterSheet.xml.aspx?keyID=" + keyID + "&vCode=" + vCode + "&characterID=" + charIDs[i], true);
@@ -273,7 +272,6 @@
             request.send();
         }
     </script>
-    <script type="text/javascript" src="js/dataParser.js"></script>
     </body>
     </html>
 <?php ob_flush(); ?>
