@@ -27,7 +27,6 @@
         var typeIDs = [];
         $(document).ready(function () {
             var charIDs = [];
-
             var charRequest = new XMLHttpRequest();
             charRequest.onreadystatechange = function () {
                 if (charRequest.readyState == 4 && charRequest.status == 200) {
@@ -35,8 +34,7 @@
                     var rows = xml.getElementsByTagName("row");
                     for (var i = 0; i < rows.length; i++) {
                         var row = rows[i];
-                        charID = row.getAttribute("characterID");
-                        charIDs[i] = charID;
+                        charIDs[i] = row.getAttribute("characterID");
                     }
                     i = 0;
                     while (i < charIDs.length) {
@@ -53,7 +51,7 @@
                     getSkillInTraining(keyID, vCode, charIDs, <?php echo $selectedChar ?>);
                     //getSkillQueue(keyID, vCode, charIDs, <?php //echo $selectedChar ?>);
                     getAllSkills(keyID, vCode, charIDs, <?php echo $selectedChar ?>);
-                    getTypeNames(typeIDs);
+                    //getTypeNames(typeIDs);
                 }
             };
             charRequest.open("GET", "https://api.eveonline.com/account/Characters.xml.aspx?keyID=" + keyID + "&vCode=" + vCode, true);
@@ -198,29 +196,14 @@
                 if (request.readyState == 4 && request.status == 200) {
                     var xml = request.responseXML;
                     if (xml.getElementsByTagName("trainingTypeID")[0] != null) {
-                        var skillIDxml = xml.getElementsByTagName("trainingTypeID")[0];
-                        var skillLvlxml = xml.getElementsByTagName("trainingToLevel")[0];
-                        var skillIDnode = skillIDxml.childNodes[0];
-                        var skillLvlnode = skillLvlxml.childNodes[0];
-                        var skillID = skillIDnode.nodeValue;
-                        var skillLvl = skillLvlnode.nodeValue;
+                        var skillID = xml.getElementsByTagName("trainingTypeID")[0].childNodes[0].nodeValue;
+                        var skillLvl = xml.getElementsByTagName("trainingToLevel")[0].childNodes[0].nodeValue;
                         var trainingStartTime = xml.getElementsByTagName("trainingStartTime")[0].childNodes[0].nodeValue;
                         var trainingEndTime = xml.getElementsByTagName("trainingEndTime")[0].childNodes[0].nodeValue;
                         var currentTQTime = xml.getElementsByTagName("currentTQTime")[0].childNodes[0].nodeValue;
-                        var request2 = new XMLHttpRequest();
-                        request2.onreadystatechange = function () {
-                            if (request2.readyState == 4 && request2.status == 200) {
-                                var xml2 = request2.responseXML;
-                                var rows = xml2.getElementsByTagName("row");
-                                for (var i2 = 0; i2 < rows.length; i2++) {
-                                    var skillName = rows[i2].getAttribute("typeName");
-                                }
-                                $("#CurrentlyTraining").html('<p>' + skillName + " " + skillLvl + "</p>");
-                                getSkillTimeRemaining(trainingStartTime, currentTQTime, trainingEndTime, i);
-                            }
-                        };
-                        request2.open("GET", "https://api.eveonline.com/eve/TypeName.xml.aspx?ids=" + skillID, true);
-                        request2.send();
+                        typeIDs.push(skillID);
+                        $("#CurrentlyTraining").html('<p id="' + skillID + '">Placeholder Skill' + skillLvl + '</p>');
+                        getSkillTimeRemaining(trainingStartTime, currentTQTime, trainingEndTime, i);
                     }
                     else {
                         $("#CurrentlyTraining").html('<p>No skill in training</p>');
@@ -250,7 +233,7 @@
                         var typeID = row.getAttribute("typeID");
                         var skillpoints = row.getAttribute("skillpoints");
                         var level = row.getAttribute("level");
-                        typeIDs[i2] = typeID;
+                        typeIDs.push(typeID);
                         $("#skilllist").append('<p id="skill"><span id="' + typeID + '">Placeholder Skill</span> ' + level + '</p>');
                     }
                 }
@@ -290,6 +273,7 @@
             request.send();
         }
     </script>
+    <script type="text/javascript" src="js/dataParser.js"></script>
     </body>
     </html>
 <?php ob_flush(); ?>
