@@ -241,36 +241,6 @@
             request.send();
         }
 
-        function getSkillNames(skills) {
-            var maxSize = 250;
-            if (skills.length > maxSize) {
-                for (var i2 = 0; i2 < skills.length; i2 += maxSize) {
-                    skillsPart = skills.slice(i2, i2 + maxSize);
-                    getSkillNames(skillsPart);
-                }
-            }
-            var skillIDs = "";
-            for (i2 = 0; i2 < skills.length; i2++) {
-                skillIDs += skills[i2] + ",";
-            }
-            skillIDs = skillIDs.substring(0, skillIDs.length - 1);
-            var request = new XMLHttpRequest();
-            request.onreadystatechange = function () {
-                if (request.readyState == 4 && request.status == 200) {
-                    var xml2 = request.responseXML;
-                    var rows = xml2.getElementsByTagName("row");
-                    for (var i2 = 0; i2 < rows.length; i2++) {
-                        var row = rows[i2];
-                        typeID = row.getAttribute("typeID");
-                        skillName = row.getAttribute("typeName");
-                        $(typeID).html(skillName);
-                    }
-
-                }
-            };
-            request.open("GET", "https://api.eveonline.com/eve/TypeName.xml.aspx?ids=" + skillIDs, true);
-            request.send();
-        }
     </script>
     </body>
     </html>
