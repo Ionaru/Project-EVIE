@@ -201,7 +201,7 @@
                         var trainingEndTime = xml.getElementsByTagName("trainingEndTime")[0].childNodes[0].nodeValue;
                         var currentTQTime = xml.getElementsByTagName("currentTQTime")[0].childNodes[0].nodeValue;
                         typeIDs.push(skillID);
-                        $("#CurrentlyTraining").html('<p id="' + skillID + '">Placeholder Skill' + skillLvl + '</p>');
+                        $("#CurrentlyTraining").html('<p><span id="' + skillID + '">Placeholder Skill</span> ' + skillLvl + '</p>');
                         getSkillTimeRemaining(trainingStartTime, currentTQTime, trainingEndTime, i);
                     }
                     else {
