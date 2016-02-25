@@ -48,9 +48,9 @@
                         $('#charmbl' + i).css('visibility', 'visible').attr('src', 'https://image.eveonline.com/Character/' + charIDs[i] + '_256.jpg');
                         i++;
                     }
-                    getSkillInTraining(keyID, vCode, charIDs, <?php //echo $selectedChar ?>);
+                    getSkillInTraining(keyID, vCode, charIDs, <?php echo $selectedChar ?>);
                     //getSkillQueue(keyID, vCode, charIDs, <?php //echo $selectedChar ?>);
-                    getAllSkills(keyID, vCode, charIDs, <?php //echo $selectedChar ?>);
+                    getAllSkills(keyID, vCode, charIDs, <?php echo $selectedChar ?>);
                 }
             };
             charRequest.open("GET", "https://api.eveonline.com/account/Characters.xml.aspx?keyID=" + keyID + "&vCode=" + vCode, true);
