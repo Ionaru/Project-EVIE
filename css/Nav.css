@@ -8,6 +8,13 @@ body {
     overflow-y: scroll;
 }
 
+.navbar-brand {
+    background: -webkit-linear-gradient(#eff9ff, #6F6F70);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    cursor:default;
+}
+
 .navbar-fixed-top {
     box-sizing: border-box;
     border: 0;
@@ -80,9 +87,9 @@ body {
 .top_bar_button {
     background-size: 100% 200%;
     background-image: linear-gradient(to bottom, #202020 50%, #205079 50%);
-    -webkit-transition: background-position .15s;
-    -moz-transition: background-position .15s;
-    transition: background-position .15s;
+    -webkit-transition: all .15s ease-in-out;
+    -moz-transition: all .15s ease-in-out;
+    transition: all 0.15s ease-in-out;
 }
 
 .top_bar_button:focus, .top_bar_button:hover {
@@ -97,9 +104,9 @@ body {
 .sidebar_button {
     background-size: 200% 100%;
     background-image: linear-gradient(to right, #202020 50%, #205079 50%);
-    -webkit-transition: background-position .15s;
-    -moz-transition: background-position .15s;
-    transition: background-position .15s;
+    -webkit-transition: background-position .15s ease-in-out;
+    -moz-transition: background-position .15s ease-in-out;
+    transition: background-position .15s ease-in-out;
 }
 
 .sidebar_button:focus, .sidebar_button:hover {

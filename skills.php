@@ -24,8 +24,10 @@
 
 <?php include __DIR__ . '/foot.php'; ?>
     <script>
+        var typeIDs = [];
         $(document).ready(function () {
             var charIDs = [];
+
             var charRequest = new XMLHttpRequest();
             charRequest.onreadystatechange = function () {
                 if (charRequest.readyState == 4 && charRequest.status == 200) {
@@ -51,7 +53,7 @@
                     getSkillInTraining(keyID, vCode, charIDs, <?php echo $selectedChar ?>);
                     //getSkillQueue(keyID, vCode, charIDs, <?php //echo $selectedChar ?>);
                     getAllSkills(keyID, vCode, charIDs, <?php echo $selectedChar ?>);
-                    //getTypeNames("Skill", typeIDs);
+                    getTypeNames(typeIDs);
                 }
             };
             charRequest.open("GET", "https://api.eveonline.com/account/Characters.xml.aspx?keyID=" + keyID + "&vCode=" + vCode, true);
@@ -62,8 +64,6 @@
             var start = Date.parse(startDate.replace(/\-/ig, '/').split('.')[0]);
             var now = Date.parse(nowDate.replace(/\-/ig, '/').split('.')[0]);
             var end = Date.parse(endDate.replace(/\-/ig, '/').split('.')[0]);
-            //var end = now + 3655000;
-
             var _second = 1000;
             var _minute = _second * 60;
             var _hour = _minute * 60;
@@ -72,8 +72,6 @@
             $('#CurrentlyTraining').append('<p id="countdown">Calculating Time...</p>');
 
             function showRemaining() {
-                //var now = new Date();
-                //console.log(now);
                 now = now + 1000;
                 var distance = end - now;
                 if (distance < 1) {
@@ -179,7 +177,7 @@
             var request = new XMLHttpRequest();
             request.onreadystatechange = function () {
                 if (request.readyState == 4 && request.status == 200) {
-                    var refTypes = new Object();
+                    var refTypes = {};
                     var xml = request.responseXML;
                     var rows = xml.getElementsByTagName("row");
                     for (var i = 0; i < rows.length; i++) {
@@ -195,37 +193,27 @@
         }
 
         function getSkillInTraining(keyID, vCode, charIDs, i) {
-            //console.log(charIDs.length);
             var request = new XMLHttpRequest();
             request.onreadystatechange = function () {
                 if (request.readyState == 4 && request.status == 200) {
-
                     var xml = request.responseXML;
-                    //console.log(xml);
                     if (xml.getElementsByTagName("trainingTypeID")[0] != null) {
                         var skillIDxml = xml.getElementsByTagName("trainingTypeID")[0];
                         var skillLvlxml = xml.getElementsByTagName("trainingToLevel")[0];
-                        //console.log(skillLvlxml);
                         var skillIDnode = skillIDxml.childNodes[0];
                         var skillLvlnode = skillLvlxml.childNodes[0];
-                        //console.log(skillLvlnode);
                         var skillID = skillIDnode.nodeValue;
                         var skillLvl = skillLvlnode.nodeValue;
                         var trainingStartTime = xml.getElementsByTagName("trainingStartTime")[0].childNodes[0].nodeValue;
                         var trainingEndTime = xml.getElementsByTagName("trainingEndTime")[0].childNodes[0].nodeValue;
                         var currentTQTime = xml.getElementsByTagName("currentTQTime")[0].childNodes[0].nodeValue;
-                        //console.log(skillLvl);
                         var request2 = new XMLHttpRequest();
                         request2.onreadystatechange = function () {
                             if (request2.readyState == 4 && request2.status == 200) {
-
                                 var xml2 = request2.responseXML;
-                                //console.log(xml2)
                                 var rows = xml2.getElementsByTagName("row");
                                 for (var i2 = 0; i2 < rows.length; i2++) {
-                                    var row = rows[i2];
-                                    //console.log(row);
-                                    skillName = row.getAttribute("typeName");
+                                    var skillName = rows[i2].getAttribute("typeName");
                                 }
                                 $("#CurrentlyTraining").html('<p>' + skillName + " " + skillLvl + "</p>");
                                 getSkillTimeRemaining(trainingStartTime, currentTQTime, trainingEndTime, i);
@@ -245,38 +233,26 @@
         }
 
         function getAllSkills(keyID, vCode, charIDs, i) {
-            //console.log(charIDs.length);
             var request = new XMLHttpRequest();
             request.onreadystatechange = function () {
                 if (request.readyState == 4 && request.status == 200) {
-
                     var xml = request.responseXML;
-                    //console.log(xml);
                     var rowsets = xml.getElementsByTagName("rowset");
-                    var skills = new Array();
-                    //console.log(rowsets);
+                    var skills = [];
                     for (var i2 = 0; i2 < rowsets.length; i2++) {
                         var rowset = rowsets[i2];
                         if (rowset.getAttribute("name") == "skills") {
-                            //console.log(rowset.getAttribute("name"));
                             var rows = rowset.getElementsByTagName("row");
                         }
-                        //skillName = row.getAttribute("typeName");
                     }
-                    //console.log(rows);
                     for (i2 = 0; i2 < rows.length; i2++) {
                         var row = rows[i2];
-                        //console.log(row);
-
-                        typeID = row.getAttribute("typeID");
-                        skillpoints = row.getAttribute("skillpoints");
-                        level = row.getAttribute("level");
-                        skills[i2] = typeID;
-                        // = getItemName(typeID, level);
-                        $("#skilllist").append('<p id="skill"><span id="skill' + typeID + '">Placeholder Skill</span> ' + level + '</p>');
+                        var typeID = row.getAttribute("typeID");
+                        var skillpoints = row.getAttribute("skillpoints");
+                        var level = row.getAttribute("level");
+                        typeIDs[i2] = typeID;
+                        $("#skilllist").append('<p id="skill"><span id="' + typeID + '">Placeholder Skill</span> ' + level + '</p>');
                     }
-                    //console.log(skills);
-                    getSkillNames(skills);
                 }
             };
             request.open("GET", "https://api.eveonline.com/char/CharacterSheet.xml.aspx?keyID=" + keyID + "&vCode=" + vCode + "&characterID=" + charIDs[i], true);
@@ -296,20 +272,16 @@
                 skillIDs += skills[i2] + ",";
             }
             skillIDs = skillIDs.substring(0, skillIDs.length - 1);
-            //console.log(skillIDs);
             var request = new XMLHttpRequest();
             request.onreadystatechange = function () {
                 if (request.readyState == 4 && request.status == 200) {
                     var xml2 = request.responseXML;
-                    //console.log(xml2)
                     var rows = xml2.getElementsByTagName("row");
                     for (var i2 = 0; i2 < rows.length; i2++) {
                         var row = rows[i2];
-                        //console.log(row);
                         typeID = row.getAttribute("typeID");
                         skillName = row.getAttribute("typeName");
-                        //console.log(typeID + " = " + skillName);
-                        $('#skill' + typeID).html(skillName);
+                        $(typeID).html(skillName);
                     }
 
                 }
@@ -317,35 +289,6 @@
             request.open("GET", "https://api.eveonline.com/eve/TypeName.xml.aspx?ids=" + skillIDs, true);
             request.send();
         }
-
-        function getName(keyID, vCode, charIDs) {
-            var bool = true;
-            for (var i = 0; i < charIDs.length; i++) {
-                var li = '<li role="presentation">';
-                var request = new XMLHttpRequest();
-                request.open("GET", "https://api.eveonline.com/char/CharacterSheet.xml.aspx?keyID=" + keyID + "&vCode=" + vCode + "&characterID=" + charIDs[i], false);
-                request.send();
-                var xml = request.responseXML;
-                var name = xml.getElementsByTagName("name")[0];
-                var y = name.childNodes[0];
-                z = y.nodeValue;
-                if (bool) {
-                    li = '<li role="presentation" class="active">';
-                    bool = false;
-                }
-            }
-        }
-
-        Number.prototype.formatMoney = function (c, d, t) {
-            var n = this,
-                c = isNaN(c = Math.abs(c)) ? 2 : c,
-                d = d == undefined ? "." : d,
-                t = t == undefined ? "," : t,
-                s = n < 0 ? "-" : "",
-                i = parseInt(n = Math.abs(+n || 0).toFixed(c)) + "",
-                j = (j = i.length) > 3 ? j % 3 : 0;
-            return s + (j ? i.substr(0, j) + t : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + t) + (c ? d + Math.abs(n - i).toFixed(c).slice(2) : "");
-        };
     </script>
     </body>
     </html>

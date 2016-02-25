@@ -1,40 +1,59 @@
 (function () {
 
-    this.getTypeNames = function (type, typeIDs){
-        //Split typeIDs into smaller parts if it's too big
-        var maxSize = 250;
-        var typeIDsPart;
-        if (typeIDs.length > maxSize) {
-            for (var i = 0; i < typeIDs.length; i += maxSize) {
-                typeIDsPart = typeIDs.slice(i, i + maxSize);
-                getTypeNames(type ,typeIDsPart);
-            }
-        }
-
-        //Create string of the IDs to send with the call
-        var typeIDString = "";
-        for (i = 0; i < typeIDs.length; i++) {
-            typeIDString += typeIDs[i] + ",";
-        }
-        typeIDString = typeIDString.substring(0, typeIDString.length - 1);
-
-        //Make the call to the API servers
-        var request = new XMLHttpRequest();
-        request.onreadystatechange = function () {
-            if (request.readyState == 4 && request.status == 200) {
-                var xml = request.responseXML;
-                var rows = xml.getElementsByTagName("row");
-                for (var i = 0; i < rows.length; i++) {
-                    var row = rows[i];
-                    var typeID = row.getAttribute("typeID");
-                    var typeName = row.getAttribute("typeName");
-                    $("#" + type + typeID).html(typeName);
+    this.getTypeNames = function (typeIDsRaw) {
+        /**
+         * @Function to convert typeIDs to TypeNames
+         *
+         * @param {Array} typeIDsRaw - An array with IDs to convert
+         *
+         * Pages will collect all typeIDs in a single array and send it to this function at the end of all other processes
+         *
+         */
+        var arraySize = typeIDsRaw.length;
+        if (arraySize > 0) {
+            /**
+             *  Check the array for duplicates and remove them
+             */
+            var typeIDs = uniq(typeIDsRaw);
+            /**
+             * Split the typeIDs array into smaller parts if needed (max 250 in an array)
+             * It will recall this function for every array chunk it creates
+             */
+            var maxSize = 250;
+            if (arraySize > maxSize) {
+                for (var i = 0; i < typeIDs.length; i += maxSize) {
+                    getTypeNames(typeIDs.slice(i, i + maxSize));
                 }
-
             }
-        };
-        request.open("GET", "https://api.eveonline.com/eve/TypeName.xml.aspx?ids=" + typeIDString, true);
-        request.send();
+            /**
+             * Convert the array into a long string seperated by commas
+             * And cut the last comma
+             */
+            var typeIDString = "";
+            for (i = 0; i < typeIDs.length; i++) {
+                typeIDString += typeIDs[i] + ",";
+            }
+            typeIDString = typeIDString.substring(0, typeIDString.length - 1);
+            /**
+             * Send the request to the EVE Online API servers with the final string (typeIDString) and change html elements to the correct TypeNames
+             */
+            var request = new XMLHttpRequest();
+            request.onreadystatechange = function () {
+                if (request.readyState == 4 && request.status == 200) {
+                    var xml = request.responseXML;
+                    var rows = xml.getElementsByTagName("row");
+                    for (var i = 0; i < rows.length; i++) {
+                        var row = rows[i];
+                        var typeID = row.getAttribute("typeID");
+                        var typeName = row.getAttribute("typeName");
+                        $("#" + typeID).html(typeName);
+                    }
+
+                }
+            };
+            request.open("GET", "https://api.eveonline.com/eve/TypeName.xml.aspx?ids=" + typeIDString, true);
+            request.send();
+        }
     };
 
     this.parseTimeRemaining = function (now, end) {
@@ -114,5 +133,12 @@
         j = (j = i.length) > 3 ? j % 3 : 0;
         return s + (j ? i.substr(0, j) + t : '') + i.substr(j).replace(/(\d{3})(?=\d)/g, '$1' + t) + (c ? d + Math.abs(n - i).toFixed(c).slice(2) : '');
     };
+
+    function uniq(a) {
+        var seen = {};
+        return a.filter(function(item) {
+            return seen.hasOwnProperty(item) ? false : (seen[item] = true);
+        });
+    }
 
 }).call(this);
