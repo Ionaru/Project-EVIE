@@ -433,15 +433,12 @@ include __DIR__ . '/nav.php'; ?>
             var request = new XMLHttpRequest();
             request.onreadystatechange = function () {
                 if (request.readyState == 4 && request.status == 200) {
-
                     var xml = request.responseXML;
                     if (xml.getElementsByTagName("trainingTypeID")[0] != null) {
-                        var skillIDxml = xml.getElementsByTagName("trainingTypeID")[0];
-                        var skillLvlxml = xml.getElementsByTagName("trainingToLevel")[0];
-                        var skillIDnode = skillIDxml.childNodes[0];
-                        var skillLvlnode = skillLvlxml.childNodes[0];
-                        var skillID = skillIDnode.nodeValue;
-                        var skillLvl = skillLvlnode.nodeValue;
+                        var skillIDs = [];
+                        var skillID = xml.getElementsByTagName("trainingTypeID")[0].childNodes[0].nodeValue
+                        skillIDs.push(skillID);
+                        var skillLvl = getElementsByTagName("trainingToLevel")[0].childNodes[0].nodeValue;
                         var trainingEndTime = xml.getElementsByTagName("trainingEndTime")[0].childNodes[0].nodeValue;
                         var currentTQTime = xml.getElementsByTagName("currentTQTime")[0].childNodes[0].nodeValue;
                         getTypeNames(skillID);
