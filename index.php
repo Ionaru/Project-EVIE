@@ -436,9 +436,9 @@ include __DIR__ . '/nav.php'; ?>
                     var xml = request.responseXML;
                     if (xml.getElementsByTagName("trainingTypeID")[0] != null) {
                         var skillIDs = [];
-                        var skillID = xml.getElementsByTagName("trainingTypeID")[0].childNodes[0].nodeValue
+                        var skillID = xml.getElementsByTagName("trainingTypeID")[0].childNodes[0].nodeValue;
                         skillIDs.push(skillID);
-                        var skillLvl = getElementsByTagName("trainingToLevel")[0].childNodes[0].nodeValue;
+                        var skillLvl = xml.getElementsByTagName("trainingToLevel")[0].childNodes[0].nodeValue;
                         var trainingEndTime = xml.getElementsByTagName("trainingEndTime")[0].childNodes[0].nodeValue;
                         var currentTQTime = xml.getElementsByTagName("currentTQTime")[0].childNodes[0].nodeValue;
                         getTypeNames(skillID);
