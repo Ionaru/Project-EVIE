@@ -14,7 +14,7 @@
             /**
              *  Check the array for duplicates and remove them
              */
-            var typeIDs = uniq(typeIDsRaw);
+            //var typeIDs = uniq(typeIDsRaw);
             /**
              * Split the typeIDs array into smaller parts if needed (max 250 in an array)
              * It will recall this function for every array chunk it creates
