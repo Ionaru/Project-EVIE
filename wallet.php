@@ -183,8 +183,6 @@ include __DIR__ . '/nav.php'; ?>
                             refTypeID = refTypes[row.getAttribute("refTypeID")];
                             balance = row.getAttribute("balance");
                             refID = row.getAttribute("refID");
-                            //ownerName1 = row.getAttribute("ownerName1");
-                            //ownerName2 = row.getAttribute("ownerName2");
                             if (amount < 0) {
                                 color = "red";
                             }
@@ -199,7 +197,7 @@ include __DIR__ . '/nav.php'; ?>
                             output += '<td data-label="refType">' + refTypeID + '</td>';
 
                             if (ownerName1 != "X") {
-                                output += '<td data-label="From">' + ownerName1 + '</td>';
+                                output += '<td data-label="From"><a style="cursor: pointer;" onclick="getCharData(' + "'" + ownerName1 + "'" + ')">' + ownerName1 + '</a></td>';
                             }
                             else {
                                 if ($(window).width() > 768) {
@@ -244,6 +242,7 @@ include __DIR__ . '/nav.php'; ?>
                     if (rows.length != 0) {
                         for (var i2 = 0; i2 < rows.length; i2++) {
                             var row = rows[i2];
+                            ownerName1 = "X";
                             date = row.getAttribute("date");
                             amount = row.getAttribute("amount");
                             refTypeID = refTypes[row.getAttribute("refTypeID")];
@@ -257,7 +256,19 @@ include __DIR__ . '/nav.php'; ?>
                                 color = "green";
                                 ownerName1 = row.getAttribute("ownerName1");
                             }
-                            $('#WalletJournalBody').append('<tr><td data-label="Date">' + date + '</td><td data-label="refType">' + refTypeID + '</td><td data-label="From">' + ownerName1 + '</td><td style="color:' + color + '" data-label="Amount">' + (parseFloat(amount)).formatMoney(2, ',', '.') + ' ISK</td><td data-label="Balance">' + (parseFloat(balance)).formatMoney(2, ',', '.') + ' ISK</td></tr>');
+                            var output = '<tr><td data-label="Date">' + date + '</td>';
+                            output += '<td data-label="refType">' + refTypeID + '</td>';
+                            if (ownerName1 != "X") {
+                                output += '<td data-label="From"><a style="cursor: pointer;" onclick="getCharData(' + "'" + ownerName1 + "'" + ')">' + ownerName1 + '</a></td>';
+                            }
+                            else {
+                                if ($(window).width() > 768) {
+                                    output += '<td></td>';
+                                }
+                            }
+                            output += '<td style="color:' + color + '" data-label="Amount">' + (parseFloat(amount)).formatMoney(2, ',', '.') + ' ISK</td>';
+                            output += '<td data-label="Balance">' + (parseFloat(balance)).formatMoney(2, ',', '.') + ' ISK</td></tr>';
+                            $('#WalletJournalBody').append(output;
                         }
                         $('#moreJournal50').attr('onclick', 'getMoreWalletJournal("' + keyID + '", "' + vCode + '", "' + charID + '", "' + refID + '", "50")');
                         $('#moreJournal100').attr('onclick', 'getMoreWalletJournal("' + keyID + '", "' + vCode + '", "' + charID + '", "' + refID + '", "100")');
