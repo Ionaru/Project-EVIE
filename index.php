@@ -442,7 +442,7 @@ include __DIR__ . '/nav.php'; ?>
                         var trainingEndTime = xml.getElementsByTagName("trainingEndTime")[0].childNodes[0].nodeValue;
                         var currentTQTime = xml.getElementsByTagName("currentTQTime")[0].childNodes[0].nodeValue;
                         getTypeNames(skillIDs);
-                        document.getElementById("SkillAccount1Character" + (i + 1)).innerHTML = '<a id="skillCharacter' + i + '" style="color: black;" href="skills.php?char=' + i + '"><span id="' + skillID + '">Placeholder</span>' + skillLvl + '</a>';
+                        document.getElementById("SkillAccount1Character" + (i + 1)).innerHTML = '<a id="skillCharacter' + i + '" style="color: black;" href="skills.php?char=' + i + '"><span id="' + skillID + '">Placeholder</span> ' + skillLvl + '</a>';
                         getSkillTimeRemaining(currentTQTime, trainingEndTime, i);
                     }
                     else {
