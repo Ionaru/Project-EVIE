@@ -444,23 +444,9 @@ include __DIR__ . '/nav.php'; ?>
                         var skillLvl = skillLvlnode.nodeValue;
                         var trainingEndTime = xml.getElementsByTagName("trainingEndTime")[0].childNodes[0].nodeValue;
                         var currentTQTime = xml.getElementsByTagName("currentTQTime")[0].childNodes[0].nodeValue;
-                        var request2 = new XMLHttpRequest();
-                        request2.onreadystatechange = function () {
-                            var skillName;
-                            if (request2.readyState == 4 && request2.status == 200) {
-
-                                var xml2 = request2.responseXML;
-                                var rows = xml2.getElementsByTagName("row");
-                                for (var i2 = 0; i2 < rows.length; i2++) {
-                                    var row = rows[i2];
-                                    skillName = row.getAttribute("typeName");
-                                }
-                                document.getElementById("SkillAccount1Character" + (i + 1)).innerHTML = '<a id="skillCharacter' + i + '" style="color: black;" href="skills.php?char=' + i + '">' + skillName + " " + skillLvl + "</a>";
-                                getSkillTimeRemaining(currentTQTime, trainingEndTime, i);
-                            }
-                        };
-                        request2.open("GET", "https://api.eveonline.com/eve/TypeName.xml.aspx?ids=" + skillID, true);
-                        request2.send();
+                        getTypeNames(skillID);
+                        document.getElementById("SkillAccount1Character" + (i + 1)).innerHTML = '<a id="skillCharacter' + i + '" style="color: black;" href="skills.php?char=' + i + '"><span id="' + skillID + '">Placeholder</span>' + skillLvl + '</a>';
+                        getSkillTimeRemaining(currentTQTime, trainingEndTime, i);
                     }
                     else {
                         document.getElementById("SkillAccount1Character" + (i + 1)).innerHTML = '<a style="color: black;" href="skills.php?char=' + i + '">No skill in training</a>';

@@ -151,8 +151,8 @@ include __DIR__ . '/nav.php'; ?>
                             prefix: '',
                             suffix: ' ISK'
                         };
-                        var demo = new CountUp("balanceSpan", 0, balance, 2, 1, options);
-                        demo.start();
+                        var count = new CountUp("balanceSpan", 0, balance, 2, 1, options);
+                        count.start();
                     }
                 }
             };
