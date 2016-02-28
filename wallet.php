@@ -268,7 +268,7 @@ include __DIR__ . '/nav.php'; ?>
                             }
                             output += '<td style="color:' + color + '" data-label="Amount">' + (parseFloat(amount)).formatMoney(2, ',', '.') + ' ISK</td>';
                             output += '<td data-label="Balance">' + (parseFloat(balance)).formatMoney(2, ',', '.') + ' ISK</td></tr>';
-                            $('#WalletJournalBody').append(output;
+                            $('#WalletJournalBody').append(output);
                         }
                         $('#moreJournal50').attr('onclick', 'getMoreWalletJournal("' + keyID + '", "' + vCode + '", "' + charID + '", "' + refID + '", "50")');
                         $('#moreJournal100').attr('onclick', 'getMoreWalletJournal("' + keyID + '", "' + vCode + '", "' + charID + '", "' + refID + '", "100")');
