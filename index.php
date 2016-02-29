@@ -193,10 +193,6 @@ include __DIR__ . '/nav.php'; ?>
             var now = Date.parse(nowDate.replace(/\-/ig, '/').split('.')[0]);
             var end = Date.parse(endDate.replace(/\-/ig, '/').split('.')[0]);
 
-            var _second = 1000;
-            var _minute = _second * 60;
-            var _hour = _minute * 60;
-            var _day = _hour * 24;
             var timer;
             $('#accountTime').html("Calculating Time...");
 
@@ -210,87 +206,7 @@ include __DIR__ . '/nav.php'; ?>
 
                     return;
                 }
-                var days = Math.floor(distance / _day);
-                var hours = Math.floor((distance % _day) / _hour);
-                var minutes = Math.floor((distance % _hour) / _minute);
-                var seconds = Math.floor((distance % _minute) / _second);
                 var output = "";
-                if (days > 0) {
-                    if (days == 1) {
-                        output += (days + " day");
-                    }
-                    else {
-                        output += (days + " days");
-                    }
-                }
-
-                if (hours > 0) {
-                    if (hours == 1) {
-                        if (minutes == 0 && seconds == 0 && days != 0) {
-                            //When below values are 0, add "and".
-                            output += (" and " + hours + " hour");
-                        }
-                        else if ((days != 0) && ((minutes != 0) || (seconds != 0))) {
-                            //When surrounding values are not 0, add ",".
-                            output += (", " + hours + " hour");
-                        }
-                        else {
-                            //If no other values, add nothing.
-                            output += (hours + " hour");
-                        }
-                    }
-                    else {
-                        if (minutes == 0 && seconds == 0 && days != 0) {
-                            //When below values are 0, add "and".
-                            output += (" and " + hours + " hours");
-                        }
-                        else if ((days != 0) && ((minutes != 0) || (seconds != 0))) {
-                            //When surrounding values are not 0, add ",".
-                            output += (", " + hours + " hours");
-                        }
-                        else {
-                            //If no other values, add nothing.
-                            output += (hours + " hours");
-                        }
-                    }
-                }
-
-                if (minutes > 0) {
-                    if (minutes == 1) {
-                        if (seconds == 0 && ((days != 0) || (hours != 0))) {
-                            //When below values are 0, add "and".
-                            output += (" and " + minutes + " minute");
-                        }
-                        else if (((hours != 0) || (days != 0)) && ((seconds != 0) || (hours != 0))) {
-                            //When surrounding values are not 0, add ",".
-                            output += (", " + minutes + " minute");
-                        }
-                        else {
-                            output += (minutes + " minute ");
-                        }
-                    }
-                    else {
-                        if (seconds == 0 && ((days != 0) || (hours != 0))) {
-                            output += (" and " + minutes + " minutes");
-                        }
-                        else if (((hours != 0) || (days != 0)) && ((seconds != 0) || (hours != 0))) {
-                            output += (", " + minutes + " minutes");
-                        }
-                        else {
-                            //If no other values, add nothing.
-                            output += (minutes + " minutes");
-                        }
-                    }
-                }
-
-                if (seconds > 0) {
-                    if (seconds == 1) {
-                        output += (" and " + seconds + " second");
-                    }
-                    else {
-                        output += (" and " + seconds + " seconds");
-                    }
-                }
                 $('#accountTime').html(output);
             }
 

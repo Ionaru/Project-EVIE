@@ -58,12 +58,18 @@
         }
     };
 
-    this.parseTimeRemaining = function (now, end) {
+    this.parseTimeRemaining = function (now, end, elementID, doTimeTick, expiredMessage) {
         var _day, _hour, _minute, _second, d, days, distance, ds, h, hours, hs, m, minutes, ms, output, s, seconds, ss;
         distance = end - now;
+        if (doTimeTick == null) {
+            doTimeTick = false;
+        }
+        if (expiredMessage == null) {
+            expiredMessage = '0';
+        }
         if (distance < 1) {
             clearInterval(timer);
-            $("#Timeleft " + i).html('0<br>');
+            $("#Timeleft " + i).html(expiredMessage + '<br>');
             return;
         }
         _second = 1000;
@@ -148,7 +154,7 @@
             $("#alertSpan").html('<div id="alertBox" class="alert alert-danger" role="alert"><strong>One or more problems were detected while loading this page. :(</strong></div>');
         }
         problems ++;
-        $("#alertBox").append('<br>Problem #' + problems + ' - There was an error in the \'' + module + '\' module, see the console for more information.');
+        $("#alertBox").append('<br>Problem #' + problems + ' - There was an error in the \'' + module + '\' module.');
     };
 
 }).call(this);
