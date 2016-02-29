@@ -516,13 +516,11 @@ class OneFileLoginApplication
                 echo '<script type="text/javascript">';
                 echo 'alert("Your account has been created successfully. You can now log in.")';
                 echo '</script>';
-                //header("Location: /eve/account.php?char=0");
-                //die();
-
+                $this->loginStuff();
                 return true;
             } else {
                 echo '<script type="text/javascript">';
-                echo 'alert("Sorry, your registration failed. Please go back and try again.")';
+                echo 'alert("Sorry, your registration failed. Please try again.")';
                 echo '</script>';
             }
         }

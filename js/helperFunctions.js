@@ -1,5 +1,7 @@
 (function () {
 
+    var problems = 0;
+
     this.getTypeNames = function (typeIDsRaw) {
         /**
          * @Function to convert typeIDs to TypeNames
@@ -135,11 +137,19 @@
         return s + (j ? i.substr(0, j) + t : '') + i.substr(j).replace(/(\d{3})(?=\d)/g, '$1' + t) + (c ? d + Math.abs(n - i).toFixed(c).slice(2) : '');
     };
 
-    function uniq(a) {
+    this.uniq = function(a) {
         var seen = {};
         return a.filter(function(item) {
             return seen.hasOwnProperty(item) ? false : (seen[item] = true);
         });
-    }
+    };
+
+    this.showError = function(module) {
+        if ( $("#alertBox").length == 0 ) {
+            $("#alertSpan").html('<div id="alertBox" class="alert alert-danger" role="alert"><strong>One or more problems were detected while loading this page. :(</strong></div>');
+        }
+        problems ++;
+        $("#alertBox").append('<br>Problem #' + problems + ' - There was an error in the \'' + module + '\' module, see the console for more information.');
+    };
 
 }).call(this);

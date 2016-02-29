@@ -6,12 +6,12 @@
         var request;
         request = new XMLHttpRequest;
         request.onreadystatechange = function () {
-            var j, len, numberOfPins, planetID, planetName, planetTypeID, planetTypeName, row, rows, solarSystemName, src, upgradeLevel, xml;
+            var i, len, numberOfPins, planetID, planetName, planetTypeID, planetTypeName, row, rows, solarSystemName, src, upgradeLevel, xml;
             if (request.readyState === 4 && request.status === 200) {
                 xml = request.responseXML;
                 rows = xml.getElementsByTagName('row');
-                for (j = 0, len = rows.length; j < len; j++) {
-                    row = rows[j];
+                for (i = 0, len = rows.length; i < len; i++) {
+                    row = rows[i];
                     solarSystemName = row.getAttribute('solarSystemName');
                     planetName = row.getAttribute('planetName');
                     planetID = row.getAttribute('planetID');
@@ -92,7 +92,7 @@
             $('#Timeleft' + i).html(output + '<br>');
         };
         $('#Timeleft' + i).html('Calculating Time...<br>');
-        timer = setInterval(showRemaining, 1000);
+        timer.setInterval(showRemaining, 1000);
     };
 
     getItemName = function (typeID, level) {

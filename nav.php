@@ -35,7 +35,7 @@ $url = $_SERVER['REQUEST_URI'];
         <div id="navbar" class="navbar-collapse collapse container-fluid">
             <?php if (count($_SESSION) !== 0) {
                 echo '<ul class="nav navbar-nav hidden-xs">';
-                if (($url !== 'apikeys.php') || (!empty($_SESSION['user_name']))) {
+                if (!(($url === 'apikeys.php') || empty($_SESSION['user_name']))) {
                     echo '<li><a class="top_bar_button' . $apikeysactive . '" href="apikeys.php?char=' . $selectedChar . '">API Keys</a></li>';
                 }
                 echo '<li><a class="top_bar_button" href="' . $_SERVER['SCRIPT_NAME'] . '?action=logout">Log out</a></li>';
@@ -189,3 +189,4 @@ $url = $_SERVER['REQUEST_URI'];
         </div>
 
         <div id="mainbody" class="col-sm-10 col-md-11 col-xs-12 main">
+            <span id="alertSpan"></span>

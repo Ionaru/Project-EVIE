@@ -66,11 +66,16 @@ include __DIR__ . '/nav.php'; ?>
         });
 
         function getAccountInfo(keyID, vCode) {
-            var request = new XMLHttpRequest();
-            request.onreadystatechange = function () {
-                var currentTime, paidUntil, createDate, logonCount, logonMinutes;
-                if (request.readyState == 4 && request.status == 200) {
-                    var xml = request.responseXML;
+            $.ajax({
+                url: "https://api.eveonline.com/account/AccountStatus.xml.aspx?keyID=" + keyID + "&vCode=" + vCode,
+                type: 'GET',
+                dataType: "xml",
+                error: function (xhr, status, error) {
+                    showError("Account Information");
+                     // TODO: implement fancy error logging
+                },
+                success: function (xml) {
+                    var currentTime, paidUntil, createDate, logonCount, logonMinutes;
                     currentTime = xml.getElementsByTagName("currentTime")[0].childNodes[0].nodeValue;
                     paidUntil = xml.getElementsByTagName("paidUntil")[0].childNodes[0].nodeValue;
                     createDate = xml.getElementsByTagName("createDate")[0].childNodes[0].nodeValue;
@@ -85,10 +90,9 @@ include __DIR__ . '/nav.php'; ?>
                     getAccountTimeRemaining(currentTime, paidUntil);
                     getTimePlayed(logonMinutes);
                 }
-            };
-            request.open("GET", "https://api.eveonline.com/account/AccountStatus.xml.aspx?keyID=" + keyID + "&vCode=" + vCode, true);
-            request.send();
+            });
         }
+
 
         function getTimePlayed(playTime) {
             var distance = (playTime * 60000);
