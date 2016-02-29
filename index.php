@@ -68,8 +68,6 @@ include __DIR__ . '/nav.php'; ?>
         function getAccountInfo(keyID, vCode) {
             $.ajax({
                 url: "https://api.eveonline.com/account/AccountStatus.xml.aspx?keyID=" + keyID + "&vCode=" + vCode,
-                type: 'GET',
-                dataType: "xml",
                 error: function (xhr, status, error) {
                     showError("Account Information");
                      // TODO: implement fancy error logging

@@ -16,8 +16,7 @@
             /**
              *  Check the array for duplicates and remove them
              */
-            //var typeIDs = uniq(typeIDsRaw);
-            var typeIDs = typeIDsRaw;
+            var typeIDs = uniq(typeIDsRaw);
             /**
              * Split the typeIDs array into smaller parts if needed (max 250 in an array)
              * It will recall this function for every array chunk it creates
@@ -40,22 +39,22 @@
             /**
              * Send the request to the EVE Online API servers with the final string (typeIDString) and change html elements to the correct TypeNames
              */
-            var request = new XMLHttpRequest();
-            request.onreadystatechange = function () {
-                if (request.readyState == 4 && request.status == 200) {
-                    var xml = request.responseXML;
+            $.ajax({
+                url: "https://api.eveonline.com/eve/TypeName.xml.aspx?ids=" + typeIDString,
+                error: function (xhr, status, error) {
+                    showError("Get Item Names");
+                    // TODO: implement fancy error logging
+                },
+                success: function (xml) {
                     var rows = xml.getElementsByTagName("row");
                     for (var i = 0; i < rows.length; i++) {
                         var row = rows[i];
                         var typeID = row.getAttribute("typeID");
                         var typeName = row.getAttribute("typeName");
-                        $("#" + typeID).html(typeName);
+                        $("[id=" + typeID + "]").html(typeName);
                     }
-
                 }
-            };
-            request.open("GET", "https://api.eveonline.com/eve/TypeName.xml.aspx?ids=" + typeIDString, true);
-            request.send();
+            });
         }
     };
 
