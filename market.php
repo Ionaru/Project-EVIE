@@ -10,65 +10,40 @@
 <?php include __DIR__ . '/foot.php'; ?>
     <script>
         $(document).ready(function () {
-            $.ajax({
-                url: "https://api.eveonline.com/account/Characters.xml.aspx?keyID=" + keyID + "&vCode=" + vCode,
-                error: function (xhr, status, error) {
-                    showError("Character Data");
-                    // TODO: implement fancy error logging
-                },
-                success: function (xml) {
-                    var charIDs = [];
-                    var rows = xml.getElementsByTagName("row");
-                    for (var i = 0; i < rows.length; i++) {
-                        var row = rows[i];
-                        charIDs[i] = row.getAttribute("characterID");
-                    }
-                    $('#Orders').append('' +
-                        '<h2>Current balance: ' +
-                        '<br class="visible-xs"/>' +
-                        '<span id="balanceSpan"></span>' +
-                        '</h2>' +
-                        '<span id="sellOrdersTable">' +
-                        '<h2 style="display: inline;">Sell Orders</h2>' +
-                        '<table class="table">' +
-                        '<thead><tr>' +
-                        '<th style="width: 20%">Item</th>' +
-                        '<th style="width: 20%">Amount</th>' +
-                        '<th style="width: 20%">Escrow</th>' +
-                        '<th style="width: 20%">Location</th>' +
-                        '<th style="width: 20%">Duration</th>' +
-                        '</tr></thead>' +
-                        '<tbody id="SellOrders"></tbody>' +
-                        '</table>' +
-                        '<hr>' +
-                        '</span>' +
-                        '<span id="buyOrdersTable">' +
-                        '<h2 style="display: inline;">Buy Orders</h2>' +
-                        '<table class="table">' +
-                        '<thead><tr>' +
-                        '<th style="width: 20%">Item</th>' +
-                        '<th style="width: 20%">Amount</th>' +
-                        '<th style="width: 20%">Price</th>' +
-                        '<th style="width: 20%">Location</th>' +
-                        '<th style="width: 20%">Duration</th>' +
-                        '</tr></thead>' +
-                        '<tbody id="BuyOrders"></tbody>' +
-                        '</table>' +
-                        '</span>');
-                    for (i = 0; i < charIDs.length; i++) {
-                        var css = "characterInactive";
-                        if (i == selectedCharacter) {
-                            css = "characterActive";
-                            selectedCharacterID = charIDs[i];
-                        }
-                        $('#charLinks').css('visibility', 'visible').append('<li><a id="charLink' + i + '" class="' + css + '" href="?char=' + i + '"><img alt="char' + i + '" id="char' + i + '" style="max-height: 50px" class="img" src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" width="50" height="50"></a></li>');
-                        $('#char' + i).css('visibility', 'visible').attr('src', 'https://image.eveonline.com/Character/' + charIDs[i] + '_50.jpg');
-                        $('#charmbl' + i).css('visibility', 'visible').attr('src', 'https://image.eveonline.com/Character/' + charIDs[i] + '_256.jpg');
-                    }
-                    getBalance(keyID, vCode, charIDs, <?php echo $selectedChar ?>);
-                    getOrders(keyID, vCode, charIDs, <?php echo $selectedChar ?>);
-                }
-            });
+            $('#Orders').append('' +
+                '<h2>Current balance: ' +
+                '<br class="visible-xs"/>' +
+                '<span id="balanceSpan"></span>' +
+                '</h2>' +
+                '<span id="sellOrdersTable">' +
+                '<h2 style="display: inline;">Sell Orders</h2>' +
+                '<table class="table">' +
+                '<thead><tr>' +
+                '<th style="width: 20%">Item</th>' +
+                '<th style="width: 20%">Amount</th>' +
+                '<th style="width: 20%">Escrow</th>' +
+                '<th style="width: 20%">Location</th>' +
+                '<th style="width: 20%">Duration</th>' +
+                '</tr></thead>' +
+                '<tbody id="SellOrders"></tbody>' +
+                '</table>' +
+                '<hr>' +
+                '</span>' +
+                '<span id="buyOrdersTable">' +
+                '<h2 style="display: inline;">Buy Orders</h2>' +
+                '<table class="table">' +
+                '<thead><tr>' +
+                '<th style="width: 20%">Item</th>' +
+                '<th style="width: 20%">Amount</th>' +
+                '<th style="width: 20%">Price</th>' +
+                '<th style="width: 20%">Location</th>' +
+                '<th style="width: 20%">Duration</th>' +
+                '</tr></thead>' +
+                '<tbody id="BuyOrders"></tbody>' +
+                '</table>' +
+                '</span>');
+            getBalance(keyID, vCode, charIDs, <?php echo $selectedChar ?>);
+            getOrders(keyID, vCode, charIDs, <?php echo $selectedChar ?>);
         });
 
         function getBalance(keyID, vCode, charIDs, i) {
@@ -162,7 +137,7 @@
                     if (buyOrders == 0) {
                         $('#buyOrdersTable').html('');
                     }
-                    if (sellOrders == 0 && buyOrders == 0){
+                    if (sellOrders == 0 && buyOrders == 0) {
                         $('#sellOrdersTable').html('<p>You have no open market orders.</p>');
                     }
                     else {

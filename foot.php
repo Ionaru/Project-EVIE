@@ -10,7 +10,7 @@
         }
         ?>
 
-        <p>Project EVIE, created by <a style="cursor: pointer;" onclick="getCharData('Ionaru Otsada')">Ionaru
+        <p>Project EVIE, created by <a onclick="getCharData('Ionaru Otsada')">Ionaru
                 Otsada.</a></p>
         <br>
         <p><strong>- Disclaimer -</strong></p>
@@ -36,17 +36,15 @@
             <div class="modal-body text-center">
                 <img id="characterInfoImage"
                      src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw=="
-                     style="display: block; margin-left: auto; margin-right: auto;" class="img-responsive"
-                     alt="Generic placeholder thumbnail">
-                <br>
+                     class="img-responsive" alt="Generic placeholder thumbnail"><br>
                 <div id="characterinfo"></div>
             </div>
         </div>
     </div>
 </div>
 
-<script type="text/javascript" src="js/jquery.js"></script>
-<script type="text/javascript" src="js/bootstrap.js"></script>
+<script type="text/javascript" src="js/jquery.min.js"></script>
+<script type="text/javascript" src="js/bootstrap.min.js"></script>
 <script type="text/javascript" src="js/jquery.timeago.js"></script>
 <script type="text/javascript" src="js/countUp.js"></script>
 <script type="text/javascript" src="js/jquery.total-storage.js"></script>

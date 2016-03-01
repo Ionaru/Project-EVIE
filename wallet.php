@@ -19,82 +19,55 @@ include __DIR__ . '/nav.php'; ?>
         });
 
         $(document).ready(function () {
-            var charIDs = [];
             getRefTypes();
-            $.ajax({
-                url: "https://api.eveonline.com/account/Characters.xml.aspx?keyID=" + keyID + "&vCode=" + vCode,
-                error: function (xhr, status, error) {
-                    showError("Character Data");
-                    // TODO: implement fancy error logging
-                },
-                success: function (xml) {
-                    var charID;
-                    var rows = xml.getElementsByTagName("row");
-                    for (var i = 0; i < rows.length; i++) {
-                        var row = rows[i];
-                        charID = row.getAttribute("characterID");
-                        charIDs[i] = charID;
-                    }
-                    $('#WalletContent').append('' +
-                        '<h2>Current balance: ' +
-                        '<br class="visible-xs"/>' +
-                        '<span id="balanceSpan"></span>' +
-                        '</h2>' +
-                        '<a class="anchor" name="Journal"></a>' +
-                        '<h2 style="display: inline;">Journal</h2>' +
-                        '<a href="#Transactions"> Jump to Transactions</a>' +
-                        '<table class="table">' +
-                        '<thead><tr>' +
-                        '<th style="width: 20%">Date (EVE Time)</th>' +
-                        '<th style="width: 20%">Type</th>' +
-                        '<th style="width: 20%">From</th>' +
-                        '<th style="width: 20%">Amount</th>' +
-                        '<th style="width: 20%">Balance</th>' +
-                        '</tr></thead>' +
-                        '<tbody id="WalletJournalBody"></tbody>' +
-                        '</table>' +
-                        '<span id="moreJournal">Load more entries ' +
-                        '<a style="cursor: pointer;" id="moreJournal50">50</a> ' +
-                        '<a style="cursor: pointer;" id="moreJournal100">100</a> ' +
-                        '<a style="cursor: pointer;" id="moreJournal250">250</a> ' +
-                        '<a style="cursor: pointer;" id="moreJournal1000">1000</a> ' +
-                        '<a style="cursor: pointer;" id="moreJournalAll">Max</a>' +
-                        '</span> ' +
-                        '<span id="loadingiconW"></span>' +
-                        '<hr>' +
-                        '<a class="anchor" name="Transactions"></a>' +
-                        '<h2 style="display: inline;">Transactions</h2>' +
-                        '<a href="#Journal"> Jump to Journal</a>' +
-                        '<table class="table">' +
-                        '<thead><tr>' +
-                        '<th style="width: 20%">Date (EVE Time)</th>' +
-                        '<th style="width: 40%">Information</th>' +
-                        '<th style="width: 40%">Price</th>' +
-                        '</tr></thead>' +
-                        '<tbody id="WalletTransactionsBody"></tbody>' +
-                        '</table>' +
-                        '<span id="moreTransactions">Load more entries ' +
-                        '<a style="cursor: pointer;" id="moreTransactions50">50</a> ' +
-                        '<a style="cursor: pointer;" id="moreTransactions100">100</a> ' +
-                        '<a style="cursor: pointer;" id="moreTransactions250">250</a> ' +
-                        '<a style="cursor: pointer;" id="moreTransactions1000">1000</a> ' +
-                        '<a style="cursor: pointer;" id="moreTransactionsAll">Max</a></span> ' +
-                        '<span id="loadingiconT"></span>');
-                    for (i = 0; i < charIDs.length; i++) {
-                        var css = "characterInactive";
-                        if (i == selectedCharacter) {
-                            css = "characterActive";
-                            selectedCharacterID = charIDs[i];
-                        }
-                        $('#charLinks').css('visibility', 'visible').append('<li><a id="charLink' + i + '" class="' + css + '" href="?char=' + i + '"><img alt="char' + i + '" id="char' + i + '" style="max-height: 50px" class="img" src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" width="50" height="50"></a></li>');
-                        $('#char' + i).css('visibility', 'visible').attr('src', 'https://image.eveonline.com/Character/' + charIDs[i] + '_50.jpg');
-                        $('#charmbl' + i).css('visibility', 'visible').attr('src', 'https://image.eveonline.com/Character/' + charIDs[i] + '_256.jpg');
-                    }
-                    getBalance(keyID, vCode, charIDs, <?php echo $selectedChar ?>);
-                    getWalletJournal(keyID, vCode, charIDs, refTypes, <?php echo $selectedChar ?>);
-                    getWalletTransactions(keyID, vCode, charIDs, <?php echo $selectedChar ?>);
-                }
-            });
+            $('#WalletContent').append('' +
+                '<h2>Current balance: ' +
+                '<br class="visible-xs"/>' +
+                '<span id="balanceSpan"></span>' +
+                '</h2>' +
+                '<a class="anchor" name="Journal"></a>' +
+                '<h2 class="walletHead">Journal</h2>' +
+                '<a href="#Transactions"> Jump to Transactions</a>' +
+                '<table class="journalTable table">' +
+                '<thead><tr>' +
+                '<th>Date (EVE Time)</th>' +
+                '<th>Type</th>' +
+                '<th>From</th>' +
+                '<th>Amount</th>' +
+                '<th>Balance</th>' +
+                '</tr></thead>' +
+                '<tbody id="WalletJournalBody"></tbody>' +
+                '</table>' +
+                '<span id="moreJournal">Load more entries ' +
+                '<a id="moreJournal50">50</a> ' +
+                '<a id="moreJournal100">100</a> ' +
+                '<a id="moreJournal250">250</a> ' +
+                '<a id="moreJournal1000">1000</a> ' +
+                '<a id="moreJournalAll">Max</a>' +
+                '</span> ' +
+                '<span id="loadingiconW"></span>' +
+                '<hr>' +
+                '<a class="anchor" name="Transactions"></a>' +
+                '<h2 class="walletHead">Transactions</h2>' +
+                '<a href="#Journal"> Jump to Journal</a>' +
+                '<table class="transactionsTable table">' +
+                '<thead><tr>' +
+                '<th class="Date">Date (EVE Time)</th>' +
+                '<th>Information</th>' +
+                '<th>Price</th>' +
+                '</tr></thead>' +
+                '<tbody id="WalletTransactionsBody"></tbody>' +
+                '</table>' +
+                '<span id="moreTransactions">Load more entries ' +
+                '<a id="moreTransactions50">50</a> ' +
+                '<a id="moreTransactions100">100</a> ' +
+                '<a id="moreTransactions250">250</a> ' +
+                '<a id="moreTransactions1000">1000</a> ' +
+                '<a id="moreTransactionsAll">Max</a></span> ' +
+                '<span id="loadingiconT"></span>');
+            getBalance(keyID, vCode, charIDs, <?php echo $selectedChar ?>);
+            getWalletJournal(keyID, vCode, charIDs, refTypes, <?php echo $selectedChar ?>);
+            getWalletTransactions(keyID, vCode, charIDs, <?php echo $selectedChar ?>);
         });
 
         function getRefTypes() {
@@ -305,7 +278,7 @@ include __DIR__ . '/nav.php'; ?>
                                 color = "green";
                                 info = " sold to ";
                             }
-                            $('#WalletTransactionsBody').append('<tr><td data-label="Date">' + date + '</td><td data-label="Information">' + quantity + ' x <a style="cursor: pointer;" onclick="getItemData(' + "'" + typeID + "'" + ')">' + typeName + '</a>' + info + ' <a style="cursor: pointer;" onclick="getCharData(' + "'" + clientName + "'" + ')">' + clientName + '</a></td><td data-label="Price" style="color: ' + color + '">' + (parseFloat(price * quantity)).formatMoney(2, ',', '.') + ' ISK (' + (parseFloat(price)).formatMoney(2, ',', '.') + ' ISK per item)</td></tr>');
+                            $('#WalletTransactionsBody').append('<tr><td data-label="Date">' + date + '</td><td data-label="Information">' + quantity + ' x <a onclick="getItemData(' + "'" + typeID + "'" + ')">' + typeName + '</a>' + info + ' <a onclick="getCharData(' + "'" + clientName + "'" + ')">' + clientName + '</a></td><td data-label="Price" style="color: ' + color + '">' + (parseFloat(price * quantity)).formatMoney(2, ',', '.') + ' ISK (' + (parseFloat(price)).formatMoney(2, ',', '.') + ' ISK per item)</td></tr>');
                         }
                         $('#moreTransactions50').attr('onclick', 'getMoreWalletTransactions("' + keyID + '", "' + vCode + '", "' + charIDs[i] + '", "' + transactionID + '", "50")');
                         $('#moreTransactions100').attr('onclick', 'getMoreWalletTransactions("' + keyID + '", "' + vCode + '", "' + charIDs[i] + '", "' + transactionID + '", "100")');
@@ -359,7 +332,7 @@ include __DIR__ . '/nav.php'; ?>
                                 color = "green";
                                 info = " sold to ";
                             }
-                            $('#WalletTransactionsBody').append('<tr><td data-label="Date">' + date + '</td><td data-label="Information">' + quantity + ' x <a style="cursor: pointer;" onclick="getItemData(' + "'" + typeID + "'" + ')">' + typeName + '</a>' + info + ' <a style="cursor: pointer;" onclick="getCharData(' + "'" + clientName + "'" + ')">' + clientName + '</a></td><td data-label="Price" style="color: ' + color + '">' + (parseFloat(price * quantity)).formatMoney(2, ',', '.') + ' ISK (' + (parseFloat(price)).formatMoney(2, ',', '.') + ' ISK per item)</td></tr>');
+                            $('#WalletTransactionsBody').append('<tr><td data-label="Date">' + date + '</td><td data-label="Information">' + quantity + ' x <a onclick="getItemData(' + "'" + typeID + "'" + ')">' + typeName + '</a>' + info + ' <a onclick="getCharData(' + "'" + clientName + "'" + ')">' + clientName + '</a></td><td data-label="Price" style="color: ' + color + '">' + (parseFloat(price * quantity)).formatMoney(2, ',', '.') + ' ISK (' + (parseFloat(price)).formatMoney(2, ',', '.') + ' ISK per item)</td></tr>');
                         }
                         $('#moreTransactions50').attr('onclick', 'getMoreWalletTransactions("' + keyID + '", "' + vCode + '", "' + charID + '", "' + transactionID + '", "50")');
                         $('#moreTransactions100').attr('onclick', 'getMoreWalletTransactions("' + keyID + '", "' + vCode + '", "' + charID + '", "' + transactionID + '", "100")');

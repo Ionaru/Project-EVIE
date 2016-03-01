@@ -54,11 +54,10 @@ class OneFileLoginApplication
                 /*} elseif ($_GET['action'] === 'change') {
                     $this->doPassChange();
                 }*/
-            }
-            else {
+            } else {
                 $this->loginStuff();
             }
-        }else {
+        } else {
             // start the session, always needed!
             $this->loginStuff();
         }

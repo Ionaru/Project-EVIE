@@ -116,7 +116,8 @@
                             <h4 class="modal-title">Enter API Key</h4>
                         </div>
                         <div class="modal-body">
-                            <p>Here you can enter an EVE Online API key for temporary use, this key will not be saved in the database and will be deleted once you log out.</p>
+                            <p>Here you can enter an EVE Online API key for temporary use, this key will not be saved in
+                                the database and will be deleted once you log out.</p>
                             <label for="login_input_username">Key ID</label>
                             <input type="text" class="form-control" id="keyID" name="keyID" required>
                             <br>

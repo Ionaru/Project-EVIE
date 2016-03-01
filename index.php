@@ -13,57 +13,31 @@ include __DIR__ . '/nav.php'; ?>
     <script>
         $(document).ready(function () {
             getAccountInfo(keyID, vCode);
-            var charID, charName;
-            var charIDs = [];
-            var charNames = [];
-            $.ajax({
-                url: "https://api.eveonline.com/account/Characters.xml.aspx?keyID=" + keyID + "&vCode=" + vCode,
-                error: function (xhr, status, error) {
-                    showError("Character Data");
-                    // TODO: implement fancy error logging
-                },
-                success: function (xml) {
-                    var rows = xml.getElementsByTagName("row");
-                    for (i = 0; i < rows.length; i++) {
-                        var row = rows[i];
-                        charID = row.getAttribute("characterID");
-                        charName = row.getAttribute("name");
-                        charNames[i] = charName;
-                        charIDs[i] = charID;
-                    }
-                    for (i = 0; i < charIDs.length; i++) {
-                        $("#mobilecharacter").append('<div class="col-xs-4 col-centered text-center"><a href="?char=' + i + '"><img alt="character" src="https://image.eveonline.com/Character/' + charIDs[i] + '_50.jpg"></a></div>');
-                        $("#char" + i).attr('src', 'https://image.eveonline.com/Character/' + charIDs[i] + '_50.jpg').css("visibility", "visible");
-                        $("#charmbl" + i).attr('src', 'https://image.eveonline.com/Character/' + charIDs[i] + '_256.jpg').css("visibility", "visible");
-                        $("#charLink" + i).css("visibility", "visible");
-                        $('#CharacterDivs').append('' +
-                            '<div class="col-xs-6 col-sm-3 col-md-2 placeholder">' +
-                            '<a id="CharacterDivLink' + (i + 1) + '" style="cursor: pointer;" onclick="getCharDataFromID(' + "'" + charIDs[i] + "'" + ')">' +
-                            '<img id="ImageAccount1Character' + (i + 1) + '" src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" width="200" height="200" class="img-responsive" alt="Generic placeholder thumbnail">' +
-                            '<h4 id="NameAccount1Character' + (i + 1) + '"></h4>' +
-                            '</a>' +
-                            '<span id="BalanceAccount1Character' + (i + 1) + '" class="text-muted"></span>' +
-                            '<p id="SkillAccount1Character' + (i + 1) + '"></p>' +
-                            '<div id="countdown"></div>' +
-                            '</div>');
-                        $("#NameAccount1Character" + (i + 1)).html("<strong>" + charNames[i] + "</strong>");
+            for (i = 0; i < charIDs.length; i++) {
+                $('#CharacterDivs').append('' +
+                    '<div class="col-xs-6 col-sm-3 col-md-2 placeholder">' +
+                    '<a id="CharacterDivLink' + (i + 1) + '" style="cursor: pointer;" onclick="getCharDataFromID(' + "'" + charIDs[i] + "'" + ')">' +
+                    '<img id="ImageAccount1Character' + (i + 1) + '" src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" width="200" height="200" class="img-responsive" alt="Generic placeholder thumbnail">' +
+                    '<h4 id="NameAccount1Character' + (i + 1) + '"></h4>' +
+                    '</a>' +
+                    '<span id="BalanceAccount1Character' + (i + 1) + '" class="text-muted"></span>' +
+                    '<p id="SkillAccount1Character' + (i + 1) + '"></p>' +
+                    '<div id="countdown"></div>' +
+                    '</div>');
+                $("#NameAccount1Character" + (i + 1)).html("<strong>" + charNames[i] + "</strong>");
 
-                        getBalance(keyID, vCode, charIDs, i);
-                        getSkillInTraining(keyID, vCode, charIDs, i);
-                    }
-                    for (var i = 0; i < charIDs.length; i++) {
-                        document.getElementById("ImageAccount1Character" + (i + 1)).src = "https://image.eveonline.com/Character/" + charIDs[i] + "_256.jpg";
-                        <?php if (strpos($_SERVER['REQUEST_URI'], 'index.php') === false) {
-                        echo '
+                getBalance(keyID, vCode, charIDs, i);
+                getSkillInTraining(keyID, vCode, charIDs, i);
+            }
+            for (var i = 0; i < charIDs.length; i++) {
+                document.getElementById("ImageAccount1Character" + (i + 1)).src = "https://image.eveonline.com/Character/" + charIDs[i] + "_256.jpg";
+                <?php if (strpos($_SERVER['REQUEST_URI'], 'index.php') === false) {
+                echo '
                               document.getElementById("char" + i).src="https://image.eveonline.com/Character/" + charIDs[i] + "_256.jpg";
                               document.getElementById("char" + i).style="max-height: 50px;";
                               ';
-                    }?>
-                    }
-                }
-            });
-
-
+            }?>
+            }
         });
 
         function getAccountInfo(keyID, vCode) {
@@ -71,7 +45,7 @@ include __DIR__ . '/nav.php'; ?>
                 url: "https://api.eveonline.com/account/AccountStatus.xml.aspx?keyID=" + keyID + "&vCode=" + vCode,
                 error: function (xhr, status, error) {
                     showError("Account Information");
-                     // TODO: implement fancy error logging
+                    // TODO: implement fancy error logging
                 },
                 success: function (xml) {
                     var currentTime, paidUntil, createDate, logonCount, logonMinutes;
@@ -106,7 +80,7 @@ include __DIR__ . '/nav.php'; ?>
                     for (var i2 = 0; i2 < rows.length; i2++) {
                         var row = rows[i2];
                         balance = row.getAttribute("balance");
-                        document.getElementById("BalanceAccount1Character" + (i + 1)).innerHTML = '<a style="color: #404040;" href="wallet.php?char=' + i + '">' + (parseFloat(balance)).formatMoney(2, ',', '.') + " ISK</a>";
+                        document.getElementById("BalanceAccount1Character" + (i + 1)).innerHTML = '<a href="wallet.php?char=' + i + '">' + (parseFloat(balance)).formatMoney(2, ',', '.') + " ISK</a>";
                     }
                 }
             });
@@ -128,11 +102,11 @@ include __DIR__ . '/nav.php'; ?>
                         var trainingEndTime = xml.getElementsByTagName("trainingEndTime")[0].childNodes[0].nodeValue;
                         var currentTQTime = xml.getElementsByTagName("currentTQTime")[0].childNodes[0].nodeValue;
                         getTypeNames(skillIDs);
-                        document.getElementById("SkillAccount1Character" + (i + 1)).innerHTML = '<a id="skillCharacter' + i + '" style="color: black;" href="skills.php?char=' + i + '"><span id="' + skillID + '">Placeholder</span> ' + skillLvl + '</a><br><span id="countdown' + i + '"></span>';
+                        document.getElementById("SkillAccount1Character" + (i + 1)).innerHTML = '<a id="skillCharacter' + i + '" href="skills.php?char=' + i + '"><span id="' + skillID + '">Placeholder</span> ' + skillLvl + '</a><br><span id="countdown' + i + '"></span>';
                         parseTimeRemaining(currentTQTime, trainingEndTime, "#countdown" + i, true, "Skill training completed!");
                     }
                     else {
-                        document.getElementById("SkillAccount1Character" + (i + 1)).innerHTML = '<a style="color: black;" href="skills.php?char=' + i + '">No skill in training</a>';
+                        document.getElementById("SkillAccount1Character" + (i + 1)).innerHTML = '<a href="skills.php?char=' + i + '">No skill in training</a>';
                     }
                 }
             });

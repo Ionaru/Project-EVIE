@@ -185,7 +185,7 @@ function getUserAPIKeys()
 
 ?>
 
-    <table class="table table-hover table-condensed" style="width:100%">
+    <table class="table table-hover table-condensed">
         <thead>
         <tr>
             <th>Actions</th>

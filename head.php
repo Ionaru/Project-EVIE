@@ -134,7 +134,7 @@ function get_string_between($string, $start, $end)
     <link rel="icon"
           href="http://www.iconwanted.com/downloads/exhumed/mega-games-pack-17-icons-by-exhumed/png/128x128/eve-online-1.png">
     <title>Project EVIE - <?php echo $title; ?></title>
-    <link rel="stylesheet" href="css/bootstrap.min.css" >
+    <link rel="stylesheet" href="css/bootstrap.min.css">
     <link rel="stylesheet" href="css/font-awesome.min.css">
     <link rel="stylesheet" href="css/Nav.css">
     <link rel="stylesheet" href="css/EVIE.css">

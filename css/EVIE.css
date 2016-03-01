@@ -49,6 +49,7 @@ ul.bottom {
 
 a {
     color: #205079;
+    cursor: pointer;
 }
 
 a.anchor {
@@ -131,3 +132,16 @@ table th {
     }
 }
 
+#characterInfoImage {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.jounalTable th {
+    width: 20%;
+}
+
+.walletHead {
+    display: inline;
+}

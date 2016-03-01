@@ -3,6 +3,42 @@ if (document.getElementById("passAlong_keyID") !== null) {
     var vCode = document.getElementById("passAlong_vCode").value;
     var selectedCharacter = document.getElementById("passAlong_selectedCharacter").value;
     var selectedCharacterID;
+    var charIDs = [];
+    var charNames = [];
+    if($.totalStorage('charIDs_' + keyID) == null) {
+        $.ajax({
+            url: "https://api.eveonline.com/account/Characters.xml.aspx?keyID=" + keyID + "&vCode=" + vCode,
+            async: false,
+            error: function (xhr, status, error) {
+                showError("Character ID");
+                // TODO: implement fancy error logging
+            },
+            success: function (xml) {
+                var rows = xml.getElementsByTagName("row");
+                for (var i = 0; i < rows.length; i++) {
+                    var row = rows[i];
+                    charIDs[i] = row.getAttribute("characterID");
+                    charNames[i] = row.getAttribute("name");
+                }
+                $.totalStorage('charIDs_' + keyID, charIDs);
+                $.totalStorage('charNames_' + keyID, charNames);
+            }
+        });
+    }
+    else {
+        charIDs = $.totalStorage('charIDs_' + keyID);
+        charNames = $.totalStorage('charNames_' + keyID);
+    }
+    for (var i = 0; i < charIDs.length; i++) {
+        var css = "characterInactive";
+        if (i == selectedCharacter) {
+            css = "characterActive";
+            selectedCharacterID = charIDs[i];
+        }
+        $('#charLinks').css('visibility', 'visible').append('<li><a id="charLink' + i + '" class="' + css + '" href="?char=' + i + '"><img alt="char' + i + '" id="char' + i + '" class="img" src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" width="50" height="50"></a></li>');
+        $('#char' + i).css('visibility', 'visible').attr('src', 'https://image.eveonline.com/Character/' + charIDs[i] + '_50.jpg');
+        $('#charmbl' + i).css('visibility', 'visible').attr('src', 'https://image.eveonline.com/Character/' + charIDs[i] + '_256.jpg');
+    }
 }
 
 $(function () {
