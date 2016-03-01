@@ -68,9 +68,7 @@ function addKey()
         $keyType = getAPIType($keyXML);
         $isActive = 1;
         $sql = 'INSERT INTO apikeys (user_name,apikey_name,apikey_keyid,apikey_vcode,apikey_type,apikey_isactive) VALUES (\'' . $_SESSION['user_name'] . '\',\'' . $keyName . '\',\'' . $keyID . '\',\'' . $vCode . '\',\'' . $keyType . '\',\'' . $isActive . '\');';
-        //$query = $db_connection->prepare($sql);
         $db_connection->exec($sql);
-        //$query->execute();
         $_SESSION['keyID'] = $keyID;
         $_SESSION['vCode'] = $vCode;
         $_SESSION['selectedCharacter'] = 0;
@@ -81,8 +79,6 @@ function setAllKeysInactive()
 {
     $db_connection = createDatabaseConnection();
     $sql2 = 'UPDATE apikeys SET apikey_isactive = 0 WHERE user_name = \'' . $_SESSION['user_name'] . '\'';
-    //$query = $db_connection->prepare($sql2);
-    //$query->execute();
     $db_connection->exec($sql2);
 }
 
@@ -94,10 +90,8 @@ function setActive($id)
         if ($row['user_name'] === $_SESSION['user_name']) {
             $sql2 = 'UPDATE `apikeys` SET `apikey_isactive`= 1 WHERE `apikey_id`=\'' . $id . '\'';
             $db_connection->exec($sql2);
-            //$query->execute();
             $sql3 = 'UPDATE `apikeys` SET `apikey_isactive`= 0 WHERE `apikey_vcode`=\'' . $_SESSION['vCode'] . '\'';
             $db_connection->exec($sql3);
-            //$query->execute();
             $_SESSION['keyID'] = $row['apikey_keyid'];
             $_SESSION['vCode'] = $row['apikey_vcode'];
             $_SESSION['selectedCharacter'] = 0;
@@ -168,19 +162,14 @@ function getUserAPIKeys()
         $apikey_type = $row['apikey_type'];
         $apikey_isactive = $row['apikey_isactive'];
         $apikey_dateadded = $row['apikey_dateadded'];
-        //var_dump($row);
         if ((int)$apikey_isactive === 1) {
             echo '<tr class="success">';
-            //echo '<td><i class="fa fa-check"></i>';
             echo '<td><button class="btn btn-xs" disabled><i class="fa fa-check"></i> Set active</button>';
             $_SESSION['keyID'] = $apikey_keyid;
             $_SESSION['vCode'] = $apikey_vcode;
             $_SESSION['selectedCharacter'] = 0;
-            //header("Location: /eve/index.php?char=0");
-            //die();
         } else {
             echo '<tr>';
-            //echo '<td><button data-toggle="modal" data-target="#apikeyModal" type="button" class="btn btn-xs btn-default ">Make active</button></td>';
             echo '<td><a class="btn btn-success btn-xs" href="?char=0&id=' . $apikey_id . '&action=setActive"><i class="fa fa-check"></i> Set active</a>';
         }
         echo ' <a class="btn btn-danger btn-xs" href="?char=0&id=' . $apikey_id . '&action=delete"><i class="fa fa-times"></i> Delete</a></td>';
