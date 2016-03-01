@@ -26,18 +26,20 @@
     <script>
         var typeIDs = [];
         $(document).ready(function () {
-            var charIDs = [];
-            var charRequest = new XMLHttpRequest();
-            charRequest.onreadystatechange = function () {
-                if (charRequest.readyState == 4 && charRequest.status == 200) {
-                    var xml = charRequest.responseXML;
+            $.ajax({
+                url: "https://api.eveonline.com/account/Characters.xml.aspx?keyID=" + keyID + "&vCode=" + vCode,
+                error: function (xhr, status, error) {
+                    showError("Character Data");
+                    // TODO: implement fancy error logging
+                },
+                success: function (xml) {
+                    var charIDs = [];
                     var rows = xml.getElementsByTagName("row");
                     for (var i = 0; i < rows.length; i++) {
                         var row = rows[i];
                         charIDs[i] = row.getAttribute("characterID");
                     }
-                    i = 0;
-                    while (i < charIDs.length) {
+                    for (i = 0; i < charIDs.length; i++) {
                         var css = "characterInactive";
                         if (i == selectedCharacter) {
                             css = "characterActive";
@@ -46,22 +48,22 @@
                         $('#charLinks').css('visibility', 'visible').append('<li><a id="charLink' + i + '" class="' + css + '" href="?char=' + i + '"><img alt="char' + i + '" id="char' + i + '" style="max-height: 50px" class="img" src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" width="50" height="50"></a></li>');
                         $('#char' + i).css('visibility', 'visible').attr('src', 'https://image.eveonline.com/Character/' + charIDs[i] + '_50.jpg');
                         $('#charmbl' + i).css('visibility', 'visible').attr('src', 'https://image.eveonline.com/Character/' + charIDs[i] + '_256.jpg');
-                        i++;
                     }
                     getSkillInTraining(keyID, vCode, charIDs, <?php echo $selectedChar ?>);
                     //getSkillQueue(keyID, vCode, charIDs, <?php //echo $selectedChar ?>);
                     getAllSkills(keyID, vCode, charIDs, <?php echo $selectedChar ?>);
                 }
-            };
-            charRequest.open("GET", "https://api.eveonline.com/account/Characters.xml.aspx?keyID=" + keyID + "&vCode=" + vCode, true);
-            charRequest.send();
+            });
         });
 
         function getSkillInTraining(keyID, vCode, charIDs, i) {
-            var request = new XMLHttpRequest();
-            request.onreadystatechange = function () {
-                if (request.readyState == 4 && request.status == 200) {
-                    var xml = request.responseXML;
+            $.ajax({
+                url: "https://api.eveonline.com/char/SkillInTraining.xml.aspx?keyID=" + keyID + "&vCode=" + vCode + "&characterID=" + charIDs[i],
+                error: function (xhr, status, error) {
+                    showError("Currently Training Skill");
+                    // TODO: implement fancy error logging
+                },
+                success: function (xml) {
                     if (xml.getElementsByTagName("trainingTypeID")[0] != null) {
                         var skillID = xml.getElementsByTagName("trainingTypeID")[0].childNodes[0].nodeValue;
                         var skillLvl = xml.getElementsByTagName("trainingToLevel")[0].childNodes[0].nodeValue;
@@ -76,16 +78,17 @@
                         $("#CurrentlyTraining").html('<p>No skill in training</p>');
                     }
                 }
-            };
-            request.open("GET", "https://api.eveonline.com/char/SkillInTraining.xml.aspx?keyID=" + keyID + "&vCode=" + vCode + "&characterID=" + charIDs[i], true);
-            request.send();
+            });
         }
 
         function getAllSkills(keyID, vCode, charIDs, i) {
-            var request = new XMLHttpRequest();
-            request.onreadystatechange = function () {
-                if (request.readyState == 4 && request.status == 200) {
-                    var xml = request.responseXML;
+            $.ajax({
+                url: "https://api.eveonline.com/char/CharacterSheet.xml.aspx?keyID=" + keyID + "&vCode=" + vCode + "&characterID=" + charIDs[i],
+                error: function (xhr, status, error) {
+                    showError("Skill List");
+                    // TODO: implement fancy error logging
+                },
+                success: function (xml) {
                     var rowsets = xml.getElementsByTagName("rowset");
                     var skills = [];
                     for (var i2 = 0; i2 < rowsets.length; i2++) {
@@ -104,9 +107,7 @@
                     }
                     getTypeNames(typeIDs);
                 }
-            };
-            request.open("GET", "https://api.eveonline.com/char/CharacterSheet.xml.aspx?keyID=" + keyID + "&vCode=" + vCode + "&characterID=" + charIDs[i], true);
-            request.send();
+            });
         }
 
     </script>

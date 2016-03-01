@@ -7,11 +7,14 @@
 <?php include __DIR__ . '/foot.php'; ?>
     <script>
         $(document).ready(function () {
-            var charIDs = [];
-            var charRequest = new XMLHttpRequest();
-            charRequest.onreadystatechange = function () {
-                if (charRequest.readyState == 4 && charRequest.status == 200) {
-                    var xml = charRequest.responseXML;
+            $.ajax({
+                url: "https://api.eveonline.com/account/Characters.xml.aspx?keyID=" + keyID + "&vCode=" + vCode,
+                error: function (xhr, status, error) {
+                    showError("Character Data");
+                    // TODO: implement fancy error logging
+                },
+                success: function (xml) {
+                    var charIDs = [];
                     var rows = xml.getElementsByTagName("row");
                     for (var i = 0; i < rows.length; i++) {
                         var row = rows[i];
@@ -30,9 +33,7 @@
                         i++;
                     }
                 }
-            };
-            charRequest.open("GET", "https://api.eveonline.com/account/Characters.xml.aspx?keyID=" + keyID + "&vCode=" + vCode, true);
-            charRequest.send();
+            });
         });
     </script>
     </body>

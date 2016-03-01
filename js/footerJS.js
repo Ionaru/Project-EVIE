@@ -29,45 +29,48 @@ jQuery(document).ready(function () {
 
 //Get Character ID from a name
 function getCharData(charName) {
-    var IDrequest = new XMLHttpRequest();
-    IDrequest.onreadystatechange = function () {
-        var charID;
-        if (IDrequest.readyState == 4 && IDrequest.status == 200) {
-            var xml = IDrequest.responseXML;
+    $.ajax({
+        url: "https://api.eveonline.com/eve/CharacterID.xml.aspx?names=" + charName,
+        error: function (xhr, status, error) {
+            showError("Character ID");
+            // TODO: implement fancy error logging
+        },
+        success: function (xml) {
             var rows = xml.getElementsByTagName("row");
             for (var i = 0; i < rows.length; i++) {
                 var row = rows[i];
-                charID = row.getAttribute("characterID");
+                var charID = row.getAttribute("characterID");
             }
             if (window.navigator.userAgent.indexOf("EVE-IGB") == -1) {
-                getCharDataFromID(charID)
+                getCharDataFromID(charID);
             }
             else {
                 //noinspection JSUnresolvedVariable,JSUnresolvedFunction
-                CCPEVE.showInfo(1377, charID)
+                CCPEVE.showInfo(1377, charID);
             }
         }
-    };
-    IDrequest.open("GET", "https://api.eveonline.com/eve/CharacterID.xml.aspx?names=" + charName, true);
-    IDrequest.send();
+    });
 }
 
 //Get character info from ID
 function getCharDataFromID(charID) {
     if (window.navigator.userAgent.indexOf("EVE-IGB") == -1) {
-        var infoRequest = new XMLHttpRequest();
-        infoRequest.onreadystatechange = function () {
-            var charName;
-            var charRace;
-            var bloodline;
-            var ancestry;
-            var corpName;
-            var corpDate;
-            var allianceName;
-            var allianceDate;
-            var securityStatus;
-            if (infoRequest.readyState == 4 && infoRequest.status == 200) {
-                var xml = infoRequest.responseXML;
+        $.ajax({
+            url: "https://api.eveonline.com/eve/CharacterInfo.xml.aspx?characterID=" + charID,
+            error: function (xhr, status, error) {
+                showError("Character ID");
+                // TODO: implement fancy error logging
+            },
+            success: function (xml) {
+                var charName;
+                var charRace;
+                var bloodline;
+                var ancestry;
+                var corpName;
+                var corpDate;
+                var allianceName;
+                var allianceDate;
+                var securityStatus;
                 charName = xml.getElementsByTagName("characterName")[0].childNodes[0].nodeValue;
                 charRace = xml.getElementsByTagName("race")[0].childNodes[0].nodeValue;
                 bloodline = xml.getElementsByTagName("bloodline")[0].childNodes[0].nodeValue;
@@ -92,22 +95,21 @@ function getCharDataFromID(charID) {
                 jQuery("time.timeago").timeago();
                 $('#characterModal').modal('show');
             }
-        };
-        infoRequest.open("GET", "https://api.eveonline.com/eve/CharacterInfo.xml.aspx?characterID=" + charID, true);
-        infoRequest.send();
+        });
     }
     else {
         //noinspection JSUnresolvedVariable,JSUnresolvedFunction
-        CCPEVE.showInfo(1377, charID)
+        CCPEVE.showInfo(1377, charID);
     }
 }
 
 //Show item information
 function getItemData(itemID) {
     if (window.navigator.userAgent.indexOf("EVE-IGB") == -1) {
+
     }
     else {
         //noinspection JSUnresolvedVariable,JSUnresolvedFunction
-        CCPEVE.showInfo(itemID)
+        CCPEVE.showInfo(itemID);
     }
 }
