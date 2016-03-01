@@ -146,14 +146,12 @@ include __DIR__ . '/nav.php'; ?>
                                 color = "green";
                                 ownerName1 = row.getAttribute("ownerName1");
                             }
-
                             var output = '';
                             output += '<tr>';
                             output += '<td data-label="Date">' + date + '</td>';
                             output += '<td data-label="refType">' + refTypeID + '</td>';
-
                             if (ownerName1 != "X") {
-                                output += '<td data-label="From"><a style="cursor: pointer;" onclick="getCharData(' + "'" + ownerName1 + "'" + ')">' + ownerName1 + '</a></td>';
+                                output += '<td data-label="From"><a onclick="getCharData(' + "'" + ownerName1 + "'" + ')">' + ownerName1 + '</a></td>';
                             }
                             else {
                                 if ($(window).width() > 768) {
@@ -206,16 +204,17 @@ include __DIR__ . '/nav.php'; ?>
                             refID = row.getAttribute("refID");
                             if (amount < 0) {
                                 color = "red";
-                                ownerName1 = "";
                             }
                             else {
                                 color = "green";
                                 ownerName1 = row.getAttribute("ownerName1");
                             }
-                            var output = '<tr><td data-label="Date">' + date + '</td>';
+                            var output = '';
+                            output += '<tr>';
+                            output += '<td data-label="Date">' + date + '</td>';
                             output += '<td data-label="refType">' + refTypeID + '</td>';
                             if (ownerName1 != "X") {
-                                output += '<td data-label="From"><a style="cursor: pointer;" onclick="getCharData(' + "'" + ownerName1 + "'" + ')">' + ownerName1 + '</a></td>';
+                                output += '<td data-label="From"><a onclick="getCharData(' + "'" + ownerName1 + "'" + ')">' + ownerName1 + '</a></td>';
                             }
                             else {
                                 if ($(window).width() > 768) {
