@@ -111,25 +111,6 @@ include __DIR__ . '/nav.php'; ?>
             refRequest.send();
         });
 
-        function getRefTypes() {
-            var request = new XMLHttpRequest();
-            request.onreadystatechange = function () {
-                if (request.readyState == 4 && request.status == 200) {
-                    var refTypes = {};
-                    var xml = request.responseXML;
-                    var rows = xml.getElementsByTagName("row");
-                    for (var i = 0; i < rows.length; i++) {
-                        var row = rows[i];
-                        refTypes[row.getAttribute("refTypeID")] = row.getAttribute("refTypeName");
-                    }
-                    console.log(refTypes);
-                    return refTypes;
-                }
-            };
-            request.open("GET", "https://api.eveonline.com/eve/RefTypes.xml.aspx", true);
-            request.send();
-        }
-
         function getBalance(keyID, vCode, charIDs, i) {
             var request = new XMLHttpRequest();
             request.onreadystatechange = function () {
@@ -139,10 +120,7 @@ include __DIR__ . '/nav.php'; ?>
                     var rows = xml.getElementsByTagName("row");
                     for (var i2 = 0; i2 < rows.length; i2++) {
                         var row = rows[i2];
-                        //console.log(row);
                         balance = row.getAttribute("balance");
-                        //console.log(balance);
-                        //$("#balanceSpan").html((parseFloat(balance)).formatMoney(2, ',', '.') + " ISK");
                         var options = {
                             useEasing: false,
                             useGrouping: true,
@@ -172,7 +150,6 @@ include __DIR__ . '/nav.php'; ?>
                 var color;
                 if (request.readyState == 4 && request.status == 200) {
                     var xml = request.responseXML;
-                    //console.log(xml);
                     var rows = xml.getElementsByTagName("row");
                     if (rows.length != 0) {
                         for (var i2 = 0; i2 < rows.length; i2++) {
@@ -321,7 +298,6 @@ include __DIR__ . '/nav.php'; ?>
                                 color = "green";
                                 info = " sold to ";
                             }
-                            //console.log(clientName);
                             $('#WalletTransactionsBody').append('<tr><td data-label="Date">' + date + '</td><td data-label="Information">' + quantity + ' x <a style="cursor: pointer;" onclick="getItemData(' + "'" + typeID + "'" + ')">' + typeName + '</a>' + info + ' <a style="cursor: pointer;" onclick="getCharData(' + "'" + clientName + "'" + ')">' + clientName + '</a></td><td data-label="Price" style="color: ' + color + '">' + (parseFloat(price * quantity)).formatMoney(2, ',', '.') + ' ISK (' + (parseFloat(price)).formatMoney(2, ',', '.') + ' ISK per item)</td></tr>');
                         }
                         $('#moreTransactions50').attr('onclick', 'getMoreWalletTransactions("' + keyID + '", "' + vCode + '", "' + charIDs[i] + '", "' + transactionID + '", "50")');
@@ -375,7 +351,6 @@ include __DIR__ . '/nav.php'; ?>
                                 color = "green";
                                 info = " sold to ";
                             }
-                            //console.log(clientName);
                             $('#WalletTransactionsBody').append('<tr><td data-label="Date">' + date + '</td><td data-label="Information">' + quantity + ' x <a style="cursor: pointer;" onclick="getItemData(' + "'" + typeID + "'" + ')">' + typeName + '</a>' + info + ' <a style="cursor: pointer;" onclick="getCharData(' + "'" + clientName + "'" + ')">' + clientName + '</a></td><td data-label="Price" style="color: ' + color + '">' + (parseFloat(price * quantity)).formatMoney(2, ',', '.') + ' ISK (' + (parseFloat(price)).formatMoney(2, ',', '.') + ' ISK per item)</td></tr>');
                         }
                         $('#moreTransactions50').attr('onclick', 'getMoreWalletTransactions("' + keyID + '", "' + vCode + '", "' + charID + '", "' + transactionID + '", "50")');

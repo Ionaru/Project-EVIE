@@ -57,25 +57,6 @@
             charRequest.send();
         });
 
-        function getRefTypes() {
-            var request = new XMLHttpRequest();
-            request.onreadystatechange = function () {
-                if (request.readyState == 4 && request.status == 200) {
-                    var refTypes = {};
-                    var xml = request.responseXML;
-                    var rows = xml.getElementsByTagName("row");
-                    for (var i = 0; i < rows.length; i++) {
-                        var row = rows[i];
-                        refTypes[row.getAttribute("refTypeID")] = row.getAttribute("refTypeName");
-                    }
-                    console.log(refTypes);
-                    return refTypes;
-                }
-            };
-            request.open("GET", "https://api.eveonline.com/eve/RefTypes.xml.aspx", true);
-            request.send();
-        }
-
         function getSkillInTraining(keyID, vCode, charIDs, i) {
             var request = new XMLHttpRequest();
             request.onreadystatechange = function () {

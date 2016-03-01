@@ -120,7 +120,6 @@
                     var buyOrders = 0;
                     var items = [];
                     var xml = request.responseXML;
-                    //console.log(xml);
                     var rows = xml.getElementsByTagName("row");
                     if (rows.length != 0) {
                         for (var i2 = 0; i2 < rows.length; i2++) {
@@ -187,18 +186,15 @@
                 skillIDs += items[i2] + ",";
             }
             skillIDs = skillIDs.substring(0, skillIDs.length - 1);
-            //console.log(skillIDs);
             var request = new XMLHttpRequest();
             request.onreadystatechange = function () {
                 var typeID;
                 var skillName;
                 if (request.readyState == 4 && request.status == 200) {
                     var xml2 = request.responseXML;
-                    //console.log(xml2)
                     var rows = xml2.getElementsByTagName("row");
                     for (var i2 = 0; i2 < rows.length; i2++) {
                         var row = rows[i2];
-                        //console.log(row);
                         typeID = row.getAttribute("typeID");
                         skillName = row.getAttribute("typeName");
                         $('#' + typeID).html(skillName);
