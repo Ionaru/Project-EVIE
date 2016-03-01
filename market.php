@@ -81,10 +81,7 @@
                     var rows = xml.getElementsByTagName("row");
                     for (var i2 = 0; i2 < rows.length; i2++) {
                         var row = rows[i2];
-                        //console.log(row);
                         balance = row.getAttribute("balance");
-                        //console.log(balance);
-                        //$("#balanceSpan").html((parseFloat(balance)).formatMoney(2, ',', '.') + " ISK");
                         var options = {
                             useEasing: false,
                             useGrouping: true,
@@ -140,18 +137,19 @@
                             bid = row.getAttribute("bid");
                             issued = row.getAttribute("issued");
                             currentTime = xml.getElementsByTagName('currentTime')[0].childNodes[0].nodeValue;
-                            currentTime = Date.parse(currentTime.replace(/\-/ig, '/').split('.')[0]);
                             issued = Date.parse(issued.replace(/\-/ig, '/').split('.')[0]);
                             expiry = issued + (duration * 86400000);
                             if (orderState == 0) {
                                 items.push(typeID);
                                 if (bid == 0) {
                                     sellOrders++;
-                                    $('#SellOrders').append('<tr><td id="' + typeID + '">' + typeID + '</td><td>' + volRemaining + ' / ' + volEntered + '</td><td>' + (parseFloat(price)).formatMoney(2, ',', '.') + ' ISK</td><td>' + stationID + ' ( range: ' + range + ' ) </td><td>' + parseTimeRemaining(currentTime, expiry) + '</td></tr>');
+                                    $('#SellOrders').append('<tr><td id="' + typeID + '">' + typeID + '</td><td>' + volRemaining + ' / ' + volEntered + '</td><td>' + (parseFloat(price)).formatMoney(2, ',', '.') + ' ISK</td><td>' + stationID + ' ( range: ' + range + ' ) </td><td><span id="sellOrder' + i2 + '"></span></td></tr>');
+                                    parseTimeRemaining(currentTime, expiry, "#sellOrder" + i2, true, "Expired!");
                                 }
                                 else if (bid == 1) {
                                     buyOrders++;
-                                    $('#BuyOrders').append('<tr><td id="' + typeID + '">' + typeID + '</td><td>' + volRemaining + ' / ' + volEntered + '</td><td>' + (parseFloat(price)).formatMoney(2, ',', '.') + ' ISK</td><td>' + stationID + ' ( range: ' + range + ' ) </td><td>' + parseTimeRemaining(currentTime, expiry) + '</td></tr>');
+                                    $('#BuyOrders').append('<tr><td id="' + typeID + '">' + typeID + '</td><td>' + volRemaining + ' / ' + volEntered + '</td><td>' + (parseFloat(price)).formatMoney(2, ',', '.') + ' ISK</td><td>' + stationID + ' ( range: ' + range + ' ) </td><td><span id="buyOrder' + i2 + '"></span></td></tr>');
+                                    parseTimeRemaining(currentTime, expiry, "#buyOrder" + i2, true, "Expired!");
                                 }
                             }
                         }

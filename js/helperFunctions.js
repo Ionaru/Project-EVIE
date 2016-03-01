@@ -59,27 +59,31 @@
     };
 
     this.parseTimeRemaining = function (now, end, elementID, doTimeTick, expiredMessage) {
-        var _day, _hour, _minute, _second, d, days, distance, ds, h, hours, hs, m, minutes, ms, output, s, seconds, ss;
+        var _day, _hour, _minute, _second, d, days, distance, ds, h, hours, hs, m, minutes, ms, output, s, seconds, ss, timer;
+        $(elementID).html("Calculating Time...");
+        try {
+            now = Date.parse(now.replace(/\-/ig, '/').split('.')[0]);
+            end = Date.parse(end.replace(/\-/ig, '/').split('.')[0]);
+        }
+        catch (TypeError) {
+
+        }
+
+        timer = void 0;
         distance = end - now;
+
         if (doTimeTick == null) {
             doTimeTick = false;
         }
         if (expiredMessage == null) {
             expiredMessage = '0';
         }
+
         if (distance < 1) {
             clearInterval(timer);
-            $("#Timeleft " + i).html(expiredMessage + '<br>');
+            $(elementID).html(expiredMessage + '<br>');
             return;
         }
-        _second = 1000;
-        _minute = _second * 60;
-        _hour = _minute * 60;
-        _day = _hour * 24;
-        days = Math.floor(distance / _day);
-        hours = Math.floor((distance % _day) / _hour);
-        minutes = Math.floor((distance % _hour) / _minute);
-        seconds = Math.floor((distance % _minute) / _second);
         d = " day";
         ds = " days";
         h = " hour";
@@ -88,32 +92,50 @@
         ms = " minutes";
         s = " second";
         ss = " seconds";
-        output = '';
-        if (days > 0) {
-            output += days + " " + (this.Pluralize(d, ds, days));
-        }
-        if (hours > 0) {
-            if (minutes === 0 && seconds === 0 && days !== 0) {
-                output += " and " + hours + " " + (this.Pluralize(h, hs, hours));
-            } else if (days !== 0 && (minutes !== 0 || seconds !== 0)) {
-                output += ", " + hours + " " + (this.Pluralize(h, hs, hours));
-            } else {
-                output += hours + " " + (this.Pluralize(h, hs, hours));
+        function calculateTime() {
+            output = '';
+            _second = 1000;
+            _minute = _second * 60;
+            _hour = _minute * 60;
+            _day = _hour * 24;
+            days = Math.floor(distance / _day);
+            hours = Math.floor((distance % _day) / _hour);
+            minutes = Math.floor((distance % _hour) / _minute);
+            seconds = Math.floor((distance % _minute) / _second);
+            if (days > 0) {
+                output += days + " " + (Pluralize(d, ds, days));
             }
-        }
-        if (minutes > 0) {
-            if (seconds === 0 && (days !== 0 || hours !== 0)) {
-                output += " and " + minutes + " " + (this.Pluralize(m, ms, minutes));
-            } else if ((hours !== 0 || days !== 0) && (seconds !== 0 || hours !== 0)) {
-                output += ", " + minutes + " " + (this.Pluralize(m, ms, minutes));
-            } else {
-                output += minutes + " " + (this.Pluralize(m, ms, minutes));
+            if (hours > 0) {
+                if (minutes === 0 && seconds === 0 && days !== 0) {
+                    output += " and " + hours + " " + (Pluralize(h, hs, hours));
+                } else if (days !== 0 && (minutes !== 0 || seconds !== 0)) {
+                    output += ", " + hours + " " + (Pluralize(h, hs, hours));
+                } else {
+                    output += hours + " " + (Pluralize(h, hs, hours));
+                }
             }
+            if (minutes > 0) {
+                if (seconds === 0 && (days !== 0 || hours !== 0)) {
+                    output += " and " + minutes + " " + (Pluralize(m, ms, minutes));
+                } else if ((hours !== 0 || days !== 0) && (seconds !== 0 || hours !== 0)) {
+                    output += ", " + minutes + " " + (Pluralize(m, ms, minutes));
+                } else {
+                    output += minutes + " " + (Pluralize(m, ms, minutes));
+                }
+            }
+            if (seconds > 0) {
+                output += " and " + seconds + " " + (Pluralize(s, ss, seconds));
+            }
+            distance -= 1000;
+            $(elementID).html(output);
         }
-        if (seconds > 0) {
-            output += " and " + seconds + " " + (this.Pluralize(s, ss, seconds));
+
+        if (doTimeTick) {
+            timer = setInterval(calculateTime, 1000);
         }
-        return output;
+        else {
+            calculateTime();
+        }
     };
 
     this.Pluralize = function (Single, Plural, number) {
@@ -142,18 +164,18 @@
         return s + (j ? i.substr(0, j) + t : '') + i.substr(j).replace(/(\d{3})(?=\d)/g, '$1' + t) + (c ? d + Math.abs(n - i).toFixed(c).slice(2) : '');
     };
 
-    this.uniq = function(a) {
+    this.uniq = function (a) {
         var seen = {};
-        return a.filter(function(item) {
+        return a.filter(function (item) {
             return seen.hasOwnProperty(item) ? false : (seen[item] = true);
         });
     };
 
-    this.showError = function(module) {
-        if ( $("#alertBox").length == 0 ) {
+    this.showError = function (module) {
+        if ($("#alertBox").length == 0) {
             $("#alertSpan").html('<div id="alertBox" class="alert alert-danger" role="alert"><strong>One or more problems were detected while loading this page. :(</strong></div>');
         }
-        problems ++;
+        problems++;
         $("#alertBox").append('<br>Problem #' + problems + ' - There was an error in the \'' + module + '\' module.');
     };
 

@@ -1,5 +1,5 @@
 (function () {
-    var getItemName, getPlanetInstallations, getPlanets, getTimeRemaining;
+    var getItemName, getPlanetInstallations, getPlanets;
 
     getPlanets = function (keyID, vCode, selectedCharacterID) {
         var request;
@@ -57,7 +57,7 @@
                         totalHarvesters++;
                         if (expiryTime > currentTime) {
                             $('#planetDiv' + planetID).append('Harvesting cycle finishes in:<br><span id="Timeleft' + pinID + '"></span><br>');
-                            getTimeRemaining(currentTime, expiryTime, pinID);
+                            parseTimeRemaining(currentTime, expiryTime, "#Timeleft" + pinID, true, "Harvesting cycle finished")
                             activeHarvesters++;
                             $('#harvesterActive' + planetID + 'New').html('Harvesters active!');
                         } else {
@@ -77,21 +77,6 @@
         };
         request.open('GET', 'https://api.eveonline.com/char/PlanetaryPins.xml.aspx?keyID=' + keyID + '&vCode=' + vCode + '&characterID=' + selectedCharacterID + '&planetID=' + planetID, true);
         request.send();
-    };
-
-    getTimeRemaining = function (nowDate, endDate, i) {
-        var end, now, showRemaining, timer;
-        now = Date.parse(nowDate.replace(/\-/ig, '/').split('.')[0]);
-        end = Date.parse(endDate.replace(/\-/ig, '/').split('.')[0]);
-        timer = void 0;
-        showRemaining = function () {
-            var output;
-            now = now + 1000;
-            output = parseTimeRemaining(now, end);
-            $('#Timeleft' + i).html(output + '<br>');
-        };
-        $('#Timeleft' + i).html('Calculating Time...<br>');
-        timer.setInterval(showRemaining, 1000);
     };
 
     getItemName = function (typeID, level) {

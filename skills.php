@@ -57,119 +57,6 @@
             charRequest.send();
         });
 
-        function getSkillTimeRemaining(startDate, nowDate, endDate, i) {
-            var start = Date.parse(startDate.replace(/\-/ig, '/').split('.')[0]);
-            var now = Date.parse(nowDate.replace(/\-/ig, '/').split('.')[0]);
-            var end = Date.parse(endDate.replace(/\-/ig, '/').split('.')[0]);
-            var _second = 1000;
-            var _minute = _second * 60;
-            var _hour = _minute * 60;
-            var _day = _hour * 24;
-            var timer;
-            $('#CurrentlyTraining').append('<p id="countdown">Calculating Time...</p>');
-
-            function showRemaining() {
-                now = now + 1000;
-                var distance = end - now;
-                if (distance < 1) {
-
-                    clearInterval(timer);
-                    $('#countdown').html("Skill training completed!");
-
-                    return;
-                }
-                var days = Math.floor(distance / _day);
-                var hours = Math.floor((distance % _day) / _hour);
-                var minutes = Math.floor((distance % _hour) / _minute);
-                var seconds = Math.floor((distance % _minute) / _second);
-                //console.log(minutes);
-                //console.log(seconds);
-                var output = "";
-                if (days > 0) {
-                    if (days == 1) {
-                        output += (days + " day");
-                    }
-                    else {
-                        output += (days + " days");
-                    }
-                }
-
-                if (hours > 0) {
-                    if (hours == 1) {
-                        if (minutes == 0 && seconds == 0 && days != 0) {
-                            //When below values are 0, add "and".
-                            output += (" and " + hours + " hour");
-                        }
-                        else if ((days != 0) && ((minutes != 0) || (seconds != 0))) {
-                            //When surrounding values are not 0, add ",".
-                            output += (", " + hours + " hour");
-                        }
-                        else {
-                            //If no other values, add nothing.
-                            output += (hours + " hour");
-                        }
-                    }
-                    else {
-                        if (minutes == 0 && seconds == 0 && days != 0) {
-                            //When below values are 0, add "and".
-                            output += (" and " + hours + " hours");
-                        }
-                        else if ((days != 0) && ((minutes != 0) || (seconds != 0))) {
-                            //When surrounding values are not 0, add ",".
-                            output += (", " + hours + " hours");
-                        }
-                        else {
-                            //If no other values, add nothing.
-                            output += (hours + " hours");
-                        }
-                    }
-                }
-
-                if (minutes > 0) {
-                    if (minutes == 1) {
-                        if (seconds == 0 && ((days != 0) || (hours != 0))) {
-                            //When below values are 0, add "and".
-                            output += (" and " + minutes + " minute");
-                        }
-                        else if (((hours != 0) || (days != 0)) && ((seconds != 0) || (hours != 0))) {
-                            //When surrounding values are not 0, add ",".
-                            output += (", " + minutes + " minute");
-                        }
-                        else {
-                            output += (minutes + " minute ");
-                        }
-                    }
-                    else {
-                        if (seconds == 0 && ((days != 0) || (hours != 0))) {
-                            output += (" and " + minutes + " minutes");
-                        }
-                        else if (((hours != 0) || (days != 0)) && ((seconds != 0) || (hours != 0))) {
-                            output += (", " + minutes + " minutes");
-                        }
-                        else {
-                            //If no other values, add nothing.
-                            output += (minutes + " minutes");
-                        }
-                    }
-                }
-
-                if (seconds > 0) {
-                    if (seconds == 1) {
-                        output += (" and " + seconds + " second");
-                    }
-                    else {
-                        output += (" and " + seconds + " seconds");
-                    }
-                }
-
-
-                //$('#countdown' + (i)).html(output);
-                $("#countdown").html(output);
-            }
-
-            timer = setInterval(showRemaining, 1000);
-        }
-
         function getRefTypes() {
             var request = new XMLHttpRequest();
             request.onreadystatechange = function () {
@@ -201,8 +88,8 @@
                         var trainingEndTime = xml.getElementsByTagName("trainingEndTime")[0].childNodes[0].nodeValue;
                         var currentTQTime = xml.getElementsByTagName("currentTQTime")[0].childNodes[0].nodeValue;
                         typeIDs.push(skillID);
-                        $("#CurrentlyTraining").html('<p><span id="' + skillID + '">Placeholder Skill</span> ' + skillLvl + '</p>');
-                        getSkillTimeRemaining(trainingStartTime, currentTQTime, trainingEndTime, i);
+                        $("#CurrentlyTraining").html('<p><span id="' + skillID + '">Placeholder Skill</span> ' + skillLvl + '</p><p id="skillCountdown"></p>');
+                        parseTimeRemaining(currentTQTime, trainingEndTime, "#skillCountdown", true, "Skill training completed!")
                     }
                     else {
                         $("#CurrentlyTraining").html('<p>No skill in training</p>');
