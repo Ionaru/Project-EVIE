@@ -13,13 +13,16 @@ include __DIR__ . '/nav.php'; ?>
     <script>
         $(document).ready(function () {
             getAccountInfo(keyID, vCode);
+            var charID, charName;
             var charIDs = [];
             var charNames = [];
-            var charRequest = new XMLHttpRequest();
-            charRequest.onreadystatechange = function () {
-                var charID, charName;
-                if (charRequest.readyState == 4 && charRequest.status == 200) {
-                    var xml = charRequest.responseXML;
+            $.ajax({
+                url: "https://api.eveonline.com/account/Characters.xml.aspx?keyID=" + keyID + "&vCode=" + vCode,
+                error: function (xhr, status, error) {
+                    showError("Character Data");
+                    // TODO: implement fancy error logging
+                },
+                success: function (xml) {
                     var rows = xml.getElementsByTagName("row");
                     for (i = 0; i < rows.length; i++) {
                         var row = rows[i];
@@ -58,9 +61,7 @@ include __DIR__ . '/nav.php'; ?>
                     }?>
                     }
                 }
-            };
-            charRequest.open("GET", "https://api.eveonline.com/account/Characters.xml.aspx?keyID=" + keyID + "&vCode=" + vCode, true);
-            charRequest.send();
+            });
 
 
         });
@@ -93,11 +94,14 @@ include __DIR__ . '/nav.php'; ?>
         }
 
         function getBalance(keyID, vCode, charIDs, i) {
-            var request = new XMLHttpRequest();
-            request.onreadystatechange = function () {
-                var balance;
-                if (request.readyState == 4 && request.status == 200) {
-                    var xml = request.responseXML;
+            $.ajax({
+                url: "https://api.eveonline.com/char/AccountBalance.xml.aspx?keyID=" + keyID + "&vCode=" + vCode + "&characterID=" + charIDs[i],
+                error: function (xhr, status, error) {
+                    showError("Account balance for character " + charIDs[i]);
+                    // TODO: implement fancy error logging
+                },
+                success: function (xml) {
+                    var balance;
                     var rows = xml.getElementsByTagName("row");
                     for (var i2 = 0; i2 < rows.length; i2++) {
                         var row = rows[i2];
@@ -105,16 +109,17 @@ include __DIR__ . '/nav.php'; ?>
                         document.getElementById("BalanceAccount1Character" + (i + 1)).innerHTML = '<a style="color: #404040;" href="wallet.php?char=' + i + '">' + (parseFloat(balance)).formatMoney(2, ',', '.') + " ISK</a>";
                     }
                 }
-            };
-            request.open("GET", "https://api.eveonline.com/char/AccountBalance.xml.aspx?keyID=" + keyID + "&vCode=" + vCode + "&characterID=" + charIDs[i], true);
-            request.send();
+            });
         }
 
         function getSkillInTraining(keyID, vCode, charIDs, i) {
-            var request = new XMLHttpRequest();
-            request.onreadystatechange = function () {
-                if (request.readyState == 4 && request.status == 200) {
-                    var xml = request.responseXML;
+            $.ajax({
+                url: "https://api.eveonline.com/char/SkillInTraining.xml.aspx?keyID=" + keyID + "&vCode=" + vCode + "&characterID=" + charIDs[i],
+                error: function (xhr, status, error) {
+                    showError("Skill training for character " + charIDs[i]);
+                    // TODO: implement fancy error logging
+                },
+                success: function (xml) {
                     if (xml.getElementsByTagName("trainingTypeID")[0] != null) {
                         var skillIDs = [];
                         var skillID = xml.getElementsByTagName("trainingTypeID")[0].childNodes[0].nodeValue;
@@ -129,11 +134,8 @@ include __DIR__ . '/nav.php'; ?>
                     else {
                         document.getElementById("SkillAccount1Character" + (i + 1)).innerHTML = '<a style="color: black;" href="skills.php?char=' + i + '">No skill in training</a>';
                     }
-
                 }
-            };
-            request.open("GET", "https://api.eveonline.com/char/SkillInTraining.xml.aspx?keyID=" + keyID + "&vCode=" + vCode + "&characterID=" + charIDs[i], true);
-            request.send();
+            });
         }
     </script>
     </body>
