@@ -8,7 +8,6 @@ include __DIR__ . '/nav.php'; ?>
 
     <script>
         var refTypes = [];
-
         var amountScrolled = 300;
 
         $(window).scroll(function () {
@@ -20,103 +19,109 @@ include __DIR__ . '/nav.php'; ?>
         });
 
         $(document).ready(function () {
-            var refRequest = new XMLHttpRequest();
-            refRequest.onreadystatechange = function () {
-                if (refRequest.readyState == 4 && refRequest.status == 200) {
-                    var xml = refRequest.responseXML;
+            var charIDs = [];
+            getRefTypes();
+            $.ajax({
+                url: "https://api.eveonline.com/account/Characters.xml.aspx?keyID=" + keyID + "&vCode=" + vCode,
+                error: function (xhr, status, error) {
+                    showError("Character Data");
+                    // TODO: implement fancy error logging
+                },
+                success: function (xml) {
+                    var charID;
                     var rows = xml.getElementsByTagName("row");
                     for (var i = 0; i < rows.length; i++) {
                         var row = rows[i];
-                        refTypes[row.getAttribute("refTypeID")] = row.getAttribute("refTypeName");
+                        charID = row.getAttribute("characterID");
+                        charIDs[i] = charID;
                     }
-                    var charIDs = [];
-                    var charRequest = new XMLHttpRequest();
-                    charRequest.onreadystatechange = function () {
-                        var charID;
-                        if (charRequest.readyState == 4 && charRequest.status == 200) {
-                            var xml = charRequest.responseXML;
-                            var rows = xml.getElementsByTagName("row");
-                            for (i = 0; i < rows.length; i++) {
-                                var row = rows[i];
-                                charID = row.getAttribute("characterID");
-                                charIDs[i] = charID;
-                            }
-                            $('#WalletContent').append('' +
-                                '<h2>Current balance: ' +
-                                '<br class="visible-xs"/>' +
-                                '<span id="balanceSpan"></span>' +
-                                '</h2>' +
-                                '<a class="anchor" name="Journal"></a>' +
-                                '<h2 style="display: inline;">Journal</h2>' +
-                                '<a href="#Transactions"> Jump to Transactions</a>' +
-                                '<table class="table">' +
-                                '<thead><tr>' +
-                                '<th style="width: 20%">Date (EVE Time)</th>' +
-                                '<th style="width: 20%">Type</th>' +
-                                '<th style="width: 20%">From</th>' +
-                                '<th style="width: 20%">Amount</th>' +
-                                '<th style="width: 20%">Balance</th>' +
-                                '</tr></thead>' +
-                                '<tbody id="WalletJournalBody"></tbody>' +
-                                '</table>' +
-                                '<span id="moreJournal">Load more entries ' +
-                                '<a style="cursor: pointer;" id="moreJournal50">50</a> ' +
-                                '<a style="cursor: pointer;" id="moreJournal100">100</a> ' +
-                                '<a style="cursor: pointer;" id="moreJournal250">250</a> ' +
-                                '<a style="cursor: pointer;" id="moreJournal1000">1000</a> ' +
-                                '<a style="cursor: pointer;" id="moreJournalAll">Max</a>' +
-                                '</span> ' +
-                                '<span id="loadingiconW"></span>' +
-                                '<hr>' +
-                                '<a class="anchor" name="Transactions"></a>' +
-                                '<h2 style="display: inline;">Transactions</h2>' +
-                                '<a href="#Journal"> Jump to Journal</a>' +
-                                '<table class="table">' +
-                                '<thead><tr>' +
-                                '<th style="width: 20%">Date (EVE Time)</th>' +
-                                '<th style="width: 40%">Information</th>' +
-                                '<th style="width: 40%">Price</th>' +
-                                '</tr></thead>' +
-                                '<tbody id="WalletTransactionsBody"></tbody>' +
-                                '</table>' +
-                                '<span id="moreTransactions">Load more entries ' +
-                                '<a style="cursor: pointer;" id="moreTransactions50">50</a> ' +
-                                '<a style="cursor: pointer;" id="moreTransactions100">100</a> ' +
-                                '<a style="cursor: pointer;" id="moreTransactions250">250</a> ' +
-                                '<a style="cursor: pointer;" id="moreTransactions1000">1000</a> ' +
-                                '<a style="cursor: pointer;" id="moreTransactionsAll">Max</a></span> ' +
-                                '<span id="loadingiconT"></span>');
-                            i = 0;
-                            while (i < charIDs.length) {
-                                var css = "characterInactive";
-                                if (i == selectedCharacter) {
-                                    css = "characterActive";
-                                    selectedCharacterID = charIDs[i];
-                                }
-                                $('#charLinks').css('visibility', 'visible').append('<li><a id="charLink' + i + '" class="' + css + '" href="?char=' + i + '"><img alt="char' + i + '" id="char' + i + '" style="max-height: 50px" class="img" src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" width="50" height="50"></a></li>');
-                                $('#char' + i).css('visibility', 'visible').attr('src', 'https://image.eveonline.com/Character/' + charIDs[i] + '_50.jpg');
-                                $('#charmbl' + i).css('visibility', 'visible').attr('src', 'https://image.eveonline.com/Character/' + charIDs[i] + '_256.jpg');
-                                i++;
-                            }
-                            getBalance(keyID, vCode, charIDs, <?php echo $selectedChar ?>);
-                            getWalletJournal(keyID, vCode, charIDs, refTypes, <?php echo $selectedChar ?>);
-                            getWalletTransactions(keyID, vCode, charIDs, <?php echo $selectedChar ?>);
+                    $('#WalletContent').append('' +
+                        '<h2>Current balance: ' +
+                        '<br class="visible-xs"/>' +
+                        '<span id="balanceSpan"></span>' +
+                        '</h2>' +
+                        '<a class="anchor" name="Journal"></a>' +
+                        '<h2 style="display: inline;">Journal</h2>' +
+                        '<a href="#Transactions"> Jump to Transactions</a>' +
+                        '<table class="table">' +
+                        '<thead><tr>' +
+                        '<th style="width: 20%">Date (EVE Time)</th>' +
+                        '<th style="width: 20%">Type</th>' +
+                        '<th style="width: 20%">From</th>' +
+                        '<th style="width: 20%">Amount</th>' +
+                        '<th style="width: 20%">Balance</th>' +
+                        '</tr></thead>' +
+                        '<tbody id="WalletJournalBody"></tbody>' +
+                        '</table>' +
+                        '<span id="moreJournal">Load more entries ' +
+                        '<a style="cursor: pointer;" id="moreJournal50">50</a> ' +
+                        '<a style="cursor: pointer;" id="moreJournal100">100</a> ' +
+                        '<a style="cursor: pointer;" id="moreJournal250">250</a> ' +
+                        '<a style="cursor: pointer;" id="moreJournal1000">1000</a> ' +
+                        '<a style="cursor: pointer;" id="moreJournalAll">Max</a>' +
+                        '</span> ' +
+                        '<span id="loadingiconW"></span>' +
+                        '<hr>' +
+                        '<a class="anchor" name="Transactions"></a>' +
+                        '<h2 style="display: inline;">Transactions</h2>' +
+                        '<a href="#Journal"> Jump to Journal</a>' +
+                        '<table class="table">' +
+                        '<thead><tr>' +
+                        '<th style="width: 20%">Date (EVE Time)</th>' +
+                        '<th style="width: 40%">Information</th>' +
+                        '<th style="width: 40%">Price</th>' +
+                        '</tr></thead>' +
+                        '<tbody id="WalletTransactionsBody"></tbody>' +
+                        '</table>' +
+                        '<span id="moreTransactions">Load more entries ' +
+                        '<a style="cursor: pointer;" id="moreTransactions50">50</a> ' +
+                        '<a style="cursor: pointer;" id="moreTransactions100">100</a> ' +
+                        '<a style="cursor: pointer;" id="moreTransactions250">250</a> ' +
+                        '<a style="cursor: pointer;" id="moreTransactions1000">1000</a> ' +
+                        '<a style="cursor: pointer;" id="moreTransactionsAll">Max</a></span> ' +
+                        '<span id="loadingiconT"></span>');
+                    for (i = 0; i < charIDs.length; i++) {
+                        var css = "characterInactive";
+                        if (i == selectedCharacter) {
+                            css = "characterActive";
+                            selectedCharacterID = charIDs[i];
                         }
-                    };
-                    charRequest.open("GET", "https://api.eveonline.com/account/Characters.xml.aspx?keyID=" + keyID + "&vCode=" + vCode, true);
-                    charRequest.send();
+                        $('#charLinks').css('visibility', 'visible').append('<li><a id="charLink' + i + '" class="' + css + '" href="?char=' + i + '"><img alt="char' + i + '" id="char' + i + '" style="max-height: 50px" class="img" src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" width="50" height="50"></a></li>');
+                        $('#char' + i).css('visibility', 'visible').attr('src', 'https://image.eveonline.com/Character/' + charIDs[i] + '_50.jpg');
+                        $('#charmbl' + i).css('visibility', 'visible').attr('src', 'https://image.eveonline.com/Character/' + charIDs[i] + '_256.jpg');
+                    }
+                    getBalance(keyID, vCode, charIDs, <?php echo $selectedChar ?>);
+                    getWalletJournal(keyID, vCode, charIDs, refTypes, <?php echo $selectedChar ?>);
+                    getWalletTransactions(keyID, vCode, charIDs, <?php echo $selectedChar ?>);
                 }
-            };
-            refRequest.open("GET", "https://api.eveonline.com/eve/RefTypes.xml.aspx", true);
-            refRequest.send();
+            });
         });
 
+        function getRefTypes() {
+            $.ajax({
+                url: "https://api.eveonline.com/eve/RefTypes.xml.aspx",
+                error: function (xhr, status, error) {
+                    showError("RefType Names");
+                    // TODO: implement fancy error logging
+                },
+                success: function (xml) {
+                    var rows = xml.getElementsByTagName("row");
+                    for (var i = 0; i < rows.length; i++) {
+                        refTypes[rows[i].getAttribute("refTypeID")] = rows[i].getAttribute("refTypeName");
+                    }
+                }
+            });
+        }
+
         function getBalance(keyID, vCode, charIDs, i) {
-            var request = new XMLHttpRequest();
-            request.onreadystatechange = function () {
-                var balance;
-                if (request.readyState == 4 && request.status == 200) {
-                    var xml = request.responseXML;
+            $.ajax({
+                url: "https://api.eveonline.com/char/AccountBalance.xml.aspx?keyID=" + keyID + "&vCode=" + vCode + "&characterID=" + charIDs[i],
+                error: function (xhr, status, error) {
+                    showError("Balance");
+                    // TODO: implement fancy error logging
+                },
+                success: function (xml) {
+                    var balance;
                     var rows = xml.getElementsByTagName("row");
                     for (var i2 = 0; i2 < rows.length; i2++) {
                         var row = rows[i2];
@@ -133,24 +138,25 @@ include __DIR__ . '/nav.php'; ?>
                         count.start();
                     }
                 }
-            };
-            request.open("GET", "https://api.eveonline.com/char/AccountBalance.xml.aspx?keyID=" + keyID + "&vCode=" + vCode + "&characterID=" + charIDs[i], true);
-            request.send();
+            });
         }
 
         function getWalletJournal(keyID, vCode, charIDs, refTypes, i) {
-            var request = new XMLHttpRequest();
-            request.onreadystatechange = function () {
-                var ownerName1;
-                var date;
-                var amount;
-                var refTypeID;
-                var balance;
-                var refID;
-                var color;
-                if (request.readyState == 4 && request.status == 200) {
-                    var xml = request.responseXML;
+            $.ajax({
+                url: "https://api.eveonline.com/char/WalletJournal.xml.aspx?keyID=" + keyID + "&vCode=" + vCode + "&characterID=" + charIDs[i] + "&rowCount=50",
+                error: function (xhr, status, error) {
+                    showError("Wallet Journal");
+                    // TODO: implement fancy error logging
+                },
+                success: function (xml) {
                     var rows = xml.getElementsByTagName("row");
+                    var ownerName1;
+                    var date;
+                    var amount;
+                    var refTypeID;
+                    var balance;
+                    var refID;
+                    var color;
                     if (rows.length != 0) {
                         for (var i2 = 0; i2 < rows.length; i2++) {
                             var row = rows[i2];
@@ -196,25 +202,25 @@ include __DIR__ . '/nav.php'; ?>
                         $('#moreJournal').html('There is no journal info available.');
                     }
                 }
-            };
-            request.open("GET", "https://api.eveonline.com/char/WalletJournal.xml.aspx?keyID=" + keyID + "&vCode=" + vCode + "&characterID=" + charIDs[i] + "&rowCount=50", true);
-            request.send();
+            });
         }
 
         function getMoreWalletJournal(keyID, vCode, charID, fromID, amountToLoad) {
-            //refTypes;
             $('#loadingiconW').html('<i class="fa fa-spin fa-circle-o-notch"></i>');
-            var request = new XMLHttpRequest();
-            request.onreadystatechange = function () {
-                var ownerName1;
-                var color;
-                var date;
-                var amount;
-                var refTypeID;
-                var balance;
-                var refID;
-                if (request.readyState == 4 && request.status == 200) {
-                    var xml = request.responseXML;
+            $.ajax({
+                url: "https://api.eveonline.com/char/WalletJournal.xml.aspx?keyID=" + keyID + "&vCode=" + vCode + "&characterID=" + charID + "&rowCount=" + amountToLoad + "&fromID=" + fromID,
+                error: function (xhr, status, error) {
+                    showError("Extended Wallet Journal");
+                    // TODO: implement fancy error logging
+                },
+                success: function (xml) {
+                    var ownerName1;
+                    var color;
+                    var date;
+                    var amount;
+                    var refTypeID;
+                    var balance;
+                    var refID;
                     var rows = xml.getElementsByTagName("row");
                     if (rows.length != 0) {
                         for (var i2 = 0; i2 < rows.length; i2++) {
@@ -258,26 +264,27 @@ include __DIR__ . '/nav.php'; ?>
                     }
                     $('#loadingiconW').html('');
                 }
-            };
-            request.open("GET", "https://api.eveonline.com/char/WalletJournal.xml.aspx?keyID=" + keyID + "&vCode=" + vCode + "&characterID=" + charID + "&rowCount=" + amountToLoad + "&fromID=" + fromID, true);
-            request.send();
+            });
         }
 
         function getWalletTransactions(keyID, vCode, charIDs, i) {
-            var request = new XMLHttpRequest();
-            request.onreadystatechange = function () {
-                var date;
-                var quantity;
-                var typeName;
-                var typeID;
-                var price;
-                var clientName;
-                var transactionType;
-                var transactionID;
-                var color;
-                var info;
-                if (request.readyState == 4 && request.status == 200) {
-                    var xml = request.responseXML;
+            $.ajax({
+                url: "https://api.eveonline.com/char/WalletTransactions.xml.aspx?keyID=" + keyID + "&vCode=" + vCode + "&characterID=" + charIDs[i] + "&rowCount=50",
+                error: function (xhr, status, error) {
+                    showError("Wallet Transactions");
+                    // TODO: implement fancy error logging
+                },
+                success: function (xml) {
+                    var date;
+                    var quantity;
+                    var typeName;
+                    var typeID;
+                    var price;
+                    var clientName;
+                    var transactionType;
+                    var transactionID;
+                    var color;
+                    var info;
                     var rows = xml.getElementsByTagName("row");
                     if (rows.length != 0) {
                         for (var i2 = 0; i2 < rows.length; i2++) {
@@ -310,27 +317,28 @@ include __DIR__ . '/nav.php'; ?>
                         $('#moreTransactions').html('There is no transaction info available.');
                     }
                 }
-            };
-            request.open("GET", "https://api.eveonline.com/char/WalletTransactions.xml.aspx?keyID=" + keyID + "&vCode=" + vCode + "&characterID=" + charIDs[i] + "&rowCount=50", true);
-            request.send();
+            });
         }
 
         function getMoreWalletTransactions(keyID, vCode, charID, fromID, amountToLoad) {
             $('#loadingiconT').html('<i class="fa fa-spin fa-circle-o-notch"></i>');
-            var request = new XMLHttpRequest();
-            request.onreadystatechange = function () {
-                var date;
-                var quantity;
-                var typeName;
-                var typeID;
-                var price;
-                var clientName;
-                var transactionType;
-                var transactionID;
-                var color;
-                var info;
-                if (request.readyState == 4 && request.status == 200) {
-                    var xml = request.responseXML;
+            $.ajax({
+                url: "https://api.eveonline.com/char/WalletTransactions.xml.aspx?keyID=" + keyID + "&vCode=" + vCode + "&characterID=" + charID + "&rowCount=" + amountToLoad + "&fromID=" + fromID,
+                error: function (xhr, status, error) {
+                    showError("Extended Wallet Transactions");
+                    // TODO: implement fancy error logging
+                },
+                success: function (xml) {
+                    var date;
+                    var quantity;
+                    var typeName;
+                    var typeID;
+                    var price;
+                    var clientName;
+                    var transactionType;
+                    var transactionID;
+                    var color;
+                    var info;
                     var rows = xml.getElementsByTagName("row");
                     if (rows.length != 0) {
                         for (var i2 = 0; i2 < rows.length; i2++) {
@@ -365,9 +373,7 @@ include __DIR__ . '/nav.php'; ?>
                     }
                     $('#loadingiconT').html('');
                 }
-            };
-            request.open("GET", "https://api.eveonline.com/char/WalletTransactions.xml.aspx?keyID=" + keyID + "&vCode=" + vCode + "&characterID=" + charID + "&rowCount=" + amountToLoad + "&fromID=" + fromID, true);
-            request.send();
+            });
         }
     </script>
     </body>

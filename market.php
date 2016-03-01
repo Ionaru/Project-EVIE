@@ -10,11 +10,14 @@
 <?php include __DIR__ . '/foot.php'; ?>
     <script>
         $(document).ready(function () {
-            var charIDs = [];
-            var charRequest = new XMLHttpRequest();
-            charRequest.onreadystatechange = function () {
-                if (charRequest.readyState == 4 && charRequest.status == 200) {
-                    var xml = charRequest.responseXML;
+            $.ajax({
+                url: "https://api.eveonline.com/account/Characters.xml.aspx?keyID=" + keyID + "&vCode=" + vCode,
+                error: function (xhr, status, error) {
+                    showError("Character Data");
+                    // TODO: implement fancy error logging
+                },
+                success: function (xml) {
+                    var charIDs = [];
                     var rows = xml.getElementsByTagName("row");
                     for (var i = 0; i < rows.length; i++) {
                         var row = rows[i];
@@ -67,17 +70,18 @@
                     getBalance(keyID, vCode, charIDs, <?php echo $selectedChar ?>);
                     getOrders(keyID, vCode, charIDs, <?php echo $selectedChar ?>);
                 }
-            };
-            charRequest.open("GET", "https://api.eveonline.com/account/Characters.xml.aspx?keyID=" + keyID + "&vCode=" + vCode, true);
-            charRequest.send();
+            });
         });
 
         function getBalance(keyID, vCode, charIDs, i) {
-            var request = new XMLHttpRequest();
-            request.onreadystatechange = function () {
-                var balance;
-                if (request.readyState == 4 && request.status == 200) {
-                    var xml = request.responseXML;
+            $.ajax({
+                url: "https://api.eveonline.com/char/AccountBalance.xml.aspx?keyID=" + keyID + "&vCode=" + vCode + "&characterID=" + charIDs[i],
+                error: function (xhr, status, error) {
+                    showError("Balance");
+                    // TODO: implement fancy error logging
+                },
+                success: function (xml) {
+                    var balance;
                     var rows = xml.getElementsByTagName("row");
                     for (var i2 = 0; i2 < rows.length; i2++) {
                         var row = rows[i2];
@@ -94,32 +98,33 @@
                         demo.start();
                     }
                 }
-            };
-            request.open("GET", "https://api.eveonline.com/char/AccountBalance.xml.aspx?keyID=" + keyID + "&vCode=" + vCode + "&characterID=" + charIDs[i], true);
-            request.send();
+            });
         }
 
         function getOrders(keyID, vCode, charIDs, i) {
-            var request = new XMLHttpRequest();
-            request.onreadystatechange = function () {
-                var stationID;
-                var volEntered;
-                var volRemaining;
-                var orderState;
-                var typeID;
-                var range;
-                var duration;
-                var escrow;
-                var price;
-                var bid;
-                var issued;
-                var currentTime;
-                var expiry;
-                if (request.readyState == 4 && request.status == 200) {
+            $.ajax({
+                url: "https://api.eveonline.com/char/MarketOrders.xml.aspx?keyID=" + keyID + "&vCode=" + vCode + "&characterID=" + charIDs[i],
+                error: function (xhr, status, error) {
+                    showError("Market Orders");
+                    // TODO: implement fancy error logging
+                },
+                success: function (xml) {
+                    var stationID;
+                    var volEntered;
+                    var volRemaining;
+                    var orderState;
+                    var typeID;
+                    var range;
+                    var duration;
+                    var escrow;
+                    var price;
+                    var bid;
+                    var issued;
+                    var currentTime;
+                    var expiry;
                     var sellOrders = 0;
                     var buyOrders = 0;
                     var items = [];
-                    var xml = request.responseXML;
                     var rows = xml.getElementsByTagName("row");
                     if (rows.length != 0) {
                         for (var i2 = 0; i2 < rows.length; i2++) {
@@ -163,47 +168,10 @@
                         $('#sellOrdersTable').html('<p>You have no open market orders.</p>');
                     }
                     else {
-                        getItemNames(items);
+                        getTypeNames(items);
                     }
-
                 }
-            };
-            request.open("GET", "https://api.eveonline.com/char/MarketOrders.xml.aspx?keyID=" + keyID + "&vCode=" + vCode + "&characterID=" + charIDs[i], true);
-            request.send();
-        }
-
-        function getItemNames(items) {
-            var maxSize = 250;
-            var skillsPart;
-            if (items.length > maxSize) {
-                for (var i2 = 0; i2 < items.length; i2 += maxSize) {
-                    skillsPart = items.slice(i2, i2 + maxSize);
-                    getItemNames(skillsPart);
-                }
-            }
-            var skillIDs = "";
-            for (i2 = 0; i2 < items.length; i2++) {
-                skillIDs += items[i2] + ",";
-            }
-            skillIDs = skillIDs.substring(0, skillIDs.length - 1);
-            var request = new XMLHttpRequest();
-            request.onreadystatechange = function () {
-                var typeID;
-                var skillName;
-                if (request.readyState == 4 && request.status == 200) {
-                    var xml2 = request.responseXML;
-                    var rows = xml2.getElementsByTagName("row");
-                    for (var i2 = 0; i2 < rows.length; i2++) {
-                        var row = rows[i2];
-                        typeID = row.getAttribute("typeID");
-                        skillName = row.getAttribute("typeName");
-                        $('#' + typeID).html(skillName);
-                    }
-
-                }
-            };
-            request.open("GET", "https://api.eveonline.com/eve/TypeName.xml.aspx?ids=" + skillIDs, true);
-            request.send();
+            });
         }
     </script>
     </body>
