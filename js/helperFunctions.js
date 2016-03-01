@@ -173,7 +173,7 @@
 
     this.showError = function (module) {
         if ($("#alertBox").length == 0) {
-            $("#alertSpan").html('<div id="alertBox" class="alert alert-danger" role="alert"><p><strong>One or more problems were detected while loading this page. :(</strong></p></div>');
+            $("#mainbody").prepend('<div id="alertBox" class="alert alert-danger" role="alert"><p><strong>One or more problems were detected while loading this page. :(</strong></p></div>');
         }
         problems++;
         $("#alertBox").append('<p>- Problem #' + problems + ' - There was an error in the \'' + module + '\' module.</p>');

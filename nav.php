@@ -189,4 +189,3 @@ $url = $_SERVER['REQUEST_URI'];
         </div>
 
         <div id="mainbody" class="col-sm-10 col-md-11 col-xs-12 main">
-            <span id="alertSpan"></span>
