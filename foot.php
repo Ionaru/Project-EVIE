@@ -47,6 +47,7 @@
 <script type="text/javascript" src="js/bootstrap.min.js"></script>
 <script type="text/javascript" src="js/jquery.timeago.js"></script>
 <script type="text/javascript" src="js/countUp.js"></script>
+<script type="text/javascript" src="js/cookie.min.js"></script>
 <script type="text/javascript" src="js/jquery.total-storage.js"></script>
 <script type="text/javascript" src="js/helperFunctions.js"></script>
 <script type="text/javascript" src="js/footerJS.js"></script>

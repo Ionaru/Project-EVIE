@@ -41,75 +41,104 @@ include __DIR__ . '/nav.php'; ?>
         });
 
         function getAccountInfo(keyID, vCode) {
-            $.ajax({
-                url: "https://api.eveonline.com/account/AccountStatus.xml.aspx?keyID=" + keyID + "&vCode=" + vCode,
-                error: function (xhr, status, error) {
-                    showError("Account Information");
-                    // TODO: implement fancy error logging
-                },
-                success: function (xml) {
-                    var currentTime, paidUntil, createDate, logonCount, logonMinutes;
-                    currentTime = xml.getElementsByTagName("currentTime")[0].childNodes[0].nodeValue;
-                    paidUntil = xml.getElementsByTagName("paidUntil")[0].childNodes[0].nodeValue;
-                    createDate = xml.getElementsByTagName("createDate")[0].childNodes[0].nodeValue;
-                    logonCount = xml.getElementsByTagName("logonCount")[0].childNodes[0].nodeValue;
-                    logonMinutes = xml.getElementsByTagName("logonMinutes")[0].childNodes[0].nodeValue;
-                    $("#AccountInfo").append('' +
-                        '<p>Account created on ' + createDate + '</p>' +
-                        '<p>Account expires in <span id="accountTime"></span></p>' +
-                        '<p>You have logged in ' + logonCount + ' times to the EVE servers</p>' +
-                        '<p>Your total play time is <span id="playTime"></span></p>' +
-                        '<p>Average session length: ' + Math.round(logonMinutes / logonCount) + ' minutes</p>');
-                    var logonTime = logonMinutes * 60000;
-                    parseTimeRemaining(currentTime, paidUntil, "#accountTime", true, "Account expired!");
-                    parseTimeRemaining(0, logonTime, "#playTime", false, "No time at all");
-                }
-            });
+            if(!Cookies.get('accountInfo_' + keyID) || isCacheExpired(Cookies.getJSON('accountInfo_' + keyID)['eveapi']['cachedUntil']['#text'])){
+                $.ajax({
+                    url: "https://api.eveonline.com/account/AccountStatus.xml.aspx?keyID=" + keyID + "&vCode=" + vCode,
+                    error: function (xhr, status, error) {
+                        showError("Account Information");
+                        // TODO: implement fancy error logging
+                    },
+                    success: function (xml) {
+                        Cookies.set('accountInfo_' + keyID, xmlToJson(xml));
+                        parseAccountInfo(xmlToJson(xml));
+                    }
+                });
+            }
+            else {
+                var data = Cookies.getJSON('accountInfo_' + keyID);
+                parseAccountInfo(data);
+            }
+        }
+
+        function parseAccountInfo(data){
+            var currentTime = data['eveapi']['currentTime']['#text'];
+            var paidUntil = data['eveapi']['result']['paidUntil']['#text'];
+            var createDate = data['eveapi']['result']['createDate']['#text'];
+            var logonCount = data['eveapi']['result']['logonCount']['#text'];
+            var logonMinutes = data['eveapi']['result']['logonMinutes']['#text'];
+            $("#AccountInfo").append('' +
+                '<p>Account created on ' + createDate + '</p>' +
+                '<p>Account expires in <span id="accountTime"></span></p>' +
+                '<p>You have logged in ' + logonCount + ' times to the EVE servers</p>' +
+                '<p>Your total play time is <span id="playTime"></span></p>' +
+                '<p>Average session length: ' + Math.round(logonMinutes / logonCount) + ' minutes</p>');
+            var logonTime = logonMinutes * 60000;
+            jQuery("time.timeago").timeago();
+            parseTimeRemaining(currentTime, paidUntil, "#accountTime", true, "Account expired!");
+            parseTimeRemaining(0, logonTime, "#playTime", false, "No time at all");
         }
 
         function getBalance(keyID, vCode, charIDs, i) {
-            $.ajax({
-                url: "https://api.eveonline.com/char/AccountBalance.xml.aspx?keyID=" + keyID + "&vCode=" + vCode + "&characterID=" + charIDs[i],
-                error: function (xhr, status, error) {
-                    showError("Account balance for character " + charIDs[i]);
-                    // TODO: implement fancy error logging
-                },
-                success: function (xml) {
-                    var balance;
-                    var rows = xml.getElementsByTagName("row");
-                    for (var i2 = 0; i2 < rows.length; i2++) {
-                        var row = rows[i2];
-                        balance = row.getAttribute("balance");
-                        document.getElementById("BalanceAccount1Character" + (i + 1)).innerHTML = '<a href="wallet.php?char=' + i + '">' + (parseFloat(balance)).formatMoney(2, ',', '.') + " ISK</a>";
+            if(!Cookies.get('characterBalance_' + keyID + charIDs[i]) || isCacheExpired(Cookies.getJSON('characterBalance_' + keyID + charIDs[i])['eveapi']['cachedUntil']['#text'])){
+                $.ajax({
+                    url: "https://api.eveonline.com/char/AccountBalance.xml.aspx?keyID=" + keyID + "&vCode=" + vCode + "&characterID=" + charIDs[i],
+                    error: function (xhr, status, error) {
+                        showError("Account balance for character " + charIDs[i]);
+                        // TODO: implement fancy error logging
+                    },
+                    success: function (xml) {
+                        Cookies.set('characterBalance_' + keyID + charIDs[i], xmlToJson(xml));
+                        parseBalance(xmlToJson(xml), i);
                     }
-                }
-            });
+                });
+            }
+            else {
+                var data = Cookies.getJSON('characterBalance_' + keyID + charIDs[i]);
+                parseBalance(data, i);
+            }
+        }
+
+        function parseBalance(data, i){
+            var balance;
+            balance = data['eveapi']['result']['rowset']['row']['@attributes']['balance'];
+            document.getElementById("BalanceAccount1Character" + (i + 1)).innerHTML = '<a href="wallet.php?char=' + i + '">' + (parseFloat(balance)).formatMoney(2, ',', '.') + " ISK</a>";
         }
 
         function getSkillInTraining(keyID, vCode, charIDs, i) {
-            $.ajax({
-                url: "https://api.eveonline.com/char/SkillInTraining.xml.aspx?keyID=" + keyID + "&vCode=" + vCode + "&characterID=" + charIDs[i],
-                error: function (xhr, status, error) {
-                    showError("Skill training for character " + charIDs[i]);
-                    // TODO: implement fancy error logging
-                },
-                success: function (xml) {
-                    if (xml.getElementsByTagName("trainingTypeID")[0] != null) {
-                        var skillIDs = [];
-                        var skillID = xml.getElementsByTagName("trainingTypeID")[0].childNodes[0].nodeValue;
-                        skillIDs.push(skillID);
-                        var skillLvl = xml.getElementsByTagName("trainingToLevel")[0].childNodes[0].nodeValue;
-                        var trainingEndTime = xml.getElementsByTagName("trainingEndTime")[0].childNodes[0].nodeValue;
-                        var currentTQTime = xml.getElementsByTagName("currentTQTime")[0].childNodes[0].nodeValue;
-                        getTypeNames(skillIDs);
-                        document.getElementById("SkillAccount1Character" + (i + 1)).innerHTML = '<a id="skillCharacter' + i + '" href="skills.php?char=' + i + '"><span id="' + skillID + '">Placeholder</span> ' + skillLvl + '</a><br><span id="countdown' + i + '"></span>';
-                        parseTimeRemaining(currentTQTime, trainingEndTime, "#countdown" + i, true, "Skill training completed!");
+            if(!Cookies.get('skillInTraining_' + keyID + charIDs[i]) || isCacheExpired(Cookies.getJSON('skillInTraining_' + keyID + charIDs[i])['eveapi']['cachedUntil']['#text'])){
+                $.ajax({
+                    url: "https://api.eveonline.com/char/SkillInTraining.xml.aspx?keyID=" + keyID + "&vCode=" + vCode + "&characterID=" + charIDs[i],
+                    error: function (xhr, status, error) {
+                        showError("Skill training for character " + charIDs[i]);
+                        // TODO: implement fancy error logging
+                    },
+                    success: function (xml) {
+                        Cookies.set('skillInTraining_' + keyID + charIDs[i], xmlToJson(xml));
+                        parseSkillInTraining(xmlToJson(xml), i);
                     }
-                    else {
-                        document.getElementById("SkillAccount1Character" + (i + 1)).innerHTML = '<a href="skills.php?char=' + i + '">No skill in training</a>';
-                    }
-                }
-            });
+                });
+            }
+            else{
+                var data = Cookies.getJSON('skillInTraining_' + keyID + charIDs[i]);
+                parseSkillInTraining(data, i);
+            }
+        }
+
+        function parseSkillInTraining(data, i){
+            if (data['eveapi']['result']['trainingTypeID']) {
+                var skillIDs = [];
+                var skillID = data['eveapi']['result']['trainingTypeID']['#text'];
+                skillIDs.push(skillID);
+                var skillLvl = data['eveapi']['result']['trainingToLevel']['#text'];
+                var trainingEndTime = data['eveapi']['result']['trainingEndTime']['#text'];
+                var currentTQTime = data['eveapi']['currentTime']['#text'];
+                getTypeNames(skillIDs);
+                document.getElementById("SkillAccount1Character" + (i + 1)).innerHTML = '<a id="skillCharacter' + i + '" href="skills.php?char=' + i + '"><span id="' + skillID + '">Placeholder</span> ' + skillLvl + '</a><br><span id="countdown' + i + '"></span>';
+                parseTimeRemaining(currentTQTime, trainingEndTime, "#countdown" + i, true, "Skill training completed!");
+            }
+            else {
+                document.getElementById("SkillAccount1Character" + (i + 1)).innerHTML = '<a href="skills.php?char=' + i + '">No skill in training</a>';
+            }
         }
     </script>
     </body>

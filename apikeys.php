@@ -16,7 +16,7 @@ function getAPIInfo($keyID, $vCode)
         echo "Error fetching XML\n";
     } else {
         libxml_use_internal_errors(true);
-        $data = simplexml_load_string($response_xml_data);
+        $data = $response_xml_data;
         if (!$data) {
             echo "Error loading XML\n";
             foreach (libxml_get_errors() as $error) {
@@ -65,7 +65,7 @@ function addKey()
     $vCode = $_POST['vCode'];
     $keyXML = getAPIInfo($keyID, $vCode);
     if ($keyXML !== '') {
-        $keyType = getAPIType($keyXML);
+        $keyType = 'API Key';
         $isActive = 1;
         $sql = 'INSERT INTO apikeys (user_name,apikey_name,apikey_keyid,apikey_vcode,apikey_type,apikey_isactive) VALUES (\'' . $_SESSION['user_name'] . '\',\'' . $keyName . '\',\'' . $keyID . '\',\'' . $vCode . '\',\'' . $keyType . '\',\'' . $isActive . '\');';
         $db_connection->exec($sql);
