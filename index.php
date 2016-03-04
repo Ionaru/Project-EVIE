@@ -10,6 +10,7 @@ include __DIR__ . '/nav.php'; ?>
     </div>
 
 <?php include __DIR__ . '/foot.php'; ?>
+
     <script>
         $(document).ready(function () {
             getAccountInfo(keyID, vCode);
@@ -31,17 +32,11 @@ include __DIR__ . '/nav.php'; ?>
             }
             for (var i = 0; i < charIDs.length; i++) {
                 document.getElementById("ImageAccount1Character" + (i + 1)).src = "https://image.eveonline.com/Character/" + charIDs[i] + "_256.jpg";
-                <?php if (strpos($_SERVER['REQUEST_URI'], 'index.php') === false) {
-                echo '
-                              document.getElementById("char" + i).src="https://image.eveonline.com/Character/" + charIDs[i] + "_256.jpg";
-                              document.getElementById("char" + i).style="max-height: 50px;";
-                              ';
-            }?>
             }
         });
 
         function getAccountInfo(keyID, vCode) {
-            if(!Cookies.get('accountInfo_' + keyID) || isCacheExpired(Cookies.getJSON('accountInfo_' + keyID)['eveapi']['cachedUntil']['#text'])){
+            if(!getCookie('accountInfo_' + keyID) || isCacheExpired(getCookieJSON('accountInfo_' + keyID)['eveapi']['cachedUntil']['#text'])){
                 $.ajax({
                     url: "https://api.eveonline.com/account/AccountStatus.xml.aspx?keyID=" + keyID + "&vCode=" + vCode,
                     error: function (xhr, status, error) {
@@ -49,7 +44,8 @@ include __DIR__ . '/nav.php'; ?>
                         // TODO: implement fancy error logging
                     },
                     success: function (xml) {
-                        Cookies.set('accountInfo_' + keyID, xmlToJson(xml));
+                        console.log(xmlToJson(xml));
+                        setCookie('accountInfo_' + keyID, xmlToJson(xml), 60);
                         parseAccountInfo(xmlToJson(xml));
                     }
                 });
