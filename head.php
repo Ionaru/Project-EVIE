@@ -28,6 +28,7 @@ $calendaractive = '';
 $calendaractivembl = '';
 $apikeysactive = '';
 $apikeysactivembl = '';
+$disabled = '';
 
 $url = $_SERVER['REQUEST_URI'];
 switch ($url) {
@@ -86,6 +87,7 @@ switch ($url) {
         break;
     case (strpos($url, 'account.php') !== false):
         $title = 'Account';
+        $disabled = 'disabled ';
         break;
     case (strpos($url, 'apikeys.php') !== false):
         $title = 'API Key Management';
