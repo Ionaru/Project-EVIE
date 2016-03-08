@@ -25,11 +25,11 @@
 <?php include __DIR__ . '/foot.php'; ?>
     <script>
         var typeIDs = [];
-        $(document).ready(function () {
+        function executePage() {
             getSkillInTraining(keyID, vCode, charIDs, <?php echo $selectedChar ?>);
             //getSkillQueue(keyID, vCode, charIDs, <?php //echo $selectedChar ?>);
             getAllSkills(keyID, vCode, charIDs, <?php echo $selectedChar ?>);
-        });
+        }
 
         function getSkillInTraining(keyID, vCode, charIDs, i) {
             $.ajax({

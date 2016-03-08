@@ -6,9 +6,9 @@
 
 <?php include __DIR__ . '/foot.php'; ?>
     <script>
-        $(document).ready(function () {
+        function executePage() {
             //TODO: Implement industrial data
-        });
+        }
     </script>
     </body>
     </html>

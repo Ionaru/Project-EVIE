@@ -9,7 +9,7 @@
 
 <?php include __DIR__ . '/foot.php'; ?>
     <script>
-        $(document).ready(function () {
+        function executePage() {
             $('#Orders').append('' +
                 '<h2>Current balance: ' +
                 '<br class="visible-xs"/>' +
@@ -44,7 +44,7 @@
                 '</span>');
             getBalance(keyID, vCode, charIDs, <?php echo $selectedChar ?>);
             getOrders(keyID, vCode, charIDs, <?php echo $selectedChar ?>);
-        });
+        }
 
         function getBalance(keyID, vCode, charIDs, i) {
             $.ajax({

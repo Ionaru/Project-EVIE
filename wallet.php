@@ -18,7 +18,7 @@ include __DIR__ . '/nav.php'; ?>
             }
         });
 
-        $(document).ready(function () {
+        function executePage() {
             getRefTypes();
             $('#WalletContent').append('' +
                 '<h2>Current balance: ' +
@@ -68,7 +68,7 @@ include __DIR__ . '/nav.php'; ?>
             getBalance(keyID, vCode, charIDs, <?php echo $selectedChar ?>);
             getWalletJournal(keyID, vCode, charIDs, refTypes, <?php echo $selectedChar ?>);
             getWalletTransactions(keyID, vCode, charIDs, <?php echo $selectedChar ?>);
-        });
+        }
 
         function getRefTypes() {
             $.ajax({

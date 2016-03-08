@@ -63,15 +63,18 @@
         $(elementID).html("Calculating Time...");
         try {
             now = Date.parse(now.replace(/\-/ig, '/').split('.')[0]);
+        }
+        catch (TypeError) {
+
+        }
+        try {
             end = Date.parse(end.replace(/\-/ig, '/').split('.')[0]);
         }
         catch (TypeError) {
 
         }
-
         timer = void 0;
         distance = end - now;
-
         if (doTimeTick == null) {
             doTimeTick = false;
         }

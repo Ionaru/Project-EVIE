@@ -12,7 +12,7 @@ include __DIR__ . '/nav.php'; ?>
 <?php include __DIR__ . '/foot.php'; ?>
 
     <script>
-        $(document).ready(function () {
+        function executePage() {
             getAccountInfo(keyID, vCode);
             for (i = 0; i < charIDs.length; i++) {
                 $('#CharacterDivs').append('' +
@@ -33,7 +33,7 @@ include __DIR__ . '/nav.php'; ?>
             for (var i = 0; i < charIDs.length; i++) {
                 document.getElementById("ImageAccount1Character" + (i + 1)).src = "https://image.eveonline.com/Character/" + charIDs[i] + "_256.jpg";
             }
-        });
+        }
 
         function getAccountInfo(keyID, vCode) {
             if(!getCookie('accountInfo_' + keyID) || isCacheExpired(getCookieJSON('accountInfo_' + keyID)['eveapi']['cachedUntil']['#text'])){
@@ -44,7 +44,6 @@ include __DIR__ . '/nav.php'; ?>
                         // TODO: implement fancy error logging
                     },
                     success: function (xml) {
-                        console.log(xmlToJson(xml));
                         setCookie('accountInfo_' + keyID, xmlToJson(xml), 60);
                         parseAccountInfo(xmlToJson(xml));
                     }
@@ -57,7 +56,6 @@ include __DIR__ . '/nav.php'; ?>
         }
 
         function parseAccountInfo(data){
-            var currentTime = data['eveapi']['currentTime']['#text'];
             var paidUntil = data['eveapi']['result']['paidUntil']['#text'];
             var createDate = data['eveapi']['result']['createDate']['#text'];
             var logonCount = data['eveapi']['result']['logonCount']['#text'];
@@ -127,10 +125,9 @@ include __DIR__ . '/nav.php'; ?>
                 skillIDs.push(skillID);
                 var skillLvl = data['eveapi']['result']['trainingToLevel']['#text'];
                 var trainingEndTime = data['eveapi']['result']['trainingEndTime']['#text'];
-                var currentTQTime = data['eveapi']['currentTime']['#text'];
                 getTypeNames(skillIDs);
                 document.getElementById("SkillAccount1Character" + (i + 1)).innerHTML = '<a id="skillCharacter' + i + '" href="skills.php?char=' + i + '"><span id="' + skillID + '">Placeholder</span> ' + skillLvl + '</a><br><span id="countdown' + i + '"></span>';
-                parseTimeRemaining(currentTQTime, trainingEndTime, "#countdown" + i, true, "Skill training completed!");
+                parseTimeRemaining(currentTime, trainingEndTime, "#countdown" + i, true, "Skill training completed!");
             }
             else {
                 document.getElementById("SkillAccount1Character" + (i + 1)).innerHTML = '<a href="skills.php?char=' + i + '">No skill in training</a>';

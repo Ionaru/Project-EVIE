@@ -6,9 +6,9 @@
 
 <?php include __DIR__ . '/foot.php'; ?>
     <script>
-        $(document).ready(function () {
+        function executePage() {
             //TODO: Implement mail and notifications
-        });
+        }
     </script>
     </body>
     </html>

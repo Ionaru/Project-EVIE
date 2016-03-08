@@ -1,51 +1,17 @@
-if (document.getElementById("passAlong_keyID") !== null) {
-    var keyID = document.getElementById("passAlong_keyID").value;
-    var vCode = document.getElementById("passAlong_vCode").value;
-    var selectedCharacter = document.getElementById("passAlong_selectedCharacter").value;
-    var selectedCharacterID;
-    var charIDs = [];
-    var charNames = [];
-    if($.totalStorage('charIDs_' + keyID) == null) {
-        $.ajax({
-            url: "https://api.eveonline.com/account/Characters.xml.aspx?keyID=" + keyID + "&vCode=" + vCode,
-            async: false,
-            error: function (xhr, status, error) {
-                showError("Character ID");
-                // TODO: implement fancy error logging
-            },
-            success: function (xml) {
-                var rows = xml.getElementsByTagName("row");
-                for (var i = 0; i < rows.length; i++) {
-                    var row = rows[i];
-                    charIDs[i] = row.getAttribute("characterID");
-                    charNames[i] = row.getAttribute("name");
-                }
-                $.totalStorage('charIDs_' + keyID, charIDs);
-                $.totalStorage('charNames_' + keyID, charNames);
-            }
-        });
-    }
-    else {
-        charIDs = $.totalStorage('charIDs_' + keyID);
-        charNames = $.totalStorage('charNames_' + keyID);
-    }
-    for (var i = 0; i < charIDs.length; i++) {
-        var css = "characterInactive";
-        if (i == selectedCharacter) {
-            css = "characterActive";
-            selectedCharacterID = charIDs[i];
-        }
-        $('#charLinks').css('visibility', 'visible').append('<li><a id="charLink' + i + '" class="' + css + '" href="?char=' + i + '"><img alt="char' + i + '" id="char' + i + '" class="img" src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" width="50" height="50"></a></li>');
-        $('#char' + i).css('visibility', 'visible').attr('src', 'https://image.eveonline.com/Character/' + charIDs[i] + '_50.jpg');
-        $('#charmbl' + i).css('visibility', 'visible').attr('src', 'https://image.eveonline.com/Character/' + charIDs[i] + '_256.jpg');
-    }
-}
-
 $(function () {
     $('[data-toggle="tooltip"]').tooltip()
 });
 
-//Fix the icons in case people are viewing this in Internet Explorer
+var currentTime;
+var serverOpen = "False";
+var onlinePlayers = 0;
+var keyID;
+var vCode;
+var selectedCharacter;
+var selectedCharacterID;
+var charIDs = [];
+var charNames = [];
+
 jQuery(document).ready(function () {
     $('#browser').append(window.navigator.userAgent);
     if ((window.navigator.userAgent.indexOf("MSIE") > -1) || (window.navigator.userAgent.indexOf("Trident") > -1)) {
@@ -60,6 +26,79 @@ jQuery(document).ready(function () {
         $("#imageIndustry").attr('src', 'icons/industry.png');
         $("#imageCalendar").attr('src', 'icons/calendar.png');
         $("#imageSettings").attr('src', 'icons/settings.png');
+    }
+    var characterIDs = $.Deferred();
+    var serverStatus = $.Deferred();
+
+    doCharInit();
+    getServerStatus();
+
+    $.when( characterIDs, serverStatus ).done(function () {
+        executePage();
+    });
+
+    function doCharInit(){
+        if (document.getElementById("passAlong_keyID") !== null) {
+            keyID = document.getElementById("passAlong_keyID").value;
+            vCode = document.getElementById("passAlong_vCode").value;
+            selectedCharacter = document.getElementById("passAlong_selectedCharacter").value;
+            if($.totalStorage('charIDs_' + keyID) == null) {
+                $.ajax({
+                    url: "https://api.eveonline.com/account/Characters.xml.aspx?keyID=" + keyID + "&vCode=" + vCode,
+                    error: function (xhr, status, error) {
+                        showError("Character ID");
+                        // TODO: implement fancy error logging
+                    },
+                    success: function (xml) {
+                        var rows = xml.getElementsByTagName("row");
+                        for (var i = 0; i < rows.length; i++) {
+                            var row = rows[i];
+                            charIDs[i] = row.getAttribute("characterID");
+                            charNames[i] = row.getAttribute("name");
+                        }
+                        $.totalStorage('charIDs_' + keyID, charIDs);
+                        $.totalStorage('charNames_' + keyID, charNames);
+                        processChar(charIDs);
+                        characterIDs.resolve();
+                    }
+                });
+            }
+            else {
+                charIDs = $.totalStorage('charIDs_' + keyID);
+                charNames = $.totalStorage('charNames_' + keyID);
+                processChar(charIDs);
+                characterIDs.resolve();
+            }
+        }
+    }
+
+    function processChar(charIDs){
+        for (var i = 0; i < charIDs.length; i++) {
+            var css = "characterInactive";
+            if (i == selectedCharacter) {
+                css = "characterActive";
+                selectedCharacterID = charIDs[i];
+            }
+            $('#charLinks').css('visibility', 'visible').append('<li><a id="charLink' + i + '" class="' + css + '" href="?char=' + i + '"><img alt="char' + i + '" id="char' + i + '" class="img" src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" width="50" height="50"></a></li>');
+            $('#char' + i).css('visibility', 'visible').attr('src', 'https://image.eveonline.com/Character/' + charIDs[i] + '_50.jpg');
+            $('#charmbl' + i).css('visibility', 'visible').attr('src', 'https://image.eveonline.com/Character/' + charIDs[i] + '_256.jpg');
+        }
+    }
+
+    function getServerStatus(){
+        $.ajax({
+            url: "https://api.eveonline.com/server/ServerStatus.xml.aspx",
+            error: function (xhr, status, error) {
+                showError("Server Status");
+                // TODO: implement fancy error logging
+            },
+            success: function (xml) {
+                currentTime = xml.getElementsByTagName('currentTime')[0].childNodes[0].nodeValue;
+                serverOpen = xml.getElementsByTagName('serverOpen')[0].childNodes[0].nodeValue;
+                onlinePlayers = xml.getElementsByTagName('onlinePlayers')[0].childNodes[0].nodeValue;
+                serverStatus.resolve();
+            }
+        });
     }
 });
 

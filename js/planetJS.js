@@ -25,6 +25,9 @@
                     $('#planets').append('<div class="planetcontainer text-center col-sm-6 col-md-4"><div id="planetDiv' + planetID + '" class="planet"><img class="img img-circle planetimg" src="' + src + '" alt="PlanetImg' + planetID + '" id="planetImg' + planetID + '"><p>' + planetName + planetTypeName.replace('Planet', '') + '<br>Command Center Level ' + upgradeLevel + '<br>' + numberOfPins + ' Installations</p></div></div>');
                     getPlanetInstallations(keyID, vCode, selectedCharacterID, planetID);
                 }
+                if (rows.length == 0){
+                    $('#planets').append('<div class="planetcontainer text-center col-sm-6 col-md-4"><p>You have no planetary colonies.</p></div>');
+                }
             }
         });
     };
@@ -77,8 +80,8 @@
         });
     };
 
-    $(document).ready(function () {
+    executePage = function () {
         getPlanets(keyID, vCode, selectedCharacterID);
-    });
+    }
 
 }).call(this);
