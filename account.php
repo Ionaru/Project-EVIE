@@ -53,7 +53,7 @@
         <div id="temporarykeysection">
             <h2>Use temporary key</h2>
             <p>Here you can enter an EVE Online API key for temporary use, this key will not be saved in the database
-                and will be deleted once you log out.</p>
+                and will be deleted once you log out or close your browser.</p>
             <form method="post" action="<?php echo $_SERVER['SCRIPT_NAME'] . '?char=0&action=temp'; ?>"
                   name="temporaryform">
                 <div class="form-group">
@@ -117,7 +117,7 @@
                         </div>
                         <div class="modal-body">
                             <p>Here you can enter an EVE Online API key for temporary use, this key will not be saved in
-                                the database and will be deleted once you log out.</p>
+                                the database and will be deleted once you log out or close your browser.</p>
                             <label for="login_input_username">Key ID</label>
                             <input type="text" class="form-control" id="keyID" name="keyID" required>
                             <br>
