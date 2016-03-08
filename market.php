@@ -47,31 +47,39 @@
         }
 
         function getBalance(keyID, vCode, charIDs, i) {
-            $.ajax({
-                url: "https://api.eveonline.com/char/AccountBalance.xml.aspx?keyID=" + keyID + "&vCode=" + vCode + "&characterID=" + charIDs[i],
-                error: function (xhr, status, error) {
-                    showError("Balance");
-                    // TODO: implement fancy error logging
-                },
-                success: function (xml) {
-                    var balance;
-                    var rows = xml.getElementsByTagName("row");
-                    for (var i2 = 0; i2 < rows.length; i2++) {
-                        var row = rows[i2];
-                        balance = row.getAttribute("balance");
-                        var options = {
-                            useEasing: false,
-                            useGrouping: true,
-                            separator: '.',
-                            decimal: ',',
-                            prefix: '',
-                            suffix: ' ISK'
-                        };
-                        var demo = new CountUp("balanceSpan", 0, balance, 2, 1, options);
-                        demo.start();
+            if (!Cookies.get('characterBalance_' + keyID + charIDs[i]) || isCacheExpired(Cookies.getJSON('characterBalance_' + keyID + charIDs[i])['eveapi']['cachedUntil']['#text'])) {
+                $.ajax({
+                    url: "https://api.eveonline.com/char/AccountBalance.xml.aspx?keyID=" + keyID + "&vCode=" + vCode + "&characterID=" + charIDs[i],
+                    error: function (xhr, status, error) {
+                        showError("Account balance for character " + charIDs[i]);
+                        // TODO: implement fancy error logging
+                    },
+                    success: function (xml) {
+                        Cookies.set('characterBalance_' + keyID + charIDs[i], xmlToJson(xml));
+                        parseBalance(xmlToJson(xml), i);
                     }
-                }
-            });
+                });
+            }
+            else {
+                var data = Cookies.getJSON('characterBalance_' + keyID + charIDs[i]);
+                parseBalance(data, i);
+            }
+
+        }
+
+        function parseBalance(data, i){
+            var balance;
+            balance = data['eveapi']['result']['rowset']['row']['@attributes']['balance'];
+            var options = {
+                useEasing: false,
+                useGrouping: true,
+                separator: '.',
+                decimal: ',',
+                prefix: '',
+                suffix: ' ISK'
+            };
+            var demo = new CountUp("balanceSpan", 0, balance, 2, 1, options);
+            demo.start();
         }
 
         function getOrders(keyID, vCode, charIDs, i) {
