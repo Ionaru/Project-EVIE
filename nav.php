@@ -177,13 +177,11 @@ $url = $_SERVER['REQUEST_URI'];
                            href=<?php echo '"industry.php?char=' . $selectedChar . '"'; ?>><img
                                 id="imageIndustry" alt="Industry" class="img sidebarimg"
                                 src="icons/industry.svg"></a></li>
-                    <li><a class="sidebar_button<?php echo $calendaractive ?>" data-toggle="tooltip" data-html="true"
+                    <li><a class="sidebar_button<?php echo $calendaractive ?> EVETime" data-toggle="tooltip" data-html="true"
                            data-placement="right"
                            data-container="body"
-                           title='<div class="text-left"><strong>Calendar</strong><br>You forgot that birthday, again!</div>'
-                           href=<?php echo '"calendar.php?char=' . $selectedChar . '"'; ?>><img
-                                id="imageCalendar" alt="Calendar" class="img sidebarimg"
-                                src="icons/calendar.svg"></a></li>
+                           title='<div class="text-left"><strong>Calendar</strong><br>Yep, you are late!</div>'
+                           href=<?php echo '"calendar.php?char=' . $selectedChar . '"'; ?>><span id="EVETime_Hours"></span>:<span id="EVETime_Minutes"></span></a></li>
                 </ul>
             </div>
         </div>

@@ -8,13 +8,6 @@ body {
     overflow-y: scroll;
 }
 
-.navbar-brand {
-    background: -webkit-linear-gradient(#eff9ff, #6F6F70);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    cursor:default;
-}
-
 .navbar-fixed-top {
     box-sizing: border-box;
     border: 0;
@@ -142,5 +135,15 @@ body {
 
 .mobile_nav_image {
     width: 100%;
+}
 
+@media(min-width:768px) {
+    .nav-sidebar>li:last-child {
+        position: absolute;
+        bottom: 0;
+    }
+}
+
+.EVETime{
+    color: #9d9d9d;
 }

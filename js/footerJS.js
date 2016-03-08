@@ -11,6 +11,9 @@ var selectedCharacter;
 var selectedCharacterID;
 var charIDs = [];
 var charNames = [];
+var hours;
+var minutes;
+var seconds;
 
 jQuery(document).ready(function () {
     $('#browser').append(window.navigator.userAgent);
@@ -96,11 +99,48 @@ jQuery(document).ready(function () {
                 currentTime = xml.getElementsByTagName('currentTime')[0].childNodes[0].nodeValue;
                 serverOpen = xml.getElementsByTagName('serverOpen')[0].childNodes[0].nodeValue;
                 onlinePlayers = xml.getElementsByTagName('onlinePlayers')[0].childNodes[0].nodeValue;
+                hours = parseInt(currentTime.slice(-8, -6));
+                minutes = parseInt(currentTime.slice(-5, -3));
+                seconds = parseInt(currentTime.slice(-2));
+                displayTime(hours, minutes);
+                setTimeout(function(){
+                    timeKeeper(hours, minutes, seconds);
+                }, 60000 - (seconds * 1000));
                 serverStatus.resolve();
             }
         });
     }
 });
+
+function timeKeeper(){
+    doTimeTick();
+    function doTimeTick(){
+        minutes = parseInt(minutes);
+        minutes += 1;
+        displayTime(hours, minutes);
+    }
+    timer = setInterval(doTimeTick, 60000);
+}
+
+function displayTime(h, m){
+    hours = parseInt(h);
+    minutes = parseInt(m);
+    if(minutes == 60){
+        hours += 1;
+        minutes = 0;
+    }
+    if(minutes < 10){
+        minutes = "0" + minutes;
+    }
+    if(hours == 24){
+        hours = 0;
+    }
+    if(hours < 10){
+        hours = "0" + hours;
+    }
+    $('#EVETime_Hours').html(hours);
+    $('#EVETime_Minutes').html(minutes);
+}
 
 //Get Character ID from a name
 function getCharData(charName) {
