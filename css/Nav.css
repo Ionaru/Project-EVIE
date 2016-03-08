@@ -154,6 +154,9 @@ body {
 
 .EVETime{
     color: #9d9d9d;
+    -webkit-transition: all .15s ease-in-out;
+    -moz-transition: all .15s ease-in-out;
+    transition: all 0.15s ease-in-out;
 }
 
 .nav>li>a:focus, .nav>li>a:hover{
