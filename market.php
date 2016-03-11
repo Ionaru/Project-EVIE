@@ -84,76 +84,75 @@
         }
 
         function getOrders(keyID, vCode, charIDs, i) {
-            $.ajax({
-                url: "https://api.eveonline.com/char/MarketOrders.xml.aspx?keyID=" + keyID + "&vCode=" + vCode + "&characterID=" + charIDs[i],
-                error: function (xhr, status, error) {
-                    showError("Market Orders");
-                    // TODO: implement fancy error logging
-                },
-                success: function (xml) {
-                    var stationID;
-                    var volEntered;
-                    var volRemaining;
-                    var orderState;
-                    var typeID;
-                    var range;
-                    var duration;
-                    var escrow;
-                    var price;
-                    var bid;
-                    var issued;
-                    var currentTime;
-                    var expiry;
-                    var sellOrders = 0;
-                    var buyOrders = 0;
-                    var items = [];
-                    var rows = xml.getElementsByTagName("row");
-                    if (rows.length != 0) {
-                        for (var i2 = 0; i2 < rows.length; i2++) {
-                            var row = rows[i2];
-                            stationID = row.getAttribute("stationID");
-                            volEntered = row.getAttribute("volEntered");
-                            volRemaining = row.getAttribute("volRemaining");
-                            orderState = row.getAttribute("orderState");
-                            typeID = row.getAttribute("typeID");
-                            range = row.getAttribute("range");
-                            duration = row.getAttribute("duration");
-                            escrow = row.getAttribute("escrow");
-                            price = row.getAttribute("price");
-                            bid = row.getAttribute("bid");
-                            issued = row.getAttribute("issued");
-                            currentTime = xml.getElementsByTagName('currentTime')[0].childNodes[0].nodeValue;
-                            issued = Date.parse(issued.replace(/\-/ig, '/').split('.')[0]);
-                            expiry = issued + (duration * 86400000);
-                            if (orderState == 0) {
-                                items.push(typeID);
-                                if (bid == 0) {
-                                    sellOrders++;
-                                    $('#SellOrders').append('<tr><td id="' + typeID + '">' + typeID + '</td><td>' + volRemaining + ' / ' + volEntered + '</td><td>' + (parseFloat(price)).formatMoney(2, ',', '.') + ' ISK</td><td>' + stationID + ' ( range: ' + range + ' ) </td><td><span id="sellOrder' + i2 + '"></span></td></tr>');
-                                    parseTimeRemaining(currentTime, expiry, "#sellOrder" + i2, true, "Expired!");
-                                }
-                                else if (bid == 1) {
-                                    buyOrders++;
-                                    $('#BuyOrders').append('<tr><td id="' + typeID + '">' + typeID + '</td><td>' + volRemaining + ' / ' + volEntered + '</td><td>' + (parseFloat(price)).formatMoney(2, ',', '.') + ' ISK</td><td>' + stationID + ' ( range: ' + range + ' ) </td><td><span id="buyOrder' + i2 + '"></span></td></tr>');
-                                    parseTimeRemaining(currentTime, expiry, "#buyOrder" + i2, true, "Expired!");
-                                }
-                            }
+            if (!$.totalStorage('orders_' + keyID + charIDs[i]) || isCacheExpired($.totalStorage('orders_' + keyID + charIDs[i])['eveapi']['cachedUntil']['#text'])) {
+                $.ajax({
+                    url: "https://api.eveonline.com/char/MarketOrders.xml.aspx?keyID=" + keyID + "&vCode=" + vCode + "&characterID=" + charIDs[i],
+                    error: function (xhr, status, error) {
+                        showError("Market Orders");
+                        // TODO: implement fancy error logging
+                    },
+                    success: function (xml) {
+                        data = xmlToJson(xml);
+                        $.totalStorage('orders_' + keyID + charIDs[i], data);
+                        parseOrders(data);
+                    }
+                });
+            }
+            else {
+                var data = $.totalStorage('orders_' + keyID + charIDs[i]);
+                parseOrders(data);
+            }
+        }
+
+        function parseOrders(data){
+            var stationID, volEntered, volRemaining, orderState, typeID ,range, duration, escrow, price, bid, issued, expiry;
+            var sellOrders = 0;
+            var buyOrders = 0;
+            var items = [];
+            var rows = data['eveapi']['result']['rowset']['row'];
+            if (rows.length != 0) {
+                for (var i = 0; i < rows.length; i++) {
+                    var row = rows[i];
+                    stationID = row["@attributes"]["stationID"];
+                    volEntered =row["@attributes"]["volEntered"];
+                    volRemaining = row["@attributes"]["volRemaining"];
+                    orderState = row["@attributes"]["orderState"];
+                    typeID = row["@attributes"]["typeID"];
+                    range = row["@attributes"]["range"];
+                    duration = row["@attributes"]["duration"];
+                    escrow = row["@attributes"]["escrow"];
+                    price = row["@attributes"]["price"];
+                    bid = row["@attributes"]["bid"];
+                    issued = row["@attributes"]["issued"];
+                    issued = Date.parse(issued.replace(/\-/ig, '/').split('.')[0]);
+                    expiry = issued + (duration * 86400000);
+                    if (orderState == 0) {
+                        items.push(typeID);
+                        if (bid == 0) {
+                            sellOrders++;
+                            $('#SellOrders').append('<tr><td id="' + typeID + '">' + typeID + '</td><td>' + volRemaining + ' / ' + volEntered + '</td><td>' + (parseFloat(price)).formatMoney(2, ',', '.') + ' ISK</td><td>' + stationID + ' ( range: ' + range + ' ) </td><td><span id="sellOrder' + i + '"></span></td></tr>');
+                            parseTimeRemaining(currentTime, expiry, "#sellOrder" + i, true, "Expired!");
+                        }
+                        else if (bid == 1) {
+                            buyOrders++;
+                            $('#BuyOrders').append('<tr><td id="' + typeID + '">' + typeID + '</td><td>' + volRemaining + ' / ' + volEntered + '</td><td>' + (parseFloat(price)).formatMoney(2, ',', '.') + ' ISK</td><td>' + stationID + ' ( range: ' + range + ' ) </td><td><span id="buyOrder' + i + '"></span></td></tr>');
+                            parseTimeRemaining(currentTime, expiry, "#buyOrder" + i, true, "Expired!");
                         }
                     }
-                    if (sellOrders == 0) {
-                        $('#sellOrdersTable').html('');
-                    }
-                    if (buyOrders == 0) {
-                        $('#buyOrdersTable').html('');
-                    }
-                    if (sellOrders == 0 && buyOrders == 0) {
-                        $('#sellOrdersTable').html('<p>You have no open market orders.</p>');
-                    }
-                    else {
-                        getTypeNames(items);
-                    }
                 }
-            });
+            }
+            if (sellOrders == 0) {
+                $('#sellOrdersTable').html('');
+            }
+            if (buyOrders == 0) {
+                $('#buyOrdersTable').html('');
+            }
+            if (sellOrders == 0 && buyOrders == 0) {
+                $('#sellOrdersTable').html('<p>You have no open market orders.</p>');
+            }
+            else {
+                getTypeNames(items);
+            }
         }
     </script>
     </body>
