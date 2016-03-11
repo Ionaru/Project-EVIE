@@ -229,25 +229,4 @@
         return distance < -5000;
     };
 
-    this.setCookie = function (cookieName, cookieData, cookieExpiryMinutes){
-        var cookieExpiryDays = cookieExpiryMinutes / 1440;
-        Cookies.set(cookieName, cookieData, { expires: cookieExpiryDays});
-    };
-
-    this.getCookie = function (cookieName){
-        try {
-            var cookieData = Cookies.get(cookieName);
-            return cookieData;
-        }
-        catch (exception){
-            return null;
-        }
-    };
-
-    this.getCookieJSON = function (cookieName){
-        var cookieData = Cookies.get(cookieName);
-        cookieData = JSON.parse(cookieData);
-        return cookieData;
-    };
-
 }).call(this);

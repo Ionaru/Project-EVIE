@@ -36,7 +36,7 @@ include __DIR__ . '/nav.php'; ?>
         }
 
         function getAccountInfo(keyID, vCode) {
-            if(!getCookie('accountInfo_' + keyID) || isCacheExpired(getCookieJSON('accountInfo_' + keyID)['eveapi']['cachedUntil']['#text'])){
+            if(!$.totalStorage('accountInfo_' + keyID) || isCacheExpired($.totalStorage('accountInfo_' + keyID)['eveapi']['cachedUntil']['#text'])){
                 $.ajax({
                     url: "https://api.eveonline.com/account/AccountStatus.xml.aspx?keyID=" + keyID + "&vCode=" + vCode,
                     error: function (xhr, status, error) {
@@ -44,13 +44,14 @@ include __DIR__ . '/nav.php'; ?>
                         // TODO: implement fancy error logging
                     },
                     success: function (xml) {
-                        setCookie('accountInfo_' + keyID, xmlToJson(xml), 60);
-                        parseAccountInfo(xmlToJson(xml));
+                        data = xmlToJson(xml);
+                        $.totalStorage('accountInfo_' + keyID, data);
+                        parseAccountInfo(data);
                     }
                 });
             }
             else {
-                var data = Cookies.getJSON('accountInfo_' + keyID);
+                var data = $.totalStorage('accountInfo_' + keyID);
                 parseAccountInfo(data);
             }
         }

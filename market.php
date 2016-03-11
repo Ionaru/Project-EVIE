@@ -47,7 +47,7 @@
         }
 
         function getBalance(keyID, vCode, charIDs, i) {
-            if (!Cookies.get('characterBalance_' + keyID + charIDs[i]) || isCacheExpired(Cookies.getJSON('characterBalance_' + keyID + charIDs[i])['eveapi']['cachedUntil']['#text'])) {
+            if (!$.totalStorage('characterBalance_' + keyID + charIDs[i]) || isCacheExpired($.totalStorage('characterBalance_' + keyID + charIDs[i])['eveapi']['cachedUntil']['#text'])) {
                 $.ajax({
                     url: "https://api.eveonline.com/char/AccountBalance.xml.aspx?keyID=" + keyID + "&vCode=" + vCode + "&characterID=" + charIDs[i],
                     error: function (xhr, status, error) {
@@ -55,19 +55,20 @@
                         // TODO: implement fancy error logging
                     },
                     success: function (xml) {
-                        Cookies.set('characterBalance_' + keyID + charIDs[i], xmlToJson(xml));
-                        parseBalance(xmlToJson(xml), i);
+                        data = xmlToJson(xml);
+                        $.totalStorage('characterBalance_' + keyID + charIDs[i], data);
+                        parseBalance(data);
                     }
                 });
             }
             else {
-                var data = Cookies.getJSON('characterBalance_' + keyID + charIDs[i]);
-                parseBalance(data, i);
+                var data = $.totalStorage('characterBalance_' + keyID + charIDs[i]);
+                parseBalance(data);
             }
 
         }
 
-        function parseBalance(data, i){
+        function parseBalance(data){
             var balance;
             balance = data['eveapi']['result']['rowset']['row']['@attributes']['balance'];
             var options = {
