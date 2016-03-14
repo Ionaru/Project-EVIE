@@ -120,7 +120,6 @@ function deleteKey($id)
     }
 }
 
-
 function createDatabaseConnection()
 {
     try {
@@ -143,7 +142,6 @@ function createDatabaseConnection()
     return false;
 }
 
-
 function getUserAPIKeys()
 {
     $db_connection = createDatabaseConnection();
@@ -164,28 +162,26 @@ function getUserAPIKeys()
         $apikey_dateadded = $row['apikey_dateadded'];
         if ((int)$apikey_isactive === 1) {
             echo '<tr class="success">';
-            echo '<td><button class="btn btn-xs" disabled><i class="fa fa-check"></i> Set active</button>';
+            echo '<td><button class="btn btn-sm pull-left" disabled><i class="fa fa-check"></i> Set active</button>';
             $_SESSION['keyID'] = $apikey_keyid;
             $_SESSION['vCode'] = $apikey_vcode;
             $_SESSION['selectedCharacter'] = 0;
         } else {
             echo '<tr>';
-            echo '<td><a class="btn btn-success btn-xs" href="?char=0&id=' . $apikey_id . '&action=setActive"><i class="fa fa-check"></i> Set active</a>';
+            echo '<td><a class="btn btn-success btn-sm pull-left" href="?char=0&id=' . $apikey_id . '&action=setActive"><i class="fa fa-check"></i> Set active</a>';
         }
-        echo ' <a class="btn btn-danger btn-xs" href="?char=0&id=' . $apikey_id . '&action=delete"><i class="fa fa-times"></i> Delete</a></td>';
-        echo '<td>' . $apikey_name . '</td>';
-        echo '<td>' . $apikey_keyid . '</td>';
-        echo '<td>' . $apikey_vcode . '</td>';
-        echo '<td>' . $apikey_type . '</td>';
-        echo '<td>' . $apikey_dateadded . '</td>';
+        echo ' <a class="btn btn-danger btn-sm" href="?char=0&id=' . $apikey_id . '&action=delete"><i class="fa fa-times"></i> Delete</a></td>';
+        echo '<td data-label="Key Name">' . $apikey_name . '</td>';
+        echo '<td class="hidden-xs">' . $apikey_keyid . '</td>';
+        echo '<td class="hidden-xs">' . $apikey_vcode . '</td>';
+        echo '<td class="hidden-xs">' . $apikey_type . '</td>';
+        echo '<td data-label="Date Added">' . $apikey_dateadded . '</td>';
         echo '</tr>';
     }
 }
-
-
 ?>
 
-    <table class="table table-hover table-condensed">
+    <table class="table table-hover table-condensed apitable">
         <thead>
         <tr>
             <th>Actions</th>
@@ -200,7 +196,7 @@ function getUserAPIKeys()
         <?php getUserAPIKeys(); ?>
         </tbody>
     </table>
-    <button data-toggle="modal" data-target="#apikeyModal" type="button" class="btn btn-primary ">Add API Key</button>
+    <button data-toggle="modal" data-target="#apikeyModal" type="button" class="btn btn-primary">Add API Key</button>
 
     <div id="apikeyModal" class="modal fade">
         <div class="modal-dialog modal-lg">
@@ -230,6 +226,13 @@ function getUserAPIKeys()
     </div>
 
 <?php include __DIR__ . '/foot.php'; ?>
+
+<script>
+    function executePage(){
+
+    }
+</script>
+
     </body>
     </html>
 <?php ob_flush(); ?>

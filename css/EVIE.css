@@ -72,8 +72,7 @@ a.back-to-top {
 }
 
 table {
-    /*max-width: auto;*/
-    border: 2px solid #205079;
+    border-bottom: 2px solid #205079;
     width: 100%;
     margin: 0;
     padding: 0;
@@ -144,4 +143,8 @@ table th {
 
 .walletHead {
     display: inline;
+}
+
+.ellipsis {
+    word-wrap: break-word
 }

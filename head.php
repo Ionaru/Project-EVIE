@@ -90,7 +90,7 @@ switch ($url) {
         $disabled = 'disabled ';
         break;
     case (strpos($url, 'apikeys.php') !== false):
-        $title = 'API Key Management';
+        $title = 'Key Management';
         $apikeysactive = ' top_active';
         $apikeysactivembl = 'style="background-color: #404040;"';
         break;
