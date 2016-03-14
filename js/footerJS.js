@@ -49,7 +49,7 @@ jQuery(document).ready(function () {
                 $.ajax({
                     url: "https://api.eveonline.com/account/Characters.xml.aspx?keyID=" + keyID + "&vCode=" + vCode,
                     error: function (xhr, status, error) {
-                        showError("Character ID", xhr, status, error);
+                        showError("Character Init", xhr, status, error);
                         // TODO: implement fancy error logging
                     },
                     success: function (xml) {
@@ -92,7 +92,7 @@ jQuery(document).ready(function () {
         $.ajax({
             url: "https://api.eveonline.com/server/ServerStatus.xml.aspx",
             error: function (xhr, status, error) {
-                showError("Server Status");
+                showError("Server Status", xhr, status, error);
                 // TODO: implement fancy error logging
             },
             success: function (xml) {
@@ -147,7 +147,7 @@ function getCharData(charName) {
     $.ajax({
         url: "https://api.eveonline.com/eve/CharacterID.xml.aspx?names=" + charName,
         error: function (xhr, status, error) {
-            showError("Character ID");
+            showError("Character Data", xhr, status, error);
             // TODO: implement fancy error logging
         },
         success: function (xml) {
@@ -173,7 +173,7 @@ function getCharDataFromID(charID) {
         $.ajax({
             url: "https://api.eveonline.com/eve/CharacterInfo.xml.aspx?characterID=" + charID,
             error: function (xhr, status, error) {
-                showError("Character ID");
+                showError("Character Info", xhr, status, error);
                 // TODO: implement fancy error logging
             },
             success: function (xml) {

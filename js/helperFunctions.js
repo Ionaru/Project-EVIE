@@ -42,7 +42,7 @@
             $.ajax({
                 url: "https://api.eveonline.com/eve/TypeName.xml.aspx?ids=" + typeIDString,
                 error: function (xhr, status, error) {
-                    showError("Get Item Names");
+                    showError("Get Item Names", xhr, status, error);
                     // TODO: implement fancy error logging
                 },
                 success: function (xml) {
@@ -197,8 +197,8 @@
             '<hr>' +
             '<p>Problem #' + problems + ' details:<br>' +
             ' > HTTP response: ' + response + '<br>' +
-            ' > Error code: ' + errorcode + '<br>' +
-            ' > Error text: ' + errortext + '</p>' +
+            ' > API error code: ' + errorcode + '<br>' +
+            ' > API error text: ' + errortext + '</p>' +
             '<hr>' +
             '</div>');
     };
