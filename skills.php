@@ -35,7 +35,7 @@
             $.ajax({
                 url: "https://api.eveonline.com/char/SkillInTraining.xml.aspx?keyID=" + keyID + "&vCode=" + vCode + "&characterID=" + charIDs[i],
                 error: function (xhr, status, error) {
-                    showError("Currently Training Skill");
+                    showError("Currently Training Skill", xhr, status, error);
                     // TODO: implement fancy error logging
                 },
                 success: function (xml) {
@@ -60,7 +60,7 @@
             $.ajax({
                 url: "https://api.eveonline.com/char/CharacterSheet.xml.aspx?keyID=" + keyID + "&vCode=" + vCode + "&characterID=" + charIDs[i],
                 error: function (xhr, status, error) {
-                    showError("Skill List");
+                    showError("Skill List", xhr, status, error);
                     // TODO: implement fancy error logging
                 },
                 success: function (xml) {

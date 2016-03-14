@@ -16,7 +16,7 @@
                 $.ajax({
                     url: "https://api.eveonline.com/char/ContactList.xml.aspx?keyID=" + keyID + "&vCode=" + vCode + "&characterID=" + charIDs[i],
                     error: function (xhr, status, error) {
-                        showError("Contacts");
+                        showError("Contacts", xhr, status, error);
                         // TODO: implement fancy error logging
                     },
                     success: function (xml) {

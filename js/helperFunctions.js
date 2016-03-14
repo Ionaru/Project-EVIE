@@ -174,12 +174,33 @@
         });
     };
 
-    this.showError = function (module) {
+    this.showError = function (module, xhr, status, error) {
         if ($("#alertBox").length == 0) {
             $("#mainbody").prepend('<div id="alertBox" class="alert alert-danger" role="alert"><p><strong>One or more problems were detected while loading this page. :(</strong></p></div>');
         }
         problems++;
-        $("#alertBox").append('<p>- Problem #' + problems + ' - There was an error in the \'' + module + '\' module.</p>');
+        var response = xhr.status;
+        var errorcode, errortext;
+        try {
+            error = xhr.responseXML.getElementsByTagName("error")[0];
+            errorcode = error.getAttribute("code");
+            errortext = error.childNodes[0].nodeValue;
+        }
+        catch (exception) {
+            errorcode = "Unknown";
+            errortext = "Unknown";
+        }
+        $("#alertBox").append('<p>- ' +
+            '<a data-toggle="collapse" href="#problem' + problems + '" aria-expanded="false" aria-controls="problem' + problems + '">Problem #' + problems + '</a>' +
+            ' - There was an error in the \'' + module + '\' module.</p>' +
+            '<div class="collapse" id="problem' + problems + '">' +
+            '<hr>' +
+            '<p>Problem #' + problems + ' details:<br>' +
+            ' > HTTP response: ' + response + '<br>' +
+            ' > Error code: ' + errorcode + '<br>' +
+            ' > Error text: ' + errortext + '</p>' +
+            '<hr>' +
+            '</div>');
     };
 
     // Changes XML to JSON

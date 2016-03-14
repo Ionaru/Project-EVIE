@@ -51,7 +51,7 @@
                 $.ajax({
                     url: "https://api.eveonline.com/char/AccountBalance.xml.aspx?keyID=" + keyID + "&vCode=" + vCode + "&characterID=" + charIDs[i],
                     error: function (xhr, status, error) {
-                        showError("Account balance for character " + charIDs[i]);
+                        showError("Account balance for character " + charIDs[i], xhr, status, error);
                         // TODO: implement fancy error logging
                     },
                     success: function (xml) {
@@ -88,7 +88,7 @@
                 $.ajax({
                     url: "https://api.eveonline.com/char/MarketOrders.xml.aspx?keyID=" + keyID + "&vCode=" + vCode + "&characterID=" + charIDs[i],
                     error: function (xhr, status, error) {
-                        showError("Market Orders");
+                        showError("Market Orders", xhr, status, error);
                         // TODO: implement fancy error logging
                     },
                     success: function (xml) {
@@ -110,7 +110,7 @@
             var buyOrders = 0;
             var items = [];
             var rows = data['eveapi']['result']['rowset']['row'];
-            if (rows.length != 0) {
+            if (rows && rows.length != 0) {
                 for (var i = 0; i < rows.length; i++) {
                     var row = rows[i];
                     stationID = row["@attributes"]["stationID"];

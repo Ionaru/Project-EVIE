@@ -49,7 +49,7 @@ jQuery(document).ready(function () {
                 $.ajax({
                     url: "https://api.eveonline.com/account/Characters.xml.aspx?keyID=" + keyID + "&vCode=" + vCode,
                     error: function (xhr, status, error) {
-                        showError("Character ID");
+                        showError("Character ID", xhr, status, error);
                         // TODO: implement fancy error logging
                     },
                     success: function (xml) {

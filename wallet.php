@@ -74,7 +74,7 @@ include __DIR__ . '/nav.php'; ?>
             $.ajax({
                 url: "https://api.eveonline.com/eve/RefTypes.xml.aspx",
                 error: function (xhr, status, error) {
-                    showError("RefType Names");
+                    showError("RefType Names", xhr, status, error);
                     // TODO: implement fancy error logging
                 },
                 success: function (xml) {
@@ -91,7 +91,7 @@ include __DIR__ . '/nav.php'; ?>
                 $.ajax({
                     url: "https://api.eveonline.com/char/AccountBalance.xml.aspx?keyID=" + keyID + "&vCode=" + vCode + "&characterID=" + charIDs[i],
                     error: function (xhr, status, error) {
-                        showError("Account balance for character " + charIDs[i]);
+                        showError("Account balance for character " + charIDs[i], xhr, status, error);
                         // TODO: implement fancy error logging
                     },
                     success: function (xml) {
@@ -127,7 +127,7 @@ include __DIR__ . '/nav.php'; ?>
             $.ajax({
                 url: "https://api.eveonline.com/char/WalletJournal.xml.aspx?keyID=" + keyID + "&vCode=" + vCode + "&characterID=" + charIDs[i] + "&rowCount=50",
                 error: function (xhr, status, error) {
-                    showError("Wallet Journal");
+                    showError("Wallet Journal", xhr, status, error);
                     // TODO: implement fancy error logging
                 },
                 success: function (xml) {
@@ -190,7 +190,7 @@ include __DIR__ . '/nav.php'; ?>
             $.ajax({
                 url: "https://api.eveonline.com/char/WalletJournal.xml.aspx?keyID=" + keyID + "&vCode=" + vCode + "&characterID=" + charID + "&rowCount=" + amountToLoad + "&fromID=" + fromID,
                 error: function (xhr, status, error) {
-                    showError("Extended Wallet Journal");
+                    showError("Extended Wallet Journal", xhr, status, error);
                     // TODO: implement fancy error logging
                 },
                 success: function (xml) {
@@ -252,7 +252,7 @@ include __DIR__ . '/nav.php'; ?>
             $.ajax({
                 url: "https://api.eveonline.com/char/WalletTransactions.xml.aspx?keyID=" + keyID + "&vCode=" + vCode + "&characterID=" + charIDs[i] + "&rowCount=50",
                 error: function (xhr, status, error) {
-                    showError("Wallet Transactions");
+                    showError("Wallet Transactions", xhr, status, error);
                     // TODO: implement fancy error logging
                 },
                 success: function (xml) {
@@ -306,7 +306,7 @@ include __DIR__ . '/nav.php'; ?>
             $.ajax({
                 url: "https://api.eveonline.com/char/WalletTransactions.xml.aspx?keyID=" + keyID + "&vCode=" + vCode + "&characterID=" + charID + "&rowCount=" + amountToLoad + "&fromID=" + fromID,
                 error: function (xhr, status, error) {
-                    showError("Extended Wallet Transactions");
+                    showError("Extended Wallet Transactions", xhr, status, error);
                     // TODO: implement fancy error logging
                 },
                 success: function (xml) {
