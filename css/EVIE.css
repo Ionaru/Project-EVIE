@@ -145,6 +145,6 @@ table th {
     display: inline;
 }
 
-.ellipsis {
-    word-wrap: break-word
+.errorText {
+    font-family: "Courier New", serif;
 }

@@ -170,53 +170,97 @@ function getCharData(charName) {
 //Get character info from ID
 function getCharDataFromID(charID) {
     if (window.navigator.userAgent.indexOf("EVE-IGB") == -1) {
-        $.ajax({
-            url: "https://api.eveonline.com/eve/CharacterInfo.xml.aspx?characterID=" + charID,
-            error: function (xhr, status, error) {
-                showError("Character Info", xhr, status, error);
-                // TODO: implement fancy error logging
-            },
-            success: function (xml) {
-                var charName;
-                var charRace;
-                var bloodline;
-                var ancestry;
-                var corpName;
-                var corpDate;
-                var allianceName;
-                var allianceDate;
-                var securityStatus;
-                charName = xml.getElementsByTagName("characterName")[0].childNodes[0].nodeValue;
-                charRace = xml.getElementsByTagName("race")[0].childNodes[0].nodeValue;
-                bloodline = xml.getElementsByTagName("bloodline")[0].childNodes[0].nodeValue;
-                ancestry = xml.getElementsByTagName("ancestry")[0].childNodes[0].nodeValue;
-                corpName = xml.getElementsByTagName("corporation")[0].childNodes[0].nodeValue;
-                corpDate = xml.getElementsByTagName("corporationDate")[0].childNodes[0].nodeValue;
-                allianceName = "";
-                if (xml.getElementsByTagName("alliance")[0] != null) {
-                    allianceName = xml.getElementsByTagName("alliance")[0].childNodes[0].nodeValue;
-                    allianceDate = xml.getElementsByTagName("allianceDate")[0].childNodes[0].nodeValue;
+        if(parseInt(charID).between(90000000, 100000000, true)) {
+            $.ajax({
+                url: "https://api.eveonline.com/eve/CharacterInfo.xml.aspx?characterID=" + charID,
+                error: function (xhr, status, error) {
+                    showError("Character Info", xhr, status, error);
+                    // TODO: implement fancy error logging
+                },
+                success: function (xml) {
+                    parseCharacterData(xml, charID)
                 }
-                securityStatus = xml.getElementsByTagName("securityStatus")[0].childNodes[0].nodeValue;
-                $("#characterModalTitle").html(charName);
-                $("#characterInfoImage").attr('src', 'https://image.eveonline.com/Character/' + charID + '_256.jpg');
-                var charInfo = '<p><strong>Race:</strong> ' + charRace + ' - ' + bloodline + ' - ' + ancestry + '</p><p><strong>Corporation:</strong> ' + corpName + ', joined ' + '<time class="timeago" datetime="' + corpDate + '">' + corpDate + '</time>' + '</p>';
-
-                if (allianceName != "") {
-                    charInfo += '<p><strong>Alliance:</strong> ' + allianceName + '</p>';
+            });
+        }
+        else {
+            $.ajax({
+                url: "https://api.eveonline.com/eve/CharacterAffiliation.xml.aspx?ids=" + charID,
+                error: function (xhr, status, error) {
+                    showError("Character Info", xhr, status, error);
+                    // TODO: implement fancy error logging
+                },
+                success: function (xml) {
+                    parseMiscCharacterData(xml, charID)
                 }
-                charInfo += '<p><strong>Security Status:</strong> ' + securityStatus + '</p><p><i>More info will come here</i></p>';
-                $("#characterinfo").html(charInfo);
-                jQuery("time.timeago").timeago();
-                $('#characterModal').modal('show');
-            }
-        });
+            });
+        }
     }
     else {
         //noinspection JSUnresolvedVariable,JSUnresolvedFunction
         CCPEVE.showInfo(1377, charID);
     }
 }
+
+function parseCharacterData(xml, charID){
+    var charName;
+    var charRace;
+    var bloodline;
+    var ancestry;
+    var corpName;
+    var corpDate;
+    var allianceName;
+    var allianceDate;
+    var securityStatus;
+    charName = xml.getElementsByTagName("characterName")[0].childNodes[0].nodeValue;
+    charRace = xml.getElementsByTagName("race")[0].childNodes[0].nodeValue;
+    bloodline = xml.getElementsByTagName("bloodline")[0].childNodes[0].nodeValue;
+    ancestry = xml.getElementsByTagName("ancestry")[0].childNodes[0].nodeValue;
+    corpName = xml.getElementsByTagName("corporation")[0].childNodes[0].nodeValue;
+    corpDate = xml.getElementsByTagName("corporationDate")[0].childNodes[0].nodeValue;
+    allianceName = "";
+    if (xml.getElementsByTagName("alliance")[0] != null) {
+        allianceName = xml.getElementsByTagName("alliance")[0].childNodes[0].nodeValue;
+        allianceDate = xml.getElementsByTagName("allianceDate")[0].childNodes[0].nodeValue;
+    }
+    securityStatus = xml.getElementsByTagName("securityStatus")[0].childNodes[0].nodeValue;
+    $("#characterModalTitle").html(charName);
+    $("#characterInfoImage").attr('src', 'https://image.eveonline.com/Character/' + charID + '_256.jpg');
+    var charInfo = '<p><strong>Race:</strong> ' + charRace + ' - ' + bloodline + ' - ' + ancestry + '</p><p><strong>Corporation:</strong> ' + corpName + ', joined ' + '<time class="timeago" datetime="' + corpDate + '">' + corpDate + '</time>' + '</p>';
+
+    if (allianceName != "") {
+        charInfo += '<p><strong>Alliance:</strong> ' + allianceName + '</p>';
+    }
+    charInfo += '<p><strong>Security Status:</strong> ' + securityStatus + '</p><p><i>More info will come here</i></p>';
+    $("#characterinfo").html(charInfo);
+    jQuery("time.timeago").timeago();
+    $('#characterModal').modal('show');
+}
+
+function parseMiscCharacterData(xml, charID) {
+    var rows = xml.getElementsByTagName("row");
+    var row = rows[0];
+    var charName = row.getAttribute("characterName");
+    var corpName = "";
+    if (row.getAttribute("corporationID") != 0) {
+        corpName = row.getAttribute("corporationName");
+    }
+    var allianceName = "";
+    if (row.getAttribute("allianceID")[0] != 0) {
+        allianceName = row.getAttribute("allianceName");
+    }
+    $("#characterModalTitle").html(charName);
+    $("#characterInfoImage").attr('src', 'https://image.eveonline.com/Character/' + charID + '_256.jpg');
+    var charInfo = "";
+    if (corpName != "") {
+        charInfo += '<p><strong>Corporation:</strong> ' + corpName + '</p>';
+    }
+    if (allianceName != "") {
+        charInfo += '<p><strong>Alliance:</strong> ' + allianceName + '</p>';
+    }
+    $("#characterinfo").html(charInfo);
+    $('#characterModal').modal('show');
+}
+
 
 //Show item information
 function getItemData(itemID) {

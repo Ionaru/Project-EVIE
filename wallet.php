@@ -133,6 +133,7 @@ include __DIR__ . '/nav.php'; ?>
                 success: function (xml) {
                     var rows = xml.getElementsByTagName("row");
                     var ownerName1;
+                    var ownerID1;
                     var date;
                     var amount;
                     var refTypeID;
@@ -154,13 +155,21 @@ include __DIR__ . '/nav.php'; ?>
                             else {
                                 color = "green";
                                 ownerName1 = row.getAttribute("ownerName1");
+                                ownerID1 = row.getAttribute("ownerID1");
                             }
                             var output = '';
                             output += '<tr>';
                             output += '<td data-label="Date">' + date + '</td>';
                             output += '<td data-label="refType">' + refTypeID + '</td>';
                             if (ownerName1 != "X") {
-                                output += '<td data-label="From"><a onclick="getCharData(' + "'" + ownerName1 + "'" + ')">' + ownerName1 + '</a></td>';
+                                output += '<td data-label="From">';
+                                if(parseInt(ownerID1).between(90000000, 100000000, true)){
+                                    output += '<a class="' + ownerID1 + '" onclick="getCharDataFromID(' + "'" + ownerID1 + "'" + ')">' + ownerName1 + '</a>';
+                                }
+                                else {
+                                    output += '<span class="' + ownerID1 + '">' + ownerName1 + '</span>';
+                                }
+                                output += '</td>';
                             }
                             else {
                                 if ($(window).width() > 768) {
@@ -195,6 +204,7 @@ include __DIR__ . '/nav.php'; ?>
                 },
                 success: function (xml) {
                     var ownerName1;
+                    var ownerID1;
                     var color;
                     var date;
                     var amount;
@@ -217,13 +227,21 @@ include __DIR__ . '/nav.php'; ?>
                             else {
                                 color = "green";
                                 ownerName1 = row.getAttribute("ownerName1");
+                                ownerID1 = row.getAttribute("ownerID1");
                             }
                             var output = '';
                             output += '<tr>';
                             output += '<td data-label="Date">' + date + '</td>';
                             output += '<td data-label="refType">' + refTypeID + '</td>';
                             if (ownerName1 != "X") {
-                                output += '<td data-label="From"><a onclick="getCharData(' + "'" + ownerName1 + "'" + ')">' + ownerName1 + '</a></td>';
+                                output += '<td data-label="From">';
+                                if(parseInt(ownerID1).between(90000000, 100000000, true)){
+                                    output += '<a class="' + ownerID1 + '" onclick="getCharDataFromID(' + "'" + ownerID1 + "'" + ')">' + ownerName1 + '</a>';
+                                }
+                                else {
+                                    output += '<span class="' + ownerID1 + '">' + ownerName1 + '</span>';
+                                }
+                                output += '</td>';
                             }
                             else {
                                 if ($(window).width() > 768) {

@@ -167,6 +167,13 @@
         return s + (j ? i.substr(0, j) + t : '') + i.substr(j).replace(/(\d{3})(?=\d)/g, '$1' + t) + (c ? d + Math.abs(n - i).toFixed(c).slice(2) : '');
     };
 
+    this.Number.prototype.between = function(a, b, inclusive) {
+        var min = Math.min(a, b),
+            max = Math.max(a, b);
+
+        return inclusive ? this >= min && this <= max : this > min && this < max;
+    };
+
     this.uniq = function (a) {
         var seen = {};
         return a.filter(function (item) {
@@ -195,10 +202,11 @@
             ' - There was an error in the \'' + module + '\' module.</p>' +
             '<div class="collapse" id="problem' + problems + '">' +
             '<hr>' +
-            '<p>Problem #' + problems + ' details:<br>' +
+            '<p class="errorText">Problem #' + problems + ' details:<br>' +
             ' > HTTP response: ' + response + '<br>' +
             ' > API error code: ' + errorcode + '<br>' +
             ' > API error text: ' + errortext + '</p>' +
+            '<p>Please search for this issue on the <a target="_blank" href="https://github.com/Ionaru/Project-EVIE/issues?utf8=✓&q=is%3Aissue+' + response + '+' + errorcode + '">issue tracker.</a></p>' +
             '<hr>' +
             '</div>');
     };
