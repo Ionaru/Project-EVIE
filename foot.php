@@ -10,13 +10,14 @@
         }
         ?>
 
-        <p>Project EVIE, created by <a onclick="getCharData('Ionaru Otsada')">Ionaru
-                Otsada.</a></p>
+        <p>Project EVIE, created by <a onclick="getCharData('Ionaru Otsada')">Ionaru Otsada.</a></p>
         <br>
         <p><strong>- Disclaimer -</strong></p>
         <p>Project EVIE is still in ongoing development, many features are missing and any data displayed may be
-            incorrect.<br>
-        Please report any issues to the <a target="_blank" href="https://github.com/Ionaru/Project-EVIE/issues">issue tracker</a>.</p>
+            incorrect.
+            <br>
+            Please report any issues to the <a target="_blank" href="https://github.com/Ionaru/Project-EVIE/issues">
+                issue tracker</a>.</p>
         <p>Material related to EVE Online is used with limited permission of CCP Games hf. No official affiliation or
             endorsement by CCP Games hf is stated or implied.</p>
     </div>
