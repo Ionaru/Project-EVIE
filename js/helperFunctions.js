@@ -206,7 +206,7 @@
             ' > HTTP response: ' + response + '<br>' +
             ' > API error code: ' + errorcode + '<br>' +
             ' > API error text: ' + errortext + '</p>' +
-            '<p>Please search for this issue on the <a target="_blank" href="https://github.com/Ionaru/Project-EVIE/issues?utf8=✓&q=is%3Aissue+' + response + '+' + errorcode + '">issue tracker.</a></p>' +
+            '<p>Please search for this issue on the <a target="_blank" href="https://github.com/Ionaru/Project-EVIE/issues?utf8=✓&q=is%3Aissue+' + response + '+' + errorcode + '">issue tracker</a>.</p>' +
             '<hr>' +
             '</div>');
     };
