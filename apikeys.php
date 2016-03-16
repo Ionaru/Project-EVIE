@@ -1,4 +1,4 @@
-<?php ob_start();
+<?php
 include __DIR__ . '/head.php';
 include __DIR__ . '/nav.php';
 
@@ -13,24 +13,26 @@ function getAPIInfo($keyID, $vCode)
 {
     $map_url = 'https://api.eveonline.com//account/APIKeyInfo.xml.aspx?keyID=' . $keyID . '&vCode=' . $vCode;
     if (($response_xml_data = file_get_contents($map_url)) === false) {
-        echo "Error fetching XML\n";
+        echo '<script type="text/javascript">';
+        echo 'alert("The key you entered could not be verified.")';
+        echo '</script>';
     } else {
         libxml_use_internal_errors(true);
         $data = $response_xml_data;
         if (!$data) {
-            echo "Error loading XML\n";
-            foreach (libxml_get_errors() as $error) {
-                echo "\t", $error->message;
-            }
+            echo '<script type="text/javascript">';
+            echo 'alert("The key you entered could not be verified.")';
+            echo '</script>';
         } else {
             return $data;
         }
     }
-    return false;
+    return '';
 }
 
 function getAPIType($data)
 {
+    $data = simplexml_load_string($data);
     return $data->result->key['type'];
 }
 
@@ -43,29 +45,24 @@ function doAction($action, $id)
 {
     if ($action === 'setActive') {
         setActive($id);
-        header('Location: index.php');
-        die();
     } else if ($action === 'delete') {
         deleteKey($id);
-        header('Location: apikeys.php?char=0');
-        die();
     } else if ($action === 'addKey') {
         addKey();
-        header('Location: apikeys.php?char=0');
-        die();
     }
 }
 
 function addKey()
 {
-    setAllKeysInactive();
+
     $db_connection = createDatabaseConnection();
     $keyName = $_POST['keyName'];
     $keyID = $_POST['keyID'];
     $vCode = $_POST['vCode'];
     $keyXML = getAPIInfo($keyID, $vCode);
     if ($keyXML !== '') {
-        $keyType = 'API Key';
+        setAllKeysInactive();
+        $keyType = getAPIType($keyXML);
         $isActive = 1;
         $sql = 'INSERT INTO apikeys (user_name,apikey_name,apikey_keyid,apikey_vcode,apikey_type,apikey_isactive) VALUES (\'' . $_SESSION['user_name'] . '\',\'' . $keyName . '\',\'' . $keyID . '\',\'' . $vCode . '\',\'' . $keyType . '\',\'' . $isActive . '\');';
         $db_connection->exec($sql);
@@ -85,21 +82,33 @@ function setAllKeysInactive()
 function setActive($id)
 {
     $db_connection = createDatabaseConnection();
-    $sql = 'SELECT user_name,apikey_keyid,apikey_vcode FROM apikeys WHERE apikey_id=' . $id . ';';
+    $sql = 'SELECT user_name,apikey_keyid,apikey_vcode,apikey_isactive FROM apikeys WHERE apikey_id=' . $id . ';';
+    $rows = 0;
     foreach ($db_connection->query($sql) as $row) {
+        $rows++;
+
         if ($row['user_name'] === $_SESSION['user_name']) {
-            $sql2 = 'UPDATE `apikeys` SET `apikey_isactive`= 1 WHERE `apikey_id`=\'' . $id . '\'';
-            $db_connection->exec($sql2);
-            $sql3 = 'UPDATE `apikeys` SET `apikey_isactive`= 0 WHERE `apikey_vcode`=\'' . $_SESSION['vCode'] . '\'';
-            $db_connection->exec($sql3);
-            $_SESSION['keyID'] = $row['apikey_keyid'];
-            $_SESSION['vCode'] = $row['apikey_vcode'];
-            $_SESSION['selectedCharacter'] = 0;
+            error_log('[TEST]  '.$row['apikey_isactive']);
+            if ((int) $row['apikey_isactive'] === 0) {
+                error_log('[TEST]  '.$row['apikey_isactive']);
+                $sql2 = 'UPDATE `apikeys` SET `apikey_isactive`= 1 WHERE `apikey_id`=\'' . $id . '\'';
+                $db_connection->exec($sql2);
+                $sql3 = 'UPDATE `apikeys` SET `apikey_isactive`= 0 WHERE `apikey_vcode`=\'' . $_SESSION['vCode'] . '\'';
+                $db_connection->exec($sql3);
+                $_SESSION['keyID'] = $row['apikey_keyid'];
+                $_SESSION['vCode'] = $row['apikey_vcode'];
+                $_SESSION['selectedCharacter'] = 0;
+            }
         } else {
             echo '<script type="text/javascript">';
             echo 'alert("That API key does not belong to you.")';
             echo '</script>';
         }
+    }
+    if ($rows === 0) {
+        echo '<script type="text/javascript">';
+        echo 'alert("That API key does not exist.")';
+        echo '</script>';
     }
 }
 
@@ -107,7 +116,9 @@ function deleteKey($id)
 {
     $db_connection = createDatabaseConnection();
     $sql = 'SELECT user_name FROM apikeys WHERE apikey_id=' . $id . ';';
+    $rows = 0;
     foreach ($db_connection->query($sql) as $row) {
+        $rows++;
         if ($row['user_name'] === $_SESSION['user_name']) {
             $sql2 = 'DELETE FROM `apikeys` WHERE `user_name` =\'' . $_SESSION['user_name'] . '\' AND `apikey_id`=\'' . $id . '\'';
             $db_connection->exec($sql2);
@@ -117,6 +128,11 @@ function deleteKey($id)
             echo 'alert("That API key does not belong to you!")';
             echo '</script>';
         }
+    }
+    if ($rows === 0) {
+        echo '<script type="text/javascript">';
+        echo 'alert("That API key does not exist.")';
+        echo '</script>';
     }
 }
 
@@ -162,13 +178,13 @@ function getUserAPIKeys()
         $apikey_dateadded = $row['apikey_dateadded'];
         if ((int)$apikey_isactive === 1) {
             echo '<tr class="success">';
-            echo '<td><button class="btn btn-sm pull-left" disabled><i class="fa fa-check"></i> Set active</button>';
+            echo '<td class="text-right"><button class="btn btn-sm pull-left" disabled><i class="fa fa-check"></i> Set active</button>';
             $_SESSION['keyID'] = $apikey_keyid;
             $_SESSION['vCode'] = $apikey_vcode;
             $_SESSION['selectedCharacter'] = 0;
         } else {
             echo '<tr>';
-            echo '<td><a class="btn btn-success btn-sm pull-left" href="?char=0&id=' . $apikey_id . '&action=setActive"><i class="fa fa-check"></i> Set active</a>';
+            echo '<td class="text-right"><a class="btn btn-success btn-sm pull-left" href="?char=0&id=' . $apikey_id . '&action=setActive"><i class="fa fa-check"></i> Set active</a>';
         }
         echo ' <a class="btn btn-danger btn-sm" href="?char=0&id=' . $apikey_id . '&action=delete"><i class="fa fa-times"></i> Delete</a></td>';
         echo '<td data-label="Key Name">' . $apikey_name . '</td>';
@@ -179,60 +195,60 @@ function getUserAPIKeys()
         echo '</tr>';
     }
 }
+
 ?>
 
-    <table class="table table-hover table-condensed apitable">
-        <thead>
-        <tr>
-            <th>Actions</th>
-            <th>Key Name</th>
-            <th>Key ID</th>
-            <th>Verification Code</th>
-            <th>Key Type</th>
-            <th>Date Added</th>
-        </tr>
-        </thead>
-        <tbody>
-        <?php getUserAPIKeys(); ?>
-        </tbody>
-    </table>
-    <button data-toggle="modal" data-target="#apikeyModal" type="button" class="btn btn-primary">Add API Key</button>
+<table class="table table-hover table-condensed apitable">
+    <thead>
+    <tr>
+        <th>Actions</th>
+        <th>Key Name</th>
+        <th>Key ID</th>
+        <th>Verification Code</th>
+        <th>Key Type</th>
+        <th>Date Added</th>
+    </tr>
+    </thead>
+    <tbody>
+    <?php getUserAPIKeys(); ?>
+    </tbody>
+</table>
+<button data-toggle="modal" data-target="#apikeyModal" type="button" class="btn btn-primary">Add API Key</button>
 
-    <div id="apikeyModal" class="modal fade">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <form method="post" action="?char=0&action=addKey" name="temporaryform">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal">&times;</button>
-                        <h4 class="modal-title">Add an API Key</h4>
-                    </div>
-                    <div class="modal-body">
-                        <label for="input_KeyName">Name your API Key</label>
-                        <input type="text" class="form-control" id="keyName" name="keyName" required
-                               title="input_KeyName">
-                        <hr>
-                        <label for="login_KeyID">Key ID</label>
-                        <input type="text" class="form-control" id="keyID" name="keyID" required title="login_KeyID">
-                        <br>
-                        <label for="login_vCode">Verification Code</label>
-                        <input type="text" class="form-control" id="vCode" name="vCode" required title="login_vCode">
-                    </div>
-                    <div class="modal-footer">
-                        <input type="submit" class="btn btn-info" name="login" value="Add Key"/>
-                    </div>
-                </form>
-            </div>
+<div id="apikeyModal" class="modal fade">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <form method="post" action="?char=0&action=addKey" name="temporaryform">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Add an API Key</h4>
+                </div>
+                <div class="modal-body">
+                    <label for="input_KeyName">Name your API Key</label>
+                    <input type="text" class="form-control" id="keyName" name="keyName" required
+                           title="input_KeyName">
+                    <hr>
+                    <label for="login_KeyID">Key ID</label>
+                    <input type="text" class="form-control" id="keyID" name="keyID" required title="login_KeyID">
+                    <br>
+                    <label for="login_vCode">Verification Code</label>
+                    <input type="text" class="form-control" id="vCode" name="vCode" required title="login_vCode">
+                </div>
+                <div class="modal-footer">
+                    <input type="submit" class="btn btn-info" name="login" value="Add Key"/>
+                </div>
+            </form>
         </div>
     </div>
+</div>
 
 <?php include __DIR__ . '/foot.php'; ?>
 
 <script>
-    function executePage(){
+    function executePage() {
 
     }
 </script>
 
-    </body>
-    </html>
-<?php ob_flush(); ?>
+</body>
+</html>

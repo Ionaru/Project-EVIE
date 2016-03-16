@@ -82,11 +82,9 @@ table {
 
 table tr {
     border: 1px solid #205079;
-    padding: 10px;
 }
 
 table th, table td {
-    padding: 10px;
     text-align: center;
 }
 

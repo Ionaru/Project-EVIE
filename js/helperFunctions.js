@@ -197,7 +197,7 @@
             errorcode = "Unknown";
             errortext = "Unknown";
         }
-        $("#alertBox").append('<p>- ' +
+        $("#alertBox").append('<div id="problemBox' + problems + '"><p>- ' +
             '<a data-toggle="collapse" href="#problem' + problems + '" aria-expanded="false" aria-controls="problem' + problems + '">Problem #' + problems + '</a>' +
             ' - There was an error in the \'' + module + '\' module.</p>' +
             '<div class="collapse" id="problem' + problems + '">' +
@@ -208,7 +208,7 @@
             ' > API error text: ' + errortext + '</p>' +
             '<p>Please search for this issue on the <a target="_blank" href="https://github.com/Ionaru/Project-EVIE/issues?utf8=✓&q=is%3Aissue+' + response + '+' + errorcode + '">issue tracker</a>.</p>' +
             '<hr>' +
-            '</div>');
+            '</div></div>');
     };
 
     // Changes XML to JSON

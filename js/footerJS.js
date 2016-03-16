@@ -119,7 +119,7 @@ function timeKeeper(){
         minutes += 1;
         displayTime(hours, minutes);
     }
-    timer = setInterval(doTimeTick, 60000);
+    var timer = setInterval(doTimeTick, 60000);
 }
 
 function displayTime(h, m){
