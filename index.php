@@ -74,7 +74,7 @@ include __DIR__ . '/nav.php'; ?>
         }
 
         function getBalance(keyID, vCode, charIDs, i) {
-            if(!Cookies.get('characterBalance_' + keyID + charIDs[i]) || isCacheExpired(Cookies.getJSON('characterBalance_' + keyID + charIDs[i])['eveapi']['cachedUntil']['#text'])){
+            if(!$.totalStorage('characterBalance_' + keyID + charIDs[i]) || isCacheExpired($.totalStorage('characterBalance_' + keyID + charIDs[i])['eveapi']['cachedUntil']['#text'])){
                 $.ajax({
                     url: "https://api.eveonline.com/char/AccountBalance.xml.aspx?keyID=" + keyID + "&vCode=" + vCode + "&characterID=" + charIDs[i],
                     error: function (xhr, status, error) {
@@ -82,13 +82,13 @@ include __DIR__ . '/nav.php'; ?>
                         // TODO: implement fancy error logging
                     },
                     success: function (xml) {
-                        Cookies.set('characterBalance_' + keyID + charIDs[i], xmlToJson(xml));
+                        $.totalStorage('characterBalance_' + keyID + charIDs[i], xmlToJson(xml));
                         parseBalance(xmlToJson(xml), i);
                     }
                 });
             }
             else {
-                var data = Cookies.getJSON('characterBalance_' + keyID + charIDs[i]);
+                var data = $.totalStorage('characterBalance_' + keyID + charIDs[i]);
                 parseBalance(data, i);
             }
         }
@@ -100,7 +100,7 @@ include __DIR__ . '/nav.php'; ?>
         }
 
         function getSkillInTraining(keyID, vCode, charIDs, i) {
-            if(!Cookies.get('skillInTraining_' + keyID + charIDs[i]) || isCacheExpired(Cookies.getJSON('skillInTraining_' + keyID + charIDs[i])['eveapi']['cachedUntil']['#text'])){
+            if(!$.totalStorage('skillInTraining_' + keyID + charIDs[i]) || isCacheExpired($.totalStorage('skillInTraining_' + keyID + charIDs[i])['eveapi']['cachedUntil']['#text'])){
                 $.ajax({
                     url: "https://api.eveonline.com/char/SkillInTraining.xml.aspx?keyID=" + keyID + "&vCode=" + vCode + "&characterID=" + charIDs[i],
                     error: function (xhr, status, error) {
@@ -108,13 +108,13 @@ include __DIR__ . '/nav.php'; ?>
                         // TODO: implement fancy error logging
                     },
                     success: function (xml) {
-                        Cookies.set('skillInTraining_' + keyID + charIDs[i], xmlToJson(xml));
+                        $.totalStorage('skillInTraining_' + keyID + charIDs[i], xmlToJson(xml));
                         parseSkillInTraining(xmlToJson(xml), i);
                     }
                 });
             }
             else{
-                var data = Cookies.getJSON('skillInTraining_' + keyID + charIDs[i]);
+                var data = $.totalStorage('skillInTraining_' + keyID + charIDs[i]);
                 parseSkillInTraining(data, i);
             }
         }
