@@ -7,7 +7,7 @@
             <div class="col-md-6" id="registersection">
                 <h2>Register</h2>
                 <p>Please register an account to add API keys.</p>
-                <form method="post" action="<?php echo $_SERVER['SCRIPT_NAME'] . '?char=0&action=register'; ?>"
+                <form method="post" action="<?php echo $_SERVER['SCRIPT_NAME'] . '?action=register'; ?>"
                       name="registerform">
                     <div class="form-group">
                         <label for="user_name">Username</label>
@@ -54,7 +54,7 @@
             <h2>Use temporary key</h2>
             <p>Here you can enter an EVE Online API key for temporary use, this key will not be saved in the database
                 and will be deleted once you log out or close your browser.</p>
-            <form method="post" action="<?php echo $_SERVER['SCRIPT_NAME'] . '?char=0&action=temp'; ?>"
+            <form method="post" action="<?php echo $_SERVER['SCRIPT_NAME'] . '?action=temp'; ?>"
                   name="temporaryform">
                 <div class="form-group">
                     <label for="keyID">Key ID</label>
@@ -109,7 +109,7 @@
         <div id="tempModal" class="modal fade">
             <div class="modal-dialog modal-sm">
                 <div class="modal-content">
-                    <form method="post" action="<?php echo $_SERVER['SCRIPT_NAME'] . '?char=0&action=temp'; ?>"
+                    <form method="post" action="<?php echo $_SERVER['SCRIPT_NAME'] . '?action=temp'; ?>"
                           name="temporaryform">
                         <div class="modal-header">
                             <button type="button" class="close" data-dismiss="modal">&times;</button>

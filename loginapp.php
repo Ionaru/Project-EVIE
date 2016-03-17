@@ -119,6 +119,8 @@ class OneFileLoginApplication
             $this->doLoginWithSessionData();
         } elseif (isset($_POST['login'])) {
             $this->doLoginWithPostData();
+            header('Location: index.php');
+            die();
         }
     }
 
@@ -139,7 +141,7 @@ class OneFileLoginApplication
      */
     private function doLoginWithSessionData()
     {
-        $this->user_is_logged_in = true; // ?
+        $this->user_is_logged_in = true;
     }
 
     /**

@@ -100,13 +100,23 @@ switch ($url) {
 }
 
 if (count($_SESSION) === 0 && (strpos($url, 'account.php') === false)) {
-    header('Location: account.php?char=0');
+    header('Location: account.php');
     die();
 }
 
 if (empty($_SESSION['keyID']) && (strpos($url, 'apikeys.php') === false) && (strpos($url, 'account.php') === false)) {
-    header('Location: apikeys.php?char=0');
+    header('Location: apikeys.php');
     die();
+}
+
+if (!empty($_SESSION['user_name']) && (strpos($url, 'account.php') === 1)){
+    header('Location: index.php');
+    die();
+}
+
+if (isset($_GET['c']) && ((int)$_GET['c'] === 0 || (int)$_GET['c'] === 1 || (int)$_GET['c'] === 2)) {
+    $_SESSION['selectedCharacter'] = $_GET['c'];
+    $selectedChar = $_GET['c'];
 }
 
 function get_string_between($string, $start, $end)

@@ -184,9 +184,9 @@ function getUserAPIKeys()
             $_SESSION['selectedCharacter'] = 0;
         } else {
             echo '<tr>';
-            echo '<td class="text-right"><a class="btn btn-success btn-sm pull-left" href="?char=0&id=' . $apikey_id . '&action=setActive"><i class="fa fa-check"></i> Set active</a>';
+            echo '<td class="text-right"><a class="btn btn-success btn-sm pull-left" href="?id=' . $apikey_id . '&action=setActive"><i class="fa fa-check"></i> Set active</a>';
         }
-        echo ' <a class="btn btn-danger btn-sm" href="?char=0&id=' . $apikey_id . '&action=delete"><i class="fa fa-times"></i> Delete</a></td>';
+        echo ' <a class="btn btn-danger btn-sm" href="?id=' . $apikey_id . '&action=delete"><i class="fa fa-times"></i> Delete</a></td>';
         echo '<td data-label="Key Name">' . $apikey_name . '</td>';
         echo '<td class="hidden-xs">' . $apikey_keyid . '</td>';
         echo '<td class="hidden-xs">' . $apikey_vcode . '</td>';
@@ -218,7 +218,7 @@ function getUserAPIKeys()
 <div id="apikeyModal" class="modal fade">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
-            <form method="post" action="?char=0&action=addKey" name="temporaryform">
+            <form method="post" action="?action=addKey" name="temporaryform">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                     <h4 class="modal-title">Add an API Key</h4>

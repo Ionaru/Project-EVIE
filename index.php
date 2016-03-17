@@ -96,7 +96,7 @@ include __DIR__ . '/nav.php'; ?>
         function parseBalance(data, i){
             var balance;
             balance = data['eveapi']['result']['rowset']['row']['@attributes']['balance'];
-            document.getElementById("BalanceAccount1Character" + (i + 1)).innerHTML = '<a href="wallet.php?char=' + i + '">' + (parseFloat(balance)).formatMoney(2, ',', '.') + " ISK</a>";
+            document.getElementById("BalanceAccount1Character" + (i + 1)).innerHTML = '<a href="wallet.php?c=' + i + '">' + (parseFloat(balance)).formatMoney(2, ',', '.') + " ISK</a>";
         }
 
         function getSkillInTraining(keyID, vCode, charIDs, i) {
@@ -127,11 +127,11 @@ include __DIR__ . '/nav.php'; ?>
                 var skillLvl = data['eveapi']['result']['trainingToLevel']['#text'];
                 var trainingEndTime = data['eveapi']['result']['trainingEndTime']['#text'];
                 getTypeNames(skillIDs);
-                document.getElementById("SkillAccount1Character" + (i + 1)).innerHTML = '<a id="skillCharacter' + i + '" href="skills.php?char=' + i + '"><span id="' + skillID + '">Placeholder</span> ' + skillLvl + '</a><br><span id="countdown' + i + '"></span>';
+                document.getElementById("SkillAccount1Character" + (i + 1)).innerHTML = '<a id="skillCharacter' + i + '" href="skills.php?c=' + i + '""><span id="' + skillID + '">Placeholder</span> ' + skillLvl + '</a><br><span id="countdown' + i + '"></span>';
                 parseTimeRemaining(currentTime, trainingEndTime, "#countdown" + i, true, "Skill training completed!");
             }
             else {
-                document.getElementById("SkillAccount1Character" + (i + 1)).innerHTML = '<a href="skills.php?char=' + i + '">No skill in training</a>';
+                document.getElementById("SkillAccount1Character" + (i + 1)).innerHTML = '<a href="skills.php?c=' + i + '">No skill in training</a>';
             }
         }
     </script>
