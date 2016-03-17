@@ -69,8 +69,7 @@
         }
 
         function parseBalance(data){
-            var balance;
-            balance = data['eveapi']['result']['rowset']['row']['@attributes']['balance'];
+            var balance = data['eveapi']['result']['rowset']['row']['@attributes']['balance'];
             var options = {
                 useEasing: false,
                 useGrouping: true,
@@ -79,8 +78,8 @@
                 prefix: '',
                 suffix: ' ISK'
             };
-            var demo = new CountUp("balanceSpan", 0, balance, 2, 1, options);
-            demo.start();
+            var animation = new CountUp("balanceSpan", 0, balance, 2, 1, options);
+            animation.start();
         }
 
         function getOrders(keyID, vCode, charIDs, i) {

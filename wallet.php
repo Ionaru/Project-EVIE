@@ -65,51 +65,65 @@ include __DIR__ . '/nav.php'; ?>
                 '<a id="moreTransactionsAll">Max</a></span> ' +
                 '<span id="loadingiconT"></span>');
             getRefTypes();
-            getBalance(keyID, vCode, charIDs, <?php echo $selectedChar ?>);
+            getBalance();
         }
 
         function getRefTypes() {
-            $.ajax({
-                url: "https://api.eveonline.com/eve/RefTypes.xml.aspx",
-                error: function (xhr, status, error) {
-                    showError("RefType Names", xhr, status, error);
-                    // TODO: implement fancy error logging
-                },
-                success: function (xml) {
-                    var rows = xml.getElementsByTagName("row");
-                    for (var i = 0; i < rows.length; i++) {
-                        refTypes[rows[i].getAttribute("refTypeID")] = rows[i].getAttribute("refTypeName");
-                    }
-                    getWalletJournal(keyID, vCode, charIDs[<?php echo $selectedChar ?>]);
-                    getWalletTransactions(keyID, vCode, charIDs[<?php echo $selectedChar ?>]);
-                }
-            });
-        }
-
-        function getBalance(keyID, vCode, charIDs, i) {
-            if (!$.totalStorage('characterBalance_' + keyID + charIDs[i]) || isCacheExpired($.totalStorage('characterBalance_' + keyID + charIDs[i])['eveapi']['cachedUntil']['#text'])) {
+            var data;
+            if (!$.totalStorage('refIDs') || isCacheExpired($.totalStorage('refIDs')['eveapi']['cachedUntil']['#text'])) {
                 $.ajax({
-                    url: "https://api.eveonline.com/char/AccountBalance.xml.aspx?keyID=" + keyID + "&vCode=" + vCode + "&characterID=" + charIDs[i],
+                    url: "https://api.eveonline.com/eve/RefTypes.xml.aspx",
                     error: function (xhr, status, error) {
-                        showError("Account balance for character " + charIDs[i], xhr, status, error);
+                        showError("RefType Names", xhr, status, error);
                         // TODO: implement fancy error logging
                     },
                     success: function (xml) {
                         data = xmlToJson(xml);
-                        $.totalStorage('characterBalance_' + keyID + charIDs[i], data);
+                        var rows = data["eveapi"]["result"]["rowset"]["row"];
+                        for (var i = 0; i < rows.length; i++) {
+                            refTypes[rows[i]['@attributes']['refTypeID']] = rows[i]['@attributes']['refTypeName'];
+                        }
+                        $.totalStorage('refIDs', data);
+                        getWalletJournal();
+                        getWalletTransactions();
+                    }
+                });
+            }
+            else {
+                data = $.totalStorage('refIDs');
+                var rows = data["eveapi"]["result"]["rowset"]["row"];
+                for (var i = 0; i < rows.length; i++) {
+                    refTypes[rows[i]['@attributes']['refTypeID']] = rows[i]['@attributes']['refTypeName'];
+                }
+                getWalletJournal();
+                getWalletTransactions();
+            }
+        }
+
+        function getBalance() {
+            var data;
+            if (!$.totalStorage('characterBalance_' + keyID + selectedCharacterID) || isCacheExpired($.totalStorage('characterBalance_' + keyID + selectedCharacterID)['eveapi']['cachedUntil']['#text'])) {
+                $.ajax({
+                    url: "https://api.eveonline.com/char/AccountBalance.xml.aspx?keyID=" + keyID + "&vCode=" + vCode + "&characterID=" + selectedCharacterID,
+                    error: function (xhr, status, error) {
+                        showError("Account balance for character " + selectedCharacterID, xhr, status, error);
+                        // TODO: implement fancy error logging
+                    },
+                    success: function (xml) {
+                        data = xmlToJson(xml);
+                        $.totalStorage('characterBalance_' + keyID + selectedCharacterID, data);
                         parseBalance(data);
                     }
                 });
             }
             else {
-                var data = $.totalStorage('characterBalance_' + keyID + charIDs[i]);
+                data = $.totalStorage('characterBalance_' + keyID + selectedCharacterID);
                 parseBalance(data);
             }
         }
 
         function parseBalance(data) {
-            var balance;
-            balance = data['eveapi']['result']['rowset']['row']['@attributes']['balance'];
+            var balance = data['eveapi']['result']['rowset']['row']['@attributes']['balance'];
             var options = {
                 useEasing: false,
                 useGrouping: true,
@@ -118,69 +132,73 @@ include __DIR__ . '/nav.php'; ?>
                 prefix: '',
                 suffix: ' ISK'
             };
-            var demo = new CountUp("balanceSpan", 0, balance, 2, 1, options);
-            demo.start();
+            var animation = new CountUp("balanceSpan", 0, balance, 2, 1, options);
+            animation.start();
         }
 
-        function getWalletJournal(keyID, vCode, charID, rowCount, fromID) {
+        function getWalletJournal(rowCount, fromID) {
+            var data;
             $('#loadingiconW').html('<i class="fa fa-spin fa-circle-o-notch"></i>');
             var url = "https://api.eveonline.com/char/WalletJournal.xml.aspx?";
+            var storageName = "walletJournal_" + keyID + selectedCharacterID;
             url += "keyID=" + keyID;
             url += "&vCode=" + vCode;
-            url += "&characterID=" + charID;
+            url += "&characterID=" + selectedCharacterID;
             if (rowCount) {
+                storageName += "_rc=" + rowCount;
                 url += "&rowCount=" + rowCount;
             }
             else {
+                storageName += "_rc=50";
                 url += "&rowCount=50";
             }
             if (fromID) {
+                storageName += "_fid=" + fromID;
                 url += "&fromID=" + fromID;
             }
-            $.ajax({
-                url: url,
-                error: function (xhr, status, error) {
-                    showError("Wallet Journal", xhr, status, error);
-                    // TODO: implement fancy error logging
-                },
-                success: function (xml) {
-                    parseWalletJournal(xml, charID);
-                }
-            });
+            if (!$.totalStorage(storageName) || isCacheExpired($.totalStorage(storageName)['eveapi']['cachedUntil']['#text'])) {
+                $.ajax({
+                    url: url,
+                    error: function (xhr, status, error) {
+                        showError("Wallet Journal", xhr, status, error);
+                        // TODO: implement fancy error logging
+                    },
+                    success: function (xml) {
+                        data = xmlToJson(xml);
+                        $.totalStorage(storageName, data);
+                        parseWalletJournal(data);
+                    }
+                });
+            }
+            else {
+                data = $.totalStorage(storageName);
+                parseWalletJournal(data);
+            }
         }
 
-        function parseWalletJournal(xml, charID) {
-            var rows = xml.getElementsByTagName("row");
-            var ownerName1;
-            var ownerID1;
-            var date;
-            var amount;
-            var refTypeID;
-            var balance;
-            var refID;
-            var color;
-            if (rows.length != 0) {
-                for (var i2 = 0; i2 < rows.length; i2++) {
-                    var row = rows[i2];
-                    ownerName1 = "X";
-                    date = row.getAttribute("date");
-                    amount = row.getAttribute("amount");
-                    refTypeID = refTypes[row.getAttribute("refTypeID")];
-                    balance = row.getAttribute("balance");
-                    refID = row.getAttribute("refID");
-                    if (amount < 0) {
-                        color = "red";
-                    }
-                    else {
+        function parseWalletJournal(data) {
+            var rows = data["eveapi"]["result"]["rowset"]["row"];
+            if (rows && rows.length != 0) {
+                var ownerName1, ownerID1, date, amount, refTypeID, balance, refID, color;
+                for (var i = 0; i < rows.length; i++) {
+                    var row = rows[i];
+                    ownerName1 = "";
+                    color = "red";
+                    date = row['@attributes']['date'];
+                    amount = row['@attributes']['amount'];
+                    refTypeID = refTypes[row['@attributes']['refTypeID']];
+                    balance = row['@attributes']['balance'];
+                    refID = row['@attributes']['refID'];
+                    if (amount >= 0) {
                         color = "green";
-                        ownerName1 = row.getAttribute("ownerName1");
-                        ownerID1 = row.getAttribute("ownerID1");
+                        ownerName1 = row['@attributes']['ownerName1'];
+                        ownerID1 = row['@attributes']['ownerID1'];
                     }
                     var output = '';
                     output += '<tr>';
                     output += '<td data-label="Date">' + date + '</td>';
                     output += '<td data-label="refType">' + refTypeID + '</td>';
-                    if (ownerName1 != "X") {
+                    if (ownerName1 != "") {
                         output += '<td data-label="From">';
                         if (parseInt(ownerID1).between(90000000, 100000000, true)) {
                             output += '<a class="' + ownerID1 + '" onclick="getCharDataFromID(' + "'" + ownerID1 + "'" + ')">' + ownerName1 + '</a>';
@@ -200,11 +218,11 @@ include __DIR__ . '/nav.php'; ?>
                     output += '</tr>';
                     $('#WalletJournalBody').append(output);
                 }
-                $('#moreJournal50').attr('onclick', 'getWalletJournal("' + keyID + '", "' + vCode + '", "' + charID + '", "50", "' + refID + '")');
-                $('#moreJournal100').attr('onclick', 'getWalletJournal("' + keyID + '", "' + vCode + '", "' + charID + '", "100", "' + refID + '")');
-                $('#moreJournal250').attr('onclick', 'getWalletJournal("' + keyID + '", "' + vCode + '", "' + charID + '", "250", "' + refID + '")');
-                $('#moreJournal1000').attr('onclick', 'getWalletJournal("' + keyID + '", "' + vCode + '", "' + charID + '", "1000", "' + refID + '")');
-                $('#moreJournalAll').attr('onclick', 'getWalletJournal("' + keyID + '", "' + vCode + '", "' + charID + '", "2560", "' + refID + '")');
+                $('#moreJournal50').attr('onclick', 'getWalletJournal("50", "' + refID + '")');
+                $('#moreJournal100').attr('onclick', 'getWalletJournal("100", "' + refID + '")');
+                $('#moreJournal250').attr('onclick', 'getWalletJournal("250", "' + refID + '")');
+                $('#moreJournal1000').attr('onclick', 'getWalletJournal("1000", "' + refID + '")');
+                $('#moreJournalAll').attr('onclick', 'getWalletJournal("2560", "' + refID + '")');
             }
             else {
                 $('#moreJournal').html('There is no (more) journal info available.');
@@ -212,56 +230,60 @@ include __DIR__ . '/nav.php'; ?>
             $('#loadingiconW').html('');
         }
 
-        function getWalletTransactions(keyID, vCode, charID, rowCount, fromID) {
+        function getWalletTransactions(rowCount, fromID) {
+            var data;
             $('#loadingiconT').html('<i class="fa fa-spin fa-circle-o-notch"></i>');
+            var storageName = "walletTransactions_" + keyID + selectedCharacterID;
             var url = "https://api.eveonline.com/char/WalletTransactions.xml.aspx?";
             url += "keyID=" + keyID;
             url += "&vCode=" + vCode;
-            url += "&characterID=" + charID;
+            url += "&characterID=" + selectedCharacterID;
             if (rowCount) {
+                storageName += "_rc=" + rowCount;
                 url += "&rowCount=" + rowCount;
             }
             else {
+                storageName += "_rc=50";
                 url += "&rowCount=50";
             }
             if (fromID) {
+                storageName += "_fid=" + fromID;
                 url += "&fromID=" + fromID;
             }
-            $.ajax({
-                url: url,
-                error: function (xhr, status, error) {
-                    showError("Wallet Transactions", xhr, status, error);
-                    // TODO: implement fancy error logging
-                },
-                success: function (xml) {
-                    parseWalletTransactions(xml, charID);
-                }
-            });
+            if (!$.totalStorage(storageName) || isCacheExpired($.totalStorage(storageName)['eveapi']['cachedUntil']['#text'])) {
+                $.ajax({
+                    url: url,
+                    error: function (xhr, status, error) {
+                        showError("Wallet Transactions", xhr, status, error);
+                        // TODO: implement fancy error logging
+                    },
+                    success: function (xml) {
+                        data = xmlToJson(xml);
+                        $.totalStorage(storageName, data);
+                        parseWalletTransactions(data);
+                    }
+                });
+            }
+            else {
+                data = $.totalStorage(storageName);
+                parseWalletTransactions(data);
+            }
         }
 
-        function parseWalletTransactions(xml, charID) {
-            var date;
-            var quantity;
-            var typeName;
-            var typeID;
-            var price;
-            var clientName;
-            var transactionType;
-            var transactionID;
-            var color;
-            var info;
-            var rows = xml.getElementsByTagName("row");
-            if (rows.length != 0) {
-                for (var i2 = 0; i2 < rows.length; i2++) {
-                    var row = rows[i2];
-                    date = row.getAttribute("transactionDateTime");
-                    quantity = row.getAttribute("quantity");
-                    typeName = row.getAttribute("typeName");
-                    typeID = row.getAttribute("typeID");
-                    price = row.getAttribute("price");
-                    clientName = row.getAttribute("clientName");
-                    transactionType = row.getAttribute("transactionType");
-                    transactionID = row.getAttribute("transactionID");
+        function parseWalletTransactions(data) {
+            var rows = data["eveapi"]["result"]["rowset"]["row"];
+            if (rows && rows.length != 0) {
+                var date, quantity, typeName, typeID, price, clientName, transactionType, transactionID, color, info;
+                for (var i = 0; i < rows.length; i++) {
+                    var row = rows[i];
+                    date = row['@attributes']['transactionDateTime'];
+                    quantity = row['@attributes']['quantity'];
+                    typeName = row['@attributes']['typeName'];
+                    typeID = row['@attributes']['typeID'];
+                    price = row['@attributes']['price'];
+                    clientName = row['@attributes']['clientName'];
+                    transactionType = row['@attributes']['transactionType'];
+                    transactionID = row['@attributes']['transactionID'];
                     if (transactionType == "buy") {
                         color = "red";
                         info = " bought from ";
@@ -272,11 +294,11 @@ include __DIR__ . '/nav.php'; ?>
                     }
                     $('#WalletTransactionsBody').append('<tr><td data-label="Date">' + date + '</td><td data-label="Information">' + quantity + ' x <a onclick="getItemData(' + "'" + typeID + "'" + ')">' + typeName + '</a>' + info + ' <a onclick="getCharData(' + "'" + clientName + "'" + ')">' + clientName + '</a></td><td data-label="Price" style="color: ' + color + '">' + (parseFloat(price * quantity)).formatMoney(2, ',', '.') + ' ISK (' + (parseFloat(price)).formatMoney(2, ',', '.') + ' ISK per item)</td></tr>');
                 }
-                $('#moreTransactions50').attr('onclick', 'getWalletTransactions("' + keyID + '", "' + vCode + '", "' + charID + '", "50", "' + transactionID + '")');
-                $('#moreTransactions100').attr('onclick', 'getWalletTransactions("' + keyID + '", "' + vCode + '", "' + charID + '", "100", "' + transactionID + '")');
-                $('#moreTransactions250').attr('onclick', 'getWalletTransactions("' + keyID + '", "' + vCode + '", "' + charID + '", "250", "' + transactionID + '")');
-                $('#moreTransactions1000').attr('onclick', 'getWalletTransactions("' + keyID + '", "' + vCode + '", "' + charID + '", "1000", "' + transactionID + '")');
-                $('#moreTransactionsAll').attr('onclick', 'getWalletTransactions("' + keyID + '", "' + vCode + '", "' + charID + '", "2560", "' + transactionID + '")');
+                $('#moreTransactions50').attr('onclick', 'getWalletTransactions("50", "' + transactionID + '")');
+                $('#moreTransactions100').attr('onclick', 'getWalletTransactions("100", "' + transactionID + '")');
+                $('#moreTransactions250').attr('onclick', 'getWalletTransactions("250", "' + transactionID + '")');
+                $('#moreTransactions1000').attr('onclick', 'getWalletTransactions("1000", "' + transactionID + '")');
+                $('#moreTransactionsAll').attr('onclick', 'getWalletTransactions("2560", "' + transactionID + '")');
             }
             else {
                 $('#moreTransactions').html('There is no (more) transaction info available.');
