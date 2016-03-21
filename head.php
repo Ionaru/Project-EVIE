@@ -6,82 +6,51 @@ session_start();
 include __DIR__ . '/loginapp.php';
 
 $title = '';
-$dashboardactive = '';
-$dashboardactivembl = '';
-$skillsactive = '';
-$skillsactivembl = '';
-$mailactive = '';
-$mailactivembl = '';
-$marketactive = '';
-$marketactivembl = '';
-$walletactive = '';
-$walletactivembl = '';
-$assetsactive = '';
-$assetsactivembl = '';
-$contactsactive = '';
-$contactsactivembl = '';
-$planetsactive = '';
-$planetsactivembl = '';
-$industryactive = '';
-$industryactivembl = '';
-$calendaractive = '';
-$calendaractivembl = '';
-$apikeysactive = '';
-$apikeysactivembl = '';
 $disabled = '';
+$disabled_m = '';
 
 $url = $_SERVER['REQUEST_URI'];
 switch ($url) {
     case (strpos($url, 'index.php') !== false):
         $title = 'Dashboard';
-        $dashboardactive = ' nav_active';
         break;
     case (strpos($url, 'character.php') !== false):
         $title = 'Character Sheet';
         break;
     case (strpos($url, 'mail.php') !== false):
         $title = 'Eve Mail';
-        $mailactive = ' nav_active';
         break;
     case (strpos($url, 'skills.php') !== false):
         $title = 'Skills';
-        $skillsactive = ' nav_active';
         break;
     case (strpos($url, 'market.php') !== false):
         $title = 'Market';
-        $marketactive = ' nav_active';
         break;
     case (strpos($url, 'wallet.php') !== false):
         $title = 'Wallet';
-        $walletactive = ' nav_active';
         break;
     case (strpos($url, 'assets.php') !== false):
         $title = 'Assets';
-        $assetsactive = ' nav_active';
         break;
     case (strpos($url, 'contacts.php') !== false):
         $title = 'Contacts';
-        $contactsactive = ' nav_active';
         break;
     case (strpos($url, 'industry.php') !== false):
         $title = 'Industry';
-        $industryactive = ' nav_active';
         break;
     case (strpos($url, 'calendar.php') !== false):
         $title = 'Calendar';
-        $calendaractive = ' nav_active';
         break;
     case (strpos($url, 'planets.php') !== false):
         $title = 'Planets';
-        $planetsactive = ' nav_active';
         break;
     case (strpos($url, 'account.php') !== false):
         $title = 'Account';
         $disabled = 'disabled ';
+        $disabled_m = 'disabled_m ';
         break;
     case (strpos($url, 'apikeys.php') !== false):
         $title = 'Key Management';
-        $apikeysactive = ' nav_active';
         break;
     default:
         $title = 'Unknown';

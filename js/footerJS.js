@@ -2,6 +2,15 @@ $(function () {
     $('[data-toggle="tooltip"]').tooltip()
 });
 
+$(function(){
+    $('a').each(function() {
+        if ($(this).prop('href') == window.location.href) {
+            $(this).addClass('nav_active');
+            $(this).parent().addClass('nav_active');
+        }
+    });
+});
+
 var currentTime;
 var serverOpen = "False";
 var onlinePlayers = 0;

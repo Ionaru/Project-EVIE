@@ -162,6 +162,10 @@ a.disabled {
     pointer-events: none;
 }
 
+button.disabled_m {
+    display: none;
+}
+
 @media (min-width: 560px) {
     .col-xs-3.visible-xs {
         width: calc(100% / 7);
@@ -172,4 +176,17 @@ a.disabled {
     .col-xs-3.visible-xs {
         width: calc(100% / 7);
     }
+}
+
+.navbar-inverse .navbar-toggle {
+    border-color: transparent;
+    border-radius: 0; !important;
+}
+
+.navbar-inverse .navbar-toggle .icon-bar {
+    background-color: #9d9d9d; !important;
+}
+
+.navbar-inverse .navbar-toggle:focus, .navbar-inverse .navbar-toggle:hover {
+    background-color: #205079;
 }
