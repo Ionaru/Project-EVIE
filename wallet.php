@@ -2,7 +2,7 @@
 include __DIR__ . '/head.php';
 include __DIR__ . '/nav.php'; ?>
     <div id="WalletContent" class="container-fluid">
-        <a data-toggle="tooltip" data-placement="left" title="Back to top" href="#" class="back-to-top">Back to Top</a>
+        <a href="#" class="back-to-top"></a>
     </div>
 <?php include __DIR__ . '/foot.php'; ?>
 
