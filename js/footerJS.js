@@ -4,7 +4,10 @@ $(function () {
 
 $(function(){
     $('a').each(function() {
-        if ($(this).prop('href') == window.location.href) {
+        var s = window.location.href;
+        var n = s.indexOf('?');
+        s = s.substring(0, n != -1 ? n : s.length);
+        if ($(this).prop('href') == s) {
             $(this).addClass('nav_active');
             $(this).parent().addClass('nav_active');
         }
