@@ -144,6 +144,8 @@ function get_string_between($string, $start, $end)
           content="Project EVIE is a web-app that displays data from the EVE Online API system, the purpose of it is to provide a fast and secure way of checking information from an account.">
     <meta name="author" content="Name: Jeroen Akkerman, Email: jeroen.akkerman@outlook.com, In-game: Ionaru Otsada">
     <meta name="theme-color" content="#202020">
+    <meta name="mobile-web-app-capable" content="yes">
+    <link rel="mobile_manifest" href="config/mobile_manifest.json">
     <link rel="icon"
           href="http://www.iconwanted.com/downloads/exhumed/mega-games-pack-17-icons-by-exhumed/png/128x128/eve-online-1.png">
     <title>Project EVIE - <?php echo $title; ?></title>
