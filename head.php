@@ -34,56 +34,46 @@ $url = $_SERVER['REQUEST_URI'];
 switch ($url) {
     case (strpos($url, 'index.php') !== false):
         $title = 'Dashboard';
-        $dashboardactive = ' sidebar_active';
-        $dashboardactivembl = 'style="background-color: #404040;"';
+        $dashboardactive = ' nav_active';
         break;
     case (strpos($url, 'character.php') !== false):
         $title = 'Character Sheet';
         break;
     case (strpos($url, 'mail.php') !== false):
         $title = 'Eve Mail';
-        $mailactive = ' sidebar_active';
-        $mailactivembl = 'style="background-color: #404040;"';
+        $mailactive = ' nav_active';
         break;
     case (strpos($url, 'skills.php') !== false):
         $title = 'Skills';
-        $skillsactive = ' sidebar_active';
-        $skillsactivembl = 'style="background-color: #404040;"';
+        $skillsactive = ' nav_active';
         break;
     case (strpos($url, 'market.php') !== false):
         $title = 'Market';
-        $marketactive = ' sidebar_active';
-        $marketactivembl = 'style="background-color: #404040;"';
+        $marketactive = ' nav_active';
         break;
     case (strpos($url, 'wallet.php') !== false):
         $title = 'Wallet';
-        $walletactive = ' sidebar_active';
-        $walletactivembl = 'style="background-color: #404040;"';
+        $walletactive = ' nav_active';
         break;
     case (strpos($url, 'assets.php') !== false):
         $title = 'Assets';
-        $assetsactive = ' sidebar_active';
-        $assetsactivembl = 'style="background-color: #404040;"';
+        $assetsactive = ' nav_active';
         break;
     case (strpos($url, 'contacts.php') !== false):
         $title = 'Contacts';
-        $contactsactive = ' sidebar_active';
-        $contactsactivembl = 'style="background-color: #404040;"';
+        $contactsactive = ' nav_active';
         break;
     case (strpos($url, 'industry.php') !== false):
         $title = 'Industry';
-        $industryactive = ' sidebar_active';
-        $industryactivembl = 'style="background-color: #404040;"';
+        $industryactive = ' nav_active';
         break;
     case (strpos($url, 'calendar.php') !== false):
         $title = 'Calendar';
-        $calendaractive = ' sidebar_active';
-        $calendaractivembl = 'style="background-color: #404040;"';
+        $calendaractive = ' nav_active';
         break;
     case (strpos($url, 'planets.php') !== false):
         $title = 'Planets';
-        $planetsactive = ' sidebar_active';
-        $planetsactivembl = 'style="background-color: #404040;"';
+        $planetsactive = ' nav_active';
         break;
     case (strpos($url, 'account.php') !== false):
         $title = 'Account';
@@ -91,8 +81,7 @@ switch ($url) {
         break;
     case (strpos($url, 'apikeys.php') !== false):
         $title = 'Key Management';
-        $apikeysactive = ' top_active';
-        $apikeysactivembl = 'style="background-color: #404040;"';
+        $apikeysactive = ' nav_active';
         break;
     default:
         $title = 'Unknown';

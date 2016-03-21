@@ -17,7 +17,7 @@
             incorrect.
             <br>
             Please report any issues to the <a target="_blank" href="https://github.com/Ionaru/Project-EVIE/issues">
-                issue tracker</a>.</p>
+                issue tracker</a> and contribute on <a target="_blank" href="https://github.com/Ionaru/Project-EVIE">Github</a>!</p>
         <p>Material related to EVE Online is used with limited permission of CCP Games hf. No official affiliation or
             endorsement by CCP Games hf is stated or implied.</p>
     </div>
