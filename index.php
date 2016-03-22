@@ -2,12 +2,12 @@
 include __DIR__ . '/head.php';
 include __DIR__ . '/nav.php'; ?>
 
+    <h2>Characters</h2>
+    <div id="CharacterDivs" class="row placeholders"></div>
+    <hr>
     <h2>Account Information</h2>
     <div id="AccountInfo"></div>
-    <hr>
-    <h2>Characters</h2>
-    <div id="CharacterDivs" class="row placeholders">
-    </div>
+
 
 <?php include __DIR__ . '/foot.php'; ?>
 
@@ -16,7 +16,7 @@ include __DIR__ . '/nav.php'; ?>
             getAccountInfo(keyID, vCode);
             for (i = 0; i < charIDs.length; i++) {
                 $('#CharacterDivs').append('' +
-                    '<div class="col-xs-6 col-sm-3 col-md-2 placeholder">' +
+                    '<div class="col-xs-6 col-sm-4 placeholder">' +
                     '<a id="CharacterDivLink' + (i + 1) + '" style="cursor: pointer;" onclick="getCharDataFromID(' + "'" + charIDs[i] + "'" + ')">' +
                     '<img id="ImageAccount1Character' + (i + 1) + '" src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" width="200" height="200" class="img-responsive" alt="Generic placeholder thumbnail">' +
                     '<h4 id="NameAccount1Character' + (i + 1) + '"></h4>' +
