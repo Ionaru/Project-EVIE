@@ -12,8 +12,10 @@ include __DIR__ . '/nav.php'; ?>
 <?php include __DIR__ . '/foot.php'; ?>
 
     <script>
-        function executePage() {
-            getAccountInfo(keyID, vCode);
+        function executePage(refresh = false) {
+            $('#CharacterDivs').html('');
+            $('#AccountInfo').html('');
+            getAccountInfo(refresh, keyID, vCode);
             for (i = 0; i < charIDs.length; i++) {
                 $('#CharacterDivs').append('' +
                     '<div class="col-xs-6 col-sm-4 placeholder">' +
@@ -27,16 +29,16 @@ include __DIR__ . '/nav.php'; ?>
                     '</div>');
                 $("#NameAccount1Character" + (i + 1)).html("<strong>" + charNames[i] + "</strong>");
 
-                getBalance(keyID, vCode, charIDs, i);
-                getSkillInTraining(keyID, vCode, charIDs, i);
+                getBalance(refresh, keyID, vCode, charIDs, i);
+                getSkillInTraining(refresh, keyID, vCode, charIDs, i);
             }
             for (var i = 0; i < charIDs.length; i++) {
-                document.getElementById("ImageAccount1Character" + (i + 1)).src = "https://image.eveonline.com/Character/" + charIDs[i] + "_256.jpg";
+                $('#ImageAccount1Character' + (i + 1)).attr('src', 'https://image.eveonline.com/Character/' + charIDs[i] + '_256.jpg')
             }
         }
 
-        function getAccountInfo(keyID, vCode) {
-            if(!$.totalStorage('accountInfo_' + keyID) || isCacheExpired($.totalStorage('accountInfo_' + keyID)['eveapi']['cachedUntil']['#text'])){
+        function getAccountInfo(refresh, keyID, vCode) {
+            if (!$.totalStorage('accountInfo_' + keyID) || isCacheExpired($.totalStorage('accountInfo_' + keyID)['eveapi']['cachedUntil']['#text']) || refresh) {
                 $.ajax({
                     url: "https://api.eveonline.com/account/AccountStatus.xml.aspx?keyID=" + keyID + "&vCode=" + vCode,
                     error: function (xhr, status, error) {
@@ -56,7 +58,7 @@ include __DIR__ . '/nav.php'; ?>
             }
         }
 
-        function parseAccountInfo(data){
+        function parseAccountInfo(data) {
             var paidUntil = data['eveapi']['result']['paidUntil']['#text'];
             var createDate = data['eveapi']['result']['createDate']['#text'];
             var logonCount = data['eveapi']['result']['logonCount']['#text'];
@@ -73,8 +75,8 @@ include __DIR__ . '/nav.php'; ?>
             parseTimeRemaining(0, logonTime, "#playTime", false, "No time at all");
         }
 
-        function getBalance(keyID, vCode, charIDs, i) {
-            if(!$.totalStorage('characterBalance_' + keyID + charIDs[i]) || isCacheExpired($.totalStorage('characterBalance_' + keyID + charIDs[i])['eveapi']['cachedUntil']['#text'])){
+        function getBalance(refresh, keyID, vCode, charIDs, i) {
+            if (!$.totalStorage('characterBalance_' + keyID + charIDs[i]) || isCacheExpired($.totalStorage('characterBalance_' + keyID + charIDs[i])['eveapi']['cachedUntil']['#text']) || refresh) {
                 $.ajax({
                     url: "https://api.eveonline.com/char/AccountBalance.xml.aspx?keyID=" + keyID + "&vCode=" + vCode + "&characterID=" + charIDs[i],
                     error: function (xhr, status, error) {
@@ -93,14 +95,14 @@ include __DIR__ . '/nav.php'; ?>
             }
         }
 
-        function parseBalance(data, i){
+        function parseBalance(data, i) {
             var balance;
             balance = data['eveapi']['result']['rowset']['row']['@attributes']['balance'];
-            document.getElementById("BalanceAccount1Character" + (i + 1)).innerHTML = '<a href="wallet.php?c=' + i + '">' + (parseFloat(balance)).formatMoney(2, ',', '.') + " ISK</a>";
+            $('#BalanceAccount1Character' + (i + 1)).html('<a href="wallet.php?c=' + i + '">' + (parseFloat(balance)).formatMoney(2, ',', '.') + ' ISK</a>');
         }
 
-        function getSkillInTraining(keyID, vCode, charIDs, i) {
-            if(!$.totalStorage('skillInTraining_' + keyID + charIDs[i]) || isCacheExpired($.totalStorage('skillInTraining_' + keyID + charIDs[i])['eveapi']['cachedUntil']['#text'])){
+        function getSkillInTraining(refresh, keyID, vCode, charIDs, i) {
+            if (!$.totalStorage('skillInTraining_' + keyID + charIDs[i]) || isCacheExpired($.totalStorage('skillInTraining_' + keyID + charIDs[i])['eveapi']['cachedUntil']['#text']) || refresh) {
                 $.ajax({
                     url: "https://api.eveonline.com/char/SkillInTraining.xml.aspx?keyID=" + keyID + "&vCode=" + vCode + "&characterID=" + charIDs[i],
                     error: function (xhr, status, error) {
@@ -113,13 +115,13 @@ include __DIR__ . '/nav.php'; ?>
                     }
                 });
             }
-            else{
+            else {
                 var data = $.totalStorage('skillInTraining_' + keyID + charIDs[i]);
                 parseSkillInTraining(data, i);
             }
         }
 
-        function parseSkillInTraining(data, i){
+        function parseSkillInTraining(data, i) {
             if (data['eveapi']['result']['trainingTypeID']) {
                 var skillIDs = [];
                 var skillID = data['eveapi']['result']['trainingTypeID']['#text'];
@@ -127,11 +129,11 @@ include __DIR__ . '/nav.php'; ?>
                 var skillLvl = data['eveapi']['result']['trainingToLevel']['#text'];
                 var trainingEndTime = data['eveapi']['result']['trainingEndTime']['#text'];
                 getTypeNames(skillIDs);
-                document.getElementById("SkillAccount1Character" + (i + 1)).innerHTML = '<a id="skillCharacter' + i + '" href="skills.php?c=' + i + '""><span id="' + skillID + '">Placeholder</span> ' + skillLvl + '</a><br><span id="countdown' + i + '"></span>';
+                $('#SkillAccount1Character' + (i + 1)).html('<a id="skillCharacter' + i + '" href="skills.php?c=' + i + '""><span id="' + skillID + '">Placeholder</span> ' + skillLvl + '</a><br><span id="countdown' + i + '"></span>');
                 parseTimeRemaining(currentTime, trainingEndTime, "#countdown" + i, true, "Skill training completed!");
             }
             else {
-                document.getElementById("SkillAccount1Character" + (i + 1)).innerHTML = '<a href="skills.php?c=' + i + '">No skill in training</a>';
+                $('#SkillAccount1Character' + (i + 1)).html('<a href="skills.php?c=' + i + '">No skill in training</a>');
             }
         }
     </script>

@@ -77,6 +77,17 @@ if (isset($_GET['c']) && ((int)$_GET['c'] === 0 || (int)$_GET['c'] === 1 || (int
     $selectedChar = $_GET['c'];
 }
 
+function createRandomString(){
+    $str = '';
+    $keyspace = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    $length = 10;
+    $max = strlen($keyspace) - 1;
+    for ($i = 0; $i < $length; ++$i) {
+        $str .= $keyspace[random_int(0, $max)];
+    }
+    return $str;
+}
+
 function get_string_between($string, $start, $end)
 {
     $string = ' ' . $string;

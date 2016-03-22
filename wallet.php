@@ -19,7 +19,7 @@ include __DIR__ . '/nav.php'; ?>
         });
 
         function executePage() {
-            $('#WalletContent').append('' +
+            $('#WalletContent').html('').append('' +
                 '<h2>Current balance: ' +
                 '<br class="visible-xs"/>' +
                 '<span id="balanceSpan"></span>' +

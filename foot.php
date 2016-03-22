@@ -6,12 +6,14 @@
             echo '<input id="passAlong_keyID" type="hidden" value="' . $_SESSION['keyID'] . '" />';
             echo '<input id="passAlong_vCode" type="hidden" value="' . $_SESSION['vCode'] . '" />';
             echo '<input id="passAlong_selectedCharacter" type="hidden" value="' . $_SESSION['selectedCharacter'] . '" />';
-            //echo '<input id="passAlong_selectedCharacter" type="hidden" value="' . $_GET['char'] . '" />';
         }
         ?>
 
         <p>Project EVIE, created by <a onclick="getCharData('Ionaru Otsada')">Ionaru Otsada.</a></p>
         <br>
+        <p><strong>- Debug -</strong></p>
+        <button id="refreshAPI" class="btn btn-danger" onclick="refreshAPI(5)">Force API refresh</button>
+        <br><br>
         <p><strong>- Disclaimer -</strong></p>
         <p>Project EVIE is still in ongoing development, many features are missing and any data displayed may be
             incorrect.

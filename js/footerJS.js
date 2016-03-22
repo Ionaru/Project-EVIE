@@ -136,6 +136,20 @@ function timeKeeper(){
     var timer = setInterval(doTimeTick, 60000);
 }
 
+function refreshAPI(timeOut){
+    $('#refreshAPI').attr('disabled', true).html('Please wait... <span id="cooldown">' + timeOut + '</span>');
+    function doTimeTick(){
+        timeOut -= 1;
+        $('#cooldown').html(timeOut);
+        if(timeOut == 0){
+            clearInterval(timer);
+            $('#refreshAPI').attr('disabled', false).html('Force API refresh');
+        }
+    }
+    var timer = setInterval(doTimeTick, 1000);
+    executePage(true);
+}
+
 function displayTime(h, m){
     hours = parseInt(h);
     minutes = parseInt(m);
