@@ -2,11 +2,11 @@
 include __DIR__ . '/head.php';
 include __DIR__ . '/nav.php';
 
-if (isset ($_GET['action'], $_GET['id'])) {
-    doAction($_GET['action'], $_GET['id']);
-} else if (isset ($_GET['action']) && !isset ($_GET['id'])) {
-    $id = 0;
-    doAction($_GET['action'], $id);
+if (isset ($_GET['action'], $_GET['pid'])) {
+    doAction($_GET['action'], $_GET['pid']);
+} else if (isset ($_GET['action']) && !isset ($_GET['pid'])) {
+    $pid = '0';
+    doAction($_GET['action'], $pid);
 }
 
 function getAPIInfo($keyID, $vCode)
@@ -14,14 +14,14 @@ function getAPIInfo($keyID, $vCode)
     $map_url = 'https://api.eveonline.com//account/APIKeyInfo.xml.aspx?keyID=' . $keyID . '&vCode=' . $vCode;
     if (($response_xml_data = file_get_contents($map_url)) === false) {
         echo '<script type="text/javascript">';
-        echo 'alert("The key you entered could not be verified.")';
+        echo 'alert("The key you entered appears to be invalid or could not be verified.")';
         echo '</script>';
     } else {
         libxml_use_internal_errors(true);
         $data = $response_xml_data;
         if (!$data) {
             echo '<script type="text/javascript">';
-            echo 'alert("The key you entered could not be verified.")';
+            echo 'alert("The key you entered appears to be invalid or could not be verified.")';
             echo '</script>';
         } else {
             return $data;
@@ -41,12 +41,12 @@ function checkForError($data)
     return $data->error['code'];
 }
 
-function doAction($action, $id)
+function doAction($action, $pid)
 {
     if ($action === 'setActive') {
-        setActive($id);
+        setActive($pid);
     } else if ($action === 'delete') {
-        deleteKey($id);
+        deleteKey($pid);
     } else if ($action === 'addKey') {
         addKey();
     }
@@ -54,17 +54,29 @@ function doAction($action, $id)
 
 function addKey()
 {
-
     $db_connection = createDatabaseConnection();
+    $pid = '0';
     $keyName = $_POST['keyName'];
     $keyID = $_POST['keyID'];
     $vCode = $_POST['vCode'];
     $keyXML = getAPIInfo($keyID, $vCode);
     if ($keyXML !== '') {
+        $uniquepid = false;
+        while(!$uniquepid){
+            $pid = createRandomString();
+            $pidcheck = 'SELECT apikey_pid FROM apikeys WHERE apikey_pid=\'' . $pid . '\';';
+            $others = 0;
+            foreach ($db_connection->query($pidcheck) as $row) {
+                $others++;
+            }
+            if($others === 0){
+                $uniquepid = true;
+            }
+        }
         setAllKeysInactive();
         $keyType = getAPIType($keyXML);
         $isActive = 1;
-        $sql = 'INSERT INTO apikeys (user_name,apikey_name,apikey_keyid,apikey_vcode,apikey_type,apikey_isactive) VALUES (\'' . $_SESSION['user_name'] . '\',\'' . $keyName . '\',\'' . $keyID . '\',\'' . $vCode . '\',\'' . $keyType . '\',\'' . $isActive . '\');';
+        $sql = 'INSERT INTO apikeys (apikey_pid,user_name,apikey_name,apikey_keyid,apikey_vcode,apikey_type,apikey_isactive) VALUES (\'' . $pid . '\',\'' . $_SESSION['user_name'] . '\',\'' . $keyName . '\',\'' . $keyID . '\',\'' . $vCode . '\',\'' . $keyType . '\',\'' . $isActive . '\');';
         $db_connection->exec($sql);
         $_SESSION['keyID'] = $keyID;
         $_SESSION['vCode'] = $vCode;
@@ -79,22 +91,18 @@ function setAllKeysInactive()
     $db_connection->exec($sql2);
 }
 
-function setActive($id)
+function setActive($pid)
 {
     $db_connection = createDatabaseConnection();
-    $sql = 'SELECT user_name,apikey_keyid,apikey_vcode,apikey_isactive FROM apikeys WHERE apikey_id=' . $id . ';';
+    $sql = 'SELECT user_name,apikey_keyid,apikey_vcode,apikey_isactive FROM apikeys WHERE apikey_pid=\'' . $pid . '\';';
     $rows = 0;
     foreach ($db_connection->query($sql) as $row) {
         $rows++;
-
         if ($row['user_name'] === $_SESSION['user_name']) {
-            error_log('[TEST]  '.$row['apikey_isactive']);
             if ((int) $row['apikey_isactive'] === 0) {
-                error_log('[TEST]  '.$row['apikey_isactive']);
-                $sql2 = 'UPDATE `apikeys` SET `apikey_isactive`= 1 WHERE `apikey_id`=\'' . $id . '\'';
+                setAllKeysInactive();
+                $sql2 = 'UPDATE `apikeys` SET `apikey_isactive`= 1 WHERE `apikey_pid`=\'' . $pid . '\'';
                 $db_connection->exec($sql2);
-                $sql3 = 'UPDATE `apikeys` SET `apikey_isactive`= 0 WHERE `apikey_vcode`=\'' . $_SESSION['vCode'] . '\'';
-                $db_connection->exec($sql3);
                 $_SESSION['keyID'] = $row['apikey_keyid'];
                 $_SESSION['vCode'] = $row['apikey_vcode'];
                 $_SESSION['selectedCharacter'] = 0;
@@ -112,15 +120,15 @@ function setActive($id)
     }
 }
 
-function deleteKey($id)
+function deleteKey($pid)
 {
     $db_connection = createDatabaseConnection();
-    $sql = 'SELECT user_name FROM apikeys WHERE apikey_id=' . $id . ';';
+    $sql = 'SELECT user_name FROM apikeys WHERE apikey_pid=\'' . $pid . '\';';
     $rows = 0;
     foreach ($db_connection->query($sql) as $row) {
         $rows++;
         if ($row['user_name'] === $_SESSION['user_name']) {
-            $sql2 = 'DELETE FROM `apikeys` WHERE `user_name` =\'' . $_SESSION['user_name'] . '\' AND `apikey_id`=\'' . $id . '\'';
+            $sql2 = 'DELETE FROM `apikeys` WHERE `user_name` =\'' . $_SESSION['user_name'] . '\' AND `apikey_pid`=\'' . $pid . '\';';
             $db_connection->exec($sql2);
             unset($_SESSION['keyID'], $_SESSION['vCode']);
         } else {
@@ -169,7 +177,7 @@ function getUserAPIKeys()
     global $apikey_dateadded;
     $sql = 'SELECT * FROM apikeys WHERE user_name = \'' . $_SESSION['user_name'] . '\'';
     foreach ($db_connection->query($sql) as $row) {
-        $apikey_id = $row['apikey_id'];
+        $apikey_pid = $row['apikey_pid'];
         $apikey_name = $row['apikey_name'];
         $apikey_keyid = $row['apikey_keyid'];
         $apikey_vcode = $row['apikey_vcode'];
@@ -184,9 +192,9 @@ function getUserAPIKeys()
             $_SESSION['selectedCharacter'] = 0;
         } else {
             echo '<tr>';
-            echo '<td class="text-right"><a class="btn btn-success btn-sm pull-left" href="?id=' . $apikey_id . '&action=setActive"><i class="fa fa-check"></i> Set active</a>';
+            echo '<td class="text-right"><a class="btn btn-success btn-sm pull-left" href="?pid=' . $apikey_pid . '&action=setActive"><i class="fa fa-check"></i> Set active</a>';
         }
-        echo ' <a class="btn btn-danger btn-sm" href="?id=' . $apikey_id . '&action=delete"><i class="fa fa-times"></i> Delete</a></td>';
+        echo ' <a class="btn btn-danger btn-sm" href="?pid=' . $apikey_pid . '&action=delete"><i class="fa fa-times"></i> Delete</a></td>';
         echo '<td data-label="Key Name">' . $apikey_name . '</td>';
         echo '<td class="hidden-xs">' . $apikey_keyid . '</td>';
         echo '<td class="hidden-xs">' . $apikey_vcode . '</td>';

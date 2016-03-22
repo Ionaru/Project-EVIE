@@ -72,17 +72,38 @@ class OneFileLoginApplication
 
     private function doTempLogin()
     {
-        if ($this->checkTempDataNotEmpty()) {
-            $this->doStartSession();
-            $keyID = $_POST['keyID'];
-            $vCode = $_POST['vCode'];
-            $_SESSION['keyID'] = $keyID;
-            $_SESSION['vCode'] = $vCode;
-            $_SESSION['selectedCharacter'] = 0;
-            $this->user_is_logged_in = true;
-            header('Location: index.php');
-            die();
+        if ($this->checkTempDataNotEmpty() && $this->checkValid($_POST['keyID'], $_POST['vCode'])) {
+                $this->doStartSession();
+                $keyID = $_POST['keyID'];
+                $vCode = $_POST['vCode'];
+                $_SESSION['keyID'] = $keyID;
+                $_SESSION['vCode'] = $vCode;
+                $_SESSION['selectedCharacter'] = 0;
+                $this->user_is_logged_in = true;
+                header('Location: index.php');
+                die();
         }
+    }
+
+    private function checkValid($keyID, $vCode)
+    {
+        $map_url = 'https://api.eveonline.com//account/APIKeyInfo.xml.aspx?keyID=' . $keyID . '&vCode=' . $vCode;
+        if (($response_xml_data = file_get_contents($map_url)) === false) {
+            echo '<script type="text/javascript">';
+            echo 'alert("The key you entered appears to be invalid or could not be verified.")';
+            echo '</script>';
+        } else {
+            libxml_use_internal_errors(true);
+            $data = $response_xml_data;
+            if (!$data) {
+                echo '<script type="text/javascript">';
+                echo 'alert("The key you entered appears to be invalid or could not be verified.")';
+                echo '</script>';
+            } else {
+                return true;
+            }
+        }
+        return false;
     }
 
     private function createDatabaseConnection()
@@ -499,20 +520,31 @@ class OneFileLoginApplication
         $result_row = $query->fetchObject();
         if ($result_row) {
             echo '<script type="text/javascript">';
-            echo 'alert("Sorry, that username / email is already taken. Please choose another one.")';
+            echo 'alert("Sorry, that username or email is already taken. Please choose another one.")';
             echo '</script>';
             return true;
         } else {
-            $sql = 'INSERT INTO users (user_name, user_password_hash, user_email)
-                    VALUES(:user_name, :user_password_hash, :user_email)';
+            $uniquepid = false;
+            $pid = '0';
+            while(!$uniquepid){
+                $pid = createRandomString();
+                $pidcheck = 'SELECT apikey_pid FROM users WHERE apikey_pid=\'' . $pid . '\';';
+                $others = 0;
+                foreach ($this->db_connection->query($pidcheck) as $row) {
+                    $others++;
+                }
+                if($others === 0){
+                    $uniquepid = true;
+                }
+            }
+            $sql = 'INSERT INTO users (user_name, user_pid, user_password_hash, user_email)
+                    VALUES(:user_name, :user_pid, :user_password_hash, :user_email)';
             $query = $this->db_connection->prepare($sql);
             $query->bindValue(':user_name', $user_name);
+            $query->bindValue(':user_pid', $pid);
             $query->bindValue(':user_password_hash', $user_password_hash);
             $query->bindValue(':user_email', $user_email);
-            // PDO's execute() gives back TRUE when successful, FALSE when not
-            // @link http://stackoverflow.com/q/1661863/1114320
             $registration_success_state = $query->execute();
-
             if ($registration_success_state) {
                 echo '<script type="text/javascript">';
                 echo 'alert("Your account has been created successfully. You can now log in.")';
