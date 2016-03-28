@@ -13,7 +13,6 @@ if (isset ($_SESSION['selectedCharacter'])) {
 } else {
     $selectedChar = 0;
 }
-$settingscss = '"max-height: 50px; background-color: #404040; border-top: 3px solid #337ab7;"';
 $url = $_SERVER['REQUEST_URI'];
 ?>
 
