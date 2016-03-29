@@ -29,15 +29,15 @@ include __DIR__ . '/nav.php'; ?>
                     '</div>');
                 $("#NameAccount1Character" + (i + 1)).html("<strong>" + charNames[i] + "</strong>");
 
-                getBalance(refresh, keyID, vCode, charIDs, i);
-                getSkillInTraining(refresh, keyID, vCode, charIDs, i);
+                getBalance(refresh, charIDs, i);
+                getSkillInTraining(refresh, charIDs, i);
             }
             for (var i = 0; i < charIDs.length; i++) {
                 $('#ImageAccount1Character' + (i + 1)).attr('src', 'https://image.eveonline.com/Character/' + charIDs[i] + '_256.jpg')
             }
         }
 
-        function getAccountInfo(refresh, keyID, vCode) {
+        function getAccountInfo(refresh) {
             if (!$.totalStorage('accountInfo_' + keyID) || isCacheExpired($.totalStorage('accountInfo_' + keyID)['eveapi']['cachedUntil']['#text']) || refresh) {
                 $.ajax({
                     url: "https://api.eveonline.com/account/AccountStatus.xml.aspx?keyID=" + keyID + "&vCode=" + vCode,
@@ -75,7 +75,7 @@ include __DIR__ . '/nav.php'; ?>
             parseTimeRemaining(0, logonTime, "#playTime", false, "No time at all");
         }
 
-        function getBalance(refresh, keyID, vCode, charIDs, i) {
+        function getBalance(refresh, charIDs, i) {
             if (!$.totalStorage('characterBalance_' + keyID + charIDs[i]) || isCacheExpired($.totalStorage('characterBalance_' + keyID + charIDs[i])['eveapi']['cachedUntil']['#text']) || refresh) {
                 $.ajax({
                     url: "https://api.eveonline.com/char/AccountBalance.xml.aspx?keyID=" + keyID + "&vCode=" + vCode + "&characterID=" + charIDs[i],
@@ -101,7 +101,7 @@ include __DIR__ . '/nav.php'; ?>
             $('#BalanceAccount1Character' + (i + 1)).html('<a href="wallet.php?c=' + i + '">' + (parseFloat(balance)).formatMoney(2, ',', '.') + ' ISK</a>');
         }
 
-        function getSkillInTraining(refresh, keyID, vCode, charIDs, i) {
+        function getSkillInTraining(refresh, charIDs, i) {
             if (!$.totalStorage('skillInTraining_' + keyID + charIDs[i]) || isCacheExpired($.totalStorage('skillInTraining_' + keyID + charIDs[i])['eveapi']['cachedUntil']['#text']) || refresh) {
                 $.ajax({
                     url: "https://api.eveonline.com/char/SkillInTraining.xml.aspx?keyID=" + keyID + "&vCode=" + vCode + "&characterID=" + charIDs[i],

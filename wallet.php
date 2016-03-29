@@ -18,7 +18,7 @@ include __DIR__ . '/nav.php'; ?>
             }
         });
 
-        function executePage() {
+        function executePage(refresh = false) {
             $('#WalletContent').html('').append('' +
                 '<h2>Current balance: ' +
                 '<br class="visible-xs"/>' +
@@ -64,13 +64,13 @@ include __DIR__ . '/nav.php'; ?>
                 '<a id="moreTransactions1000">1000</a> ' +
                 '<a id="moreTransactionsAll">Max</a></span> ' +
                 '<span id="loadingiconT"></span>');
-            getRefTypes();
-            getBalance();
+            getRefTypes(refresh);
+            getBalance(refresh);
         }
 
-        function getRefTypes() {
+        function getRefTypes(refresh) {
             var data;
-            if (!$.totalStorage('refIDs') || isCacheExpired($.totalStorage('refIDs')['eveapi']['cachedUntil']['#text'])) {
+            if (!$.totalStorage('refIDs') || isCacheExpired($.totalStorage('refIDs')['eveapi']['cachedUntil']['#text']) || refresh) {
                 $.ajax({
                     url: "https://api.eveonline.com/eve/RefTypes.xml.aspx",
                     error: function (xhr, status, error) {
@@ -84,8 +84,8 @@ include __DIR__ . '/nav.php'; ?>
                             refTypes[rows[i]['@attributes']['refTypeID']] = rows[i]['@attributes']['refTypeName'];
                         }
                         $.totalStorage('refIDs', data);
-                        getWalletJournal();
-                        getWalletTransactions();
+                        getWalletJournal(refresh);
+                        getWalletTransactions(refresh);
                     }
                 });
             }
@@ -95,14 +95,14 @@ include __DIR__ . '/nav.php'; ?>
                 for (var i = 0; i < rows.length; i++) {
                     refTypes[rows[i]['@attributes']['refTypeID']] = rows[i]['@attributes']['refTypeName'];
                 }
-                getWalletJournal();
-                getWalletTransactions();
+                getWalletJournal(refresh);
+                getWalletTransactions(refresh);
             }
         }
 
-        function getBalance() {
+        function getBalance(refresh) {
             var data;
-            if (!$.totalStorage('characterBalance_' + keyID + selectedCharacterID) || isCacheExpired($.totalStorage('characterBalance_' + keyID + selectedCharacterID)['eveapi']['cachedUntil']['#text'])) {
+            if (!$.totalStorage('characterBalance_' + keyID + selectedCharacterID) || isCacheExpired($.totalStorage('characterBalance_' + keyID + selectedCharacterID)['eveapi']['cachedUntil']['#text']) || refresh) {
                 $.ajax({
                     url: "https://api.eveonline.com/char/AccountBalance.xml.aspx?keyID=" + keyID + "&vCode=" + vCode + "&characterID=" + selectedCharacterID,
                     error: function (xhr, status, error) {
@@ -136,7 +136,7 @@ include __DIR__ . '/nav.php'; ?>
             animation.start();
         }
 
-        function getWalletJournal(rowCount, fromID) {
+        function getWalletJournal(rowCount, fromID, refresh) {
             var data;
             $('#loadingiconW').html('<i class="fa fa-spin fa-circle-o-notch"></i>');
             var url = "https://api.eveonline.com/char/WalletJournal.xml.aspx?";
@@ -156,7 +156,7 @@ include __DIR__ . '/nav.php'; ?>
                 storageName += "_fid=" + fromID;
                 url += "&fromID=" + fromID;
             }
-            if (!$.totalStorage(storageName) || isCacheExpired($.totalStorage(storageName)['eveapi']['cachedUntil']['#text'])) {
+            if (!$.totalStorage(storageName) || isCacheExpired($.totalStorage(storageName)['eveapi']['cachedUntil']['#text']) || refresh) {
                 $.ajax({
                     url: url,
                     error: function (xhr, status, error) {
@@ -230,7 +230,7 @@ include __DIR__ . '/nav.php'; ?>
             $('#loadingiconW').html('');
         }
 
-        function getWalletTransactions(rowCount, fromID) {
+        function getWalletTransactions(rowCount, fromID, refresh) {
             var data;
             $('#loadingiconT').html('<i class="fa fa-spin fa-circle-o-notch"></i>');
             var storageName = "walletTransactions_" + keyID + selectedCharacterID;
@@ -250,7 +250,7 @@ include __DIR__ . '/nav.php'; ?>
                 storageName += "_fid=" + fromID;
                 url += "&fromID=" + fromID;
             }
-            if (!$.totalStorage(storageName) || isCacheExpired($.totalStorage(storageName)['eveapi']['cachedUntil']['#text'])) {
+            if (!$.totalStorage(storageName) || isCacheExpired($.totalStorage(storageName)['eveapi']['cachedUntil']['#text']) || refresh) {
                 $.ajax({
                     url: url,
                     error: function (xhr, status, error) {

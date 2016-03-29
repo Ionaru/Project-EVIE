@@ -52,6 +52,7 @@ jQuery(document).ready(function () {
 
     $.when( characterIDs, serverStatus ).done(function () {
         executePage();
+        buttonCooldown(5);
     });
 
     function doCharInit(){
@@ -137,6 +138,11 @@ function timeKeeper(){
 }
 
 function refreshAPI(timeOut){
+    buttonCooldown(timeOut);
+    executePage(true);
+}
+
+function buttonCooldown(timeOut){
     $('#refreshAPI').attr('disabled', true).html('Please wait... <span id="cooldown">' + timeOut + '</span>');
     function doTimeTick(){
         timeOut -= 1;
@@ -147,7 +153,6 @@ function refreshAPI(timeOut){
         }
     }
     var timer = setInterval(doTimeTick, 1000);
-    executePage(true);
 }
 
 function displayTime(h, m){
