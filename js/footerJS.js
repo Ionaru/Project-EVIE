@@ -16,18 +16,10 @@ $(function(){
     });
 });
 
-var currentTime;
+var currentTime, keyID, vCode, selectedCharacter, selectedCharacterID, hours, minutes, seconds;
 var serverOpen = "False";
 var onlinePlayers = 0;
-var keyID;
-var vCode;
-var selectedCharacter;
-var selectedCharacterID;
-var charIDs = [];
-var charNames = [];
-var hours;
-var minutes;
-var seconds;
+var charIDs, charNames = [];
 
 jQuery(document).ready(function () {
     $('#browser').append(window.navigator.userAgent);
@@ -235,15 +227,7 @@ function getCharDataFromID(charID) {
 }
 
 function parseCharacterData(xml, charID){
-    var charName;
-    var charRace;
-    var bloodline;
-    var ancestry;
-    var corpName;
-    var corpDate;
-    var allianceName;
-    var allianceDate;
-    var securityStatus;
+    var charName, charRace, bloodline, ancestry, corpName, corpDate, allianceName, allianceDate, securityStatus;
     charName = xml.getElementsByTagName("characterName")[0].childNodes[0].nodeValue;
     charRace = xml.getElementsByTagName("race")[0].childNodes[0].nodeValue;
     bloodline = xml.getElementsByTagName("bloodline")[0].childNodes[0].nodeValue;
