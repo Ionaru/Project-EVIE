@@ -1,7 +1,7 @@
 # Evie
 
-Project EVIE is an API data checker for the game EVE Online. it will fetch information from the EVE Online API servers and display it on the webpage.
-My goal is to build a mobile-friendly website that will always display the most recent data, without the need to refresh the page each time. 
+Project EVIE is an API data checker for the game EVE Online. it will fetch information from the EVE Online API servers and display it on a webpage.
+My goal is to build a mobile-friendly website that will always display the most recent available data when the page loads.
 
 
 #####The website is created using:
