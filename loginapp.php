@@ -151,7 +151,6 @@ class OneFileLoginApplication
      */
     private function doStartSession()
     {
-        session_set_cookie_params(7200);
         if (session_status() === PHP_SESSION_NONE) {
             session_start();
         }
@@ -376,7 +375,8 @@ class OneFileLoginApplication
                 FROM users
                 WHERE user_name = :user_name OR user_email = :user_name
                 LIMIT 1';
-        $query = $this->db_connection->prepare($sql);
+        $query = $this->db_connection;
+        $query->prepare($sql);
         $query->bindValue(':user_name', $_POST['user_name']);
         $query->execute();
 
@@ -399,7 +399,8 @@ class OneFileLoginApplication
                 FROM apikeys
                 WHERE user_name = :user_name AND apikey_isactive = 1
                 LIMIT 1';
-                $query2 = $this->db_connection->prepare($sql2);
+                $query2 = $this->db_connection;
+                $query2->prepare($sql2);
                 $query2->bindValue(':user_name', $_SESSION['user_name']);
                 $query2->execute();
                 $result_row2 = $query2->fetchObject();
@@ -435,9 +436,10 @@ class OneFileLoginApplication
         }
 
         // validating the input
+        /** @noinspection NotOptimalIfConditionsInspection */
         if (!empty($_POST['user_name'])
-            && strlen($_POST['user_name']) <= 16
-            && strlen($_POST['user_name']) >= 2
+            && (strlen($_POST['user_name']) >= 2
+            && strlen($_POST['user_name']) <= 16)
             && preg_match('/^[a-z\d]{2,16}$/i', $_POST['user_name'])
             && !empty($_POST['user_email'])
             && strlen($_POST['user_email']) <= 64
@@ -465,9 +467,13 @@ class OneFileLoginApplication
             echo '<script type="text/javascript">';
             echo 'alert("Password has a minimum length of 6 characters")';
             echo '</script>';
-        } elseif (strlen($_POST['user_name']) > 64 || strlen($_POST['user_name']) < 2) {
+        } elseif (strlen($_POST['user_name']) < 2) {
             echo '<script type="text/javascript">';
-            echo 'alert("Username cannot be shorter than 2 or longer than 16 characters")';
+            echo 'alert("Username cannot be shorter than 2 characters")';
+            echo '</script>';
+        } elseif (strlen($_POST['user_name']) > 16) {
+            echo '<script type="text/javascript">';
+            echo 'alert("Username cannot be longer than 16 characters")';
             echo '</script>';
         } elseif (!preg_match('/^[a-z\d]{2,64}$/i', $_POST['user_name'])) {
             echo '<script type="text/javascript">';
@@ -510,7 +516,8 @@ class OneFileLoginApplication
         $user_password_hash = password_hash($user_password, PASSWORD_DEFAULT);
 
         $sql = 'SELECT * FROM users WHERE user_name = :user_name OR user_email = :user_email';
-        $query = $this->db_connection->prepare($sql);
+        $query = $this->db_connection;
+        $query->prepare($sql);
         $query->bindValue(':user_name', $user_name);
         $query->bindValue(':user_email', $user_email);
         $query->execute();
@@ -539,7 +546,8 @@ class OneFileLoginApplication
             }
             $sql = 'INSERT INTO users (user_name, user_pid, user_password_hash, user_email)
                     VALUES(:user_name, :user_pid, :user_password_hash, :user_email)';
-            $query = $this->db_connection->prepare($sql);
+            $query = $this->db_connection;
+            $query->prepare($sql);
             $query->bindValue(':user_name', $user_name);
             $query->bindValue(':user_pid', $pid);
             $query->bindValue(':user_password_hash', $user_password_hash);
