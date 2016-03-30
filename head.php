@@ -116,7 +116,7 @@ function get_string_between($string, $start, $end)
     <meta name="mobile-web-app-capable" content="yes">
     <link rel="mobile_manifest" href="config/mobile_manifest.json">
     <link rel="icon"
-          href="http://www.iconwanted.com/downloads/exhumed/mega-games-pack-17-icons-by-exhumed/png/128x128/eve-online-1.png">
+          href="eve_fav.png">
     <title>Project EVIE - <?php echo $title; ?></title>
     <link rel="stylesheet" href="css/bootstrap.min.css">
     <link rel="stylesheet" href="css/font-awesome.min.css">

@@ -19,7 +19,7 @@ $(function(){
 var currentTime, keyID, vCode, selectedCharacter, selectedCharacterID, hours, minutes, seconds;
 var serverOpen = "False";
 var onlinePlayers = 0;
-var charIDs, charNames = [];
+var charIDs = [], charNames = [];
 
 jQuery(document).ready(function () {
     $('#browser').append(window.navigator.userAgent);
