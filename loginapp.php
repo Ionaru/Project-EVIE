@@ -398,8 +398,7 @@ class OneFileLoginApplication
                 FROM apikeys
                 WHERE user_name = :user_name AND apikey_isactive = 1
                 LIMIT 1';
-                $query2 = $this->db_connection;
-                $query2->prepare($sql2);
+                $query2 = $this->db_connection->prepare($sql2);
                 $query2->bindValue(':user_name', $_SESSION['user_name']);
                 $query2->execute();
                 $result_row2 = $query2->fetchObject();
