@@ -1,0 +1,23 @@
+* {
+  // Set box-sizing: border-box on every element
+  box-sizing: border-box;
+}
+
+html {
+  // Never hide the scrollbar, this messes with modals
+  overflow-y: scroll !important;
+
+  body {
+    // Set some standard rendering as the defaults might vary between browsers and operating systems
+    font-family: "Source Sans Pro", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 14px;
+    line-height: 1.42857143;
+    color: $eve_text_color;
+    background-color: $eve_ore_content;
+    margin: 0;
+
+    .my-content, .error-div, footer {
+      text-align: center;
+    }
+  }
+}

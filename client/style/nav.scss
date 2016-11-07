@@ -1,0 +1,201 @@
+/*
+ * Base structure
+ */
+
+/* Move down content because we have a fixed navbar that is 55px tall */
+body {
+  padding-top: 55px;
+
+  .navbar {
+    position: fixed;
+    right: 0;
+    left: 0;
+    z-index: 1030;
+    background-color: red;
+    min-height: 50px;
+    margin-bottom: 20px;
+    top: 0;
+  }
+}
+
+.navbar-brand {
+  cursor:default;
+}
+
+.navbar-inverse .navbar-brand:hover{
+  color: #9d9d9d;
+}
+
+.navbar-fixed-top {
+  box-sizing: border-box;
+  border: 0;
+  border-top: 5px solid #205079;
+  background-color: #202020;
+}
+
+/*
+ * Sidebar
+ */
+
+/* Hide for mobile, show later */
+.sidebar {
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .main {
+    padding-right: 40px;
+    padding-left: 10px;
+  }
+  .sidebar {
+    max-width: 80px;
+    position: fixed;
+    top: 50px;
+    bottom: 0;
+    left: 0;
+    z-index: 1000;
+    display: block;
+    padding: 20px;
+    overflow-x: hidden;
+    overflow-y: auto; /* Scrollable contents if viewport is shorter than content. */
+    background-color: #202020;
+    border-right: 5px solid #205079;
+  }
+  .nav-sidebar>li:last-child {
+    position: absolute;
+    bottom: 0;
+  }
+
+}
+
+/* Sidebar navigation */
+.nav-sidebar {
+  margin-right: -23px; /* 20px padding + 1px border */
+  margin-bottom: 20px;
+  margin-left: -20px;
+}
+
+.nav-sidebar > li > a {
+  padding-right: 20px;
+  padding-left: 20px;
+}
+
+/*
+ * Main content
+ */
+
+.main {
+  padding: 20px;
+}
+
+.main .page-header {
+  margin-top: 0;
+}
+
+.sidebarimg {
+  width: 40px;
+  height: 40px;
+}
+
+.top_bar_button {
+  background-size: 100% 200%;
+  background-image: linear-gradient(to bottom, #202020 50%, #205079 50%);
+  -webkit-transition: all .15s ease-in-out;
+  -moz-transition: all .15s ease-in-out;
+  transition: all 0.15s ease-in-out;
+}
+
+.top_bar_button:focus, .top_bar_button:hover {
+  background-position: 0 -100%;
+}
+
+.top_active, .top_active:hover, .top_active:focus {
+  background-color: #205079 !important;
+  background-image: initial;
+}
+
+.sidebar_button {
+  background-size: 200% 100%;
+  background-image: linear-gradient(to right, #202020 50%, #205079 50%);
+  -webkit-transition: background-position .15s ease-in-out;
+  -moz-transition: background-position .15s ease-in-out;
+  transition: background-position .15s ease-in-out;
+}
+
+.sidebar_button:focus, .sidebar_button:hover {
+  background-position: 100% 0;
+}
+
+.nav_active {
+  background-color: #205079 !important;
+  background-image: initial;
+}
+
+.characterActive {
+  max-height: 50px;
+  background-color: #205079 !important;
+}
+
+.characterInactive {
+  max-height: 50px;
+  background-size: 100% 200%;
+  background-image: linear-gradient(to bottom, #202020 50%, #205079 50%);
+  -webkit-transition: background-position .15s;
+  -moz-transition: background-position .15s;
+  transition: background-position .15s;
+}
+
+.characterInactive:hover, .characterInactive:focus {
+  background-position: 0 -100%;
+}
+
+.mobile_nav_box{
+  border-bottom: 5px solid #205079;
+}
+
+.mobile_nav_image {
+  width: 100%;
+}
+
+.EVETime{
+  color: #9d9d9d;
+  -webkit-transition: all .15s ease-in-out;
+  -moz-transition: all .15s ease-in-out;
+  transition: all 0.15s ease-in-out;
+}
+
+.nav>li>a:focus, .nav>li>a:hover{
+  color: #fff;
+}
+
+a.disabled {
+  pointer-events: none;
+}
+
+button.disabled_m {
+  display: none;
+}
+
+@media (min-width: 560px) {
+  .col-xs-3.visible-xs {
+    width: calc(100% / 7);
+  }
+}
+
+@media screen and (orientation:landscape) {
+  .col-xs-3.visible-xs {
+    width: calc(100% / 7);
+  }
+}
+
+.navbar-inverse .navbar-toggle {
+  border-color: transparent;
+}
+
+.navbar-inverse .navbar-toggle .icon-bar {
+  background-color: #9d9d9d;
+}
+
+.navbar-inverse .navbar-toggle:focus, .navbar-inverse .navbar-toggle:hover {
+  background-color: transparent;
+}
