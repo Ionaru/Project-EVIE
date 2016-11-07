@@ -1,13 +1,3 @@
-404.php
-*.htaccess
-403.php
-config/EVIEdatabase.ini
-config/EVIEmail.ini
-Project EVIE.iml
-Project_EVIE.iml
-icons/
-items/
-
 .idea
 *.iml
 /client/public/stylesheets
@@ -23,5 +13,5 @@ items/
 /config/crts
 /config/database.ini
 /config/database_test.ini
-/config/config.ini
-/config/config_test.ini
+/config/main.ini
+/config/main_test.ini

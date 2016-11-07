@@ -20,7 +20,7 @@ loadConfig = (configName, allowedMissing) ->
 ###
   Load configuration from config files
 ###
-global.mainConfig = loadConfig('config', false)
+global.mainConfig = loadConfig('main', false)
 global.dbConfig = loadConfig('database', false)
 
 ###

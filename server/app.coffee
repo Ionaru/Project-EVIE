@@ -72,7 +72,18 @@ app.all '/*', require('./routes/global')
 ###
   Register the rest of the routes the application should use
 ###
-app.use '/', require('./routes/index')
+app.use '/', require('./routes/index') # Main page
+app.use '/apikeys', require('./routes/index') # Main page
+app.use '/dashboard', require('./routes/index') # Main page
+app.use '/skills', require('./routes/index') # Main page
+app.use '/contacts', require('./routes/index') # Main page
+app.use '/mail', require('./routes/index') # Main page
+app.use '/market', require('./routes/index') # Main page
+app.use '/wallet', require('./routes/index') # Main page
+app.use '/assets', require('./routes/index') # Main page
+app.use '/planets', require('./routes/index') # Main page
+app.use '/industry', require('./routes/index') # Main page
+app.use '/calendar', require('./routes/index') # Main page
 
 ###
   Register a 404 error page
