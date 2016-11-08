@@ -26,9 +26,9 @@ exports.compileStylesheets = (done) ->
     Minify the compiled CSS and write a source map if the application is in DEV mode
   ###
   CleanCSS = require('clean-css')
-  await new CleanCSS({sourceMap: result.map.toString(), target: outputDirNameStyle}).minify(result.css, defer(error, result))
+  await new CleanCSS({sourceMap: result.map.toString()}).minify(result.css, defer(error, result))
   if DEVMODE
-    fs.writeFileSync(outputDirNameStyle + 'style.css', result.styles.toString() + "/*# sourceMappingURL=style.css.map */")
+    fs.writeFileSync(outputDirNameStyle + 'style.css', result.styles.toString() + " /*# sourceMappingURL=style.css.map */")
     fs.writeFileSync(outputDirNameStyle + 'style.css.map', result.sourceMap.toString())
   else
     fs.writeFileSync(outputDirNameStyle + 'style.css', result.styles)
