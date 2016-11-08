@@ -3,13 +3,22 @@
   box-sizing: border-box;
 }
 
+@font-face {
+  font-family: eve-font;
+  src: url(../fonts/evesansneue-regular.otf);
+}
+@font-face {
+  font-family: eve-font-bold;
+  src: url(../fonts/evesansneue-bold.otf);
+}
+
 html {
   // Never hide the scrollbar, this messes with modals
   overflow-y: scroll !important;
 
   body {
     // Set some standard rendering as the defaults might vary between browsers and operating systems
-    font-family: "Source Sans Pro", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-family: "eve-font", sans-serif;
     font-size: 14px;
     line-height: 1.42857143;
     color: $eve_text_color;

@@ -13,20 +13,78 @@ body {
     z-index: 1030;
     background-color: $eve_ore_body;
     min-height: 50px;
-    margin-bottom: 20px;
     top: 0;
-    border-top: 5px solid $eve_skill_training;
+    border-top: 1px solid $eve_ore_button_active;
+    .navbar-brand {
+      font-family: "eve-font-bold", sans-serif;
+      color: $eve_text_color_bold;
+      //font-weight: bold;
+      float: left;
+      //height: 50px;
+      padding: 14px 14px;
+      font-size: 18px;
+      line-height: 20px;
+      cursor: pointer;
+      text-decoration: none;
+    }
+    .navbar-item {
+      background-size: 100% 200%;
+      background-image: linear-gradient(to bottom, transparent 50%, $eve_ore_button_active 50%);
+      transition: all 0.15s ease-in-out;
+      color: $eve_text_color;
+      text-decoration: none;
+      float: left;
+      padding: 14px 14px;
+      //background-color: red;
+      &:hover {
+        color: $eve_text_color_bold;
+        background-position: 0 -100%;
+      }
+    }
   }
 
   .navbar-side {
+    padding-top: 50px;
     position: fixed;
     left: 0;
     z-index: 1029;
     background-color: $eve_ore_body;
-    min-width: 80px;
+    min-width: 60px;
+    max-width: 60px;
     top: 0;
-    bottom:0;
-    border-right: 5px solid $eve_skill_training;
+    bottom: 0;
+    border-right: 1px solid $eve_ore_button_active;
+    text-align: center;
+    * {
+      max-height: 50px;
+    }
+    .navbar-item {
+      margin-top: 5px;
+      margin-bottom: 5px;
+      display: block;
+      background-size: 200% 100%;
+      background-image: linear-gradient(to right, transparent 50%, $eve_ore_button_active 50%);
+      transition: background-position 0.15s ease-in-out, color 0.15s ease-in-out;
+      img {
+        transition: filter 0.2s linear;
+      }
+      &:hover {
+        color: $eve_text_color_bold;
+        background-position: 100% 0;
+        img {
+          filter: brightness(150%);
+          //filter: contrast(5);
+        }
+      }
+      &.time {
+        margin-bottom: 0;
+        position: absolute;
+        width: 100%;
+        bottom: 0;
+        padding-top: 10px;
+        padding-bottom: 10px;
+      }
+    }
   }
 }
 

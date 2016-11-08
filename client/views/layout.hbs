@@ -4,8 +4,21 @@
     {{> header }}
 </head>
 <body>
-<nav class="navbar-top"></nav>
-<nav class="navbar-side"></nav>
+<nav class="navbar-top">
+    <a href="dashboard" class="navbar-brand">
+            Project EVIE 2.0 - Dashboard
+        </a>
+    <a href="thing" class="navbar-item">API Keys</a>
+    <a class="navbar-item">Logout</a>
+    <!--<a class="navbar-item">Item 3</a>-->
+</nav>
+<nav class="navbar-side">
+    <a href="thing" class="navbar-item"><img src="//data.saturnserver.org/eve/Icons/UI/WindowIcons/assetscorp.svg"></a>
+    <a href="thing" class="navbar-item"><img src="//data.saturnserver.org/eve/Icons/UI/WindowIcons/attributes.svg"></a>
+    <a class="navbar-item"></a>
+    <a class="navbar-item"></a>
+    <a class="navbar-item time">12:34</a>
+</nav>
 <div class="content">
     {{{body}}}
 </div>
