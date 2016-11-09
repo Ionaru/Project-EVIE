@@ -79,7 +79,7 @@ app.use '/skills', require('./routes/index') # Main page
 app.use '/contacts', require('./routes/index') # Main page
 app.use '/mail', require('./routes/index') # Main page
 app.use '/market', require('./routes/index') # Main page
-app.use '/wallet', require('./routes/index') # Main page
+app.use '/wallet', require('./routes/wallet') # Main page
 app.use '/assets', require('./routes/index') # Main page
 app.use '/planets', require('./routes/index') # Main page
 app.use '/industry', require('./routes/index') # Main page

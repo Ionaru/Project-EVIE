@@ -25,8 +25,13 @@ html {
     background-color: $eve_ore_content;
     margin: 0;
 
-    .my-content, .error-div, footer {
+    .error-div, footer {
       text-align: center;
+    }
+
+    a {
+      color: $eve_skill_training;
+      text-decoration: none;
     }
   }
 }
