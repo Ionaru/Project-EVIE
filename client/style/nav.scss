@@ -1,82 +1,80 @@
-$navbar_top_height: 50px;
-$navbar_side_width: 60px;
+.navbar-top {
+  z-index: 1;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  background-color: $eve_ore_body;
+  min-height: $navbar_top_height;
+  border-bottom: 1px solid $eve_ore_button_active;
+  box-shadow: 0 2px 5px 0 rgba(0,0,0,0.75);
+  height: 50px;
+  .navbar-brand {
+    font-family: "eve-font-bold", sans-serif;
+    color: $eve_text_color_bold;
+    float: left;
+    padding: 14px 14px;
+    font-size: 18px;
+    line-height: 20px;
+    cursor: pointer;
+    text-decoration: none;
+  }
+  .navbar-item {
+    height: 100%;
+    background-size: 100% 200%;
+    background-image: linear-gradient(to bottom, transparent 50%, $eve_ore_button_active 50%);
+    transition: all 0.15s ease-in-out;
+    color: $eve_text_color;
+    text-decoration: none;
+    float: left;
+    padding: 14px 14px;
 
-body {
-  padding: ($navbar_top_height + 5px) 5px 5px ($navbar_side_width + 5px);
-
-  .navbar-top {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    background-color: $eve_ore_body;
-    min-height: $navbar_top_height;
-    border-top: 1px solid $eve_ore_button_active;
-    .navbar-brand {
-      font-family: "eve-font-bold", sans-serif;
+    &:hover {
       color: $eve_text_color_bold;
-      float: left;
-      padding: 14px 14px;
-      font-size: 18px;
-      line-height: 20px;
-      cursor: pointer;
-      text-decoration: none;
-    }
-    .navbar-item {
-      background-size: 100% 200%;
-      background-image: linear-gradient(to bottom, transparent 50%, $eve_ore_button_active 50%);
-      transition: all 0.15s ease-in-out;
-      color: $eve_text_color;
-      text-decoration: none;
-      float: left;
-      padding: 14px 14px;
-
-      &:hover {
-        color: $eve_text_color_bold;
-        background-position: 0 -100%;
-      }
+      background-position: 0 100%;
     }
   }
+}
 
-  .navbar-side {
-    position: fixed;
-    top: $navbar_top_height;
-    left: 0;
-    bottom: 0;
-    background-color: $eve_ore_body;
-    width: $navbar_side_width;
-    border-right: 1px solid $eve_ore_button_active;
-    text-align: center;
-    max-width: 100%;
-    .navbar-item {
-      color: $eve_text_color;
-      text-decoration: none;
-      padding-top: 5px;
-      padding-bottom: 5px;
-      display: block;
-      background-size: 200% 100%;
-      background-image: linear-gradient(to right, transparent 50%, $eve_ore_button_active 50%);
-      transition: background-position 0.15s ease-in-out, color 0.15s ease-in-out;
+.navbar-side {
+  position: fixed;
+  top: $navbar_top_height;
+  left: 0;
+  bottom: 0;
+  background-color: $eve_ore_body;
+  width: $navbar_side_width;
+  border-right: 1px solid $eve_ore_button_active;
+  text-align: center;
+  max-width: 100%;
+  box-shadow: 2px 0 5px 0 rgba(0,0,0,0.75);
+  .navbar-item {
+    color: $eve_text_color;
+    text-decoration: none;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    display: block;
+    background-size: 200% 100%;
+    background-image: linear-gradient(to right, transparent 50%, $eve_ore_button_active 50%);
+    transition: background-position 0.15s ease-in-out, color 0.15s ease-in-out;
+    img {
+      transition: filter 0.2s linear;
+      vertical-align: middle;
+      max-width: 85%;
+    }
+    &:hover {
+      color: $eve_text_color_bold;
+      background-position: 100% 0;
       img {
-        transition: filter 0.2s linear;
-        vertical-align: middle;
-        max-width: 85%;
+        filter: brightness(150%);
       }
-      &:hover {
-        color: $eve_text_color_bold;
-        background-position: 100% 0;
-        img {
-          filter: brightness(150%);
-        }
-      }
-      &.time {
-        margin-bottom: 0;
-        position: absolute;
-        width: 100%;
-        bottom: 0;
-        padding-top: 10px;
-        padding-bottom: 10px;
-      }
+    }
+    &.time {
+      margin-bottom: 0;
+      position: absolute;
+      width: 100%;
+      bottom: 0;
+      padding-top: 10px;
+      padding-bottom: 10px;
     }
   }
 }

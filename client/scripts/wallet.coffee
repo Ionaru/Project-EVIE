@@ -2,7 +2,6 @@ refTypes = []
 amountScrolled = 300
 
 executePage = (refresh = false) ->
-  $('#WalletContent').html('' + '<h2>Current balance: ' + '<br class="visible-xs"/>' + '<span id="balanceSpan"></span>' + '</h2>' + '<a class="anchor" name="Journal"></a>' + '<h2 class="walletHead">Journal</h2>' + '<a href="#Transactions"> Jump to Transactions</a>' + '<table class="journalTable table">' + '<thead><tr>' + '<th>Date (EVE Time)</th>' + '<th>Type</th>' + '<th>From</th>' + '<th>Amount</th>' + '<th>Balance</th>' + '</tr></thead>' + '<tbody id="WalletJournalBody"></tbody>' + '</table>' + '<span id="moreJournal">Load more entries ' + '<a id="moreJournal50">50</a> ' + '<a id="moreJournal100">100</a> ' + '<a id="moreJournal250">250</a> ' + '<a id="moreJournal1000">1000</a> ' + '<a id="moreJournalAll">Max</a>' + '</span> ' + '<span id="loadingiconW"></span>' + '<hr>' + '<a class="anchor" name="Transactions"></a>' + '<h2 class="walletHead">Transactions</h2>' + '<a href="#Journal"> Jump to Journal</a>' + '<table class="transactionsTable table">' + '<thead><tr>' + '<th class="Date">Date (EVE Time)</th>' + '<th>Information</th>' + '<th>Price</th>' + '</tr></thead>' + '<tbody id="WalletTransactionsBody"></tbody>' + '</table>' + '<span id="moreTransactions">Load more entries ' + '<a id="moreTransactions50">50</a> ' + '<a id="moreTransactions100">100</a> ' + '<a id="moreTransactions250">250</a> ' + '<a id="moreTransactions1000">1000</a> ' + '<a id="moreTransactionsAll">Max</a></span> ' + '<span id="loadingiconT"></span>')
   getRefTypes refresh
   getBalance refresh
   return
@@ -64,10 +63,8 @@ parseBalance = (data) ->
     useGrouping: true
     separator: '.'
     decimal: ','
-    prefix: ''
     suffix: ' ISK'
-  animation = new CountUp('balanceSpan', 0, balance, 2, 1, options)
-  animation.start()
+  new CountUp('balanceSpan', 0, balance, 2, 1, options).start()
   return
 
 @getWalletJournal = (rowCount, fromID, refresh) ->
