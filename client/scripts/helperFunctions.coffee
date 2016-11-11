@@ -151,10 +151,13 @@ problems = 0
   return
 
 @Pluralize = (Single, Plural, number) ->
+  ###
+    Helper to show the correct word for a dynamic number
+  ###
   if number == 1
-    Single
+    return Single
   else
-    Plural
+    return Plural
 
 @Number::formatMoney = (c, d, t) ->
   i = undefined
@@ -200,14 +203,12 @@ problems = 0
   $('#alertBox').append '<div id="problemBox' + problems + '"><p>- ' + '<a data-toggle="collapse" href="#problem' + problems + '" aria-expanded="false" aria-controls="problem' + problems + '">Problem #' + problems + '</a>' + ' - There was an error in the \'' + module + '\' module.</p>' + '<div class="collapse" id="problem' + problems + '">' + '<hr>' + '<p class="errorText">Problem #' + problems + ' details:<br>' + ' > HTTP response: ' + response + '<br>' + ' > API error code: ' + errorcode + '<br>' + ' > API error text: ' + errortext + '</p>' + '<p>Please search for this issue on the <a target="_blank" href="https://github.com/Ionaru/Project-EVIE/issues?utf8=✓&q=is%3Aissue+' + response + '+' + errorcode + '">issue tracker</a>.</p>' + '<hr>' + '</div></div>'
   return
 
-# Changes XML to JSON
-
 @xmlToJson = (xml) ->
-# Create the return object
+  ###
+    Transforms XML to a JSON object
+  ###
   obj = {}
   if xml.nodeType == 1
-# element
-# do attributes
     if xml.attributes.length > 0
       obj['@attributes'] = {}
       j = 0
@@ -216,9 +217,7 @@ problems = 0
         obj['@attributes'][attribute.nodeName] = attribute.nodeValue
         j++
   else if xml.nodeType == 3
-# text
     obj = xml.nodeValue
-  # do children
   if xml.hasChildNodes()
     i = 0
     while i < xml.childNodes.length
@@ -236,8 +235,11 @@ problems = 0
   obj
 
 @isCacheExpired = (cacheEndTime) ->
+  ###
+  Checks if an entered cache time is expired
+  ###
   cacheEndTime = Date.parse(cacheEndTime.replace(/\-/ig, '/').split('.')[0])
   cacheEndTime += 3600000
   currentTime = (new Date).getTime()
   distance = cacheEndTime - currentTime
-  distance < -5000
+  return distance < -5000
