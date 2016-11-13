@@ -1,10 +1,10 @@
 refTypes = []
 amountScrolled = 300
 
-executePage = (refresh = false) ->
-  getRefTypes refresh
-  getBalance refresh
-  return
+#executePage = (refresh = false) ->
+#  getRefTypes refresh
+#  getBalance refresh
+#  return
 
 getRefTypes = (refresh) ->
   data = undefined
@@ -37,35 +37,36 @@ getRefTypes = (refresh) ->
     getWalletTransactions refresh
   return
 
-getBalance = (refresh) ->
-  data = undefined
-  if !$.totalStorage('characterBalance_' + keyID + selectedCharacterID) or isCacheExpired($.totalStorage('characterBalance_' + keyID + selectedCharacterID)['eveapi']['cachedUntil']['#text']) or refresh
-    $.ajax
-      url: 'https://api.eveonline.com/char/AccountBalance.xml.aspx?keyID=' + keyID + '&vCode=' + vCode + '&characterID=' + selectedCharacterID
-      error: (xhr, status, error) ->
-        showError 'Account balance for character ' + selectedCharacterID, xhr, status, error
-        # TODO: implement fancy error logging
-        return
-      success: (xml) ->
-        data = xmlToJson(xml)
-        $.totalStorage 'characterBalance_' + keyID + selectedCharacterID, data
-        parseBalance data
-        return
-  else
-    data = $.totalStorage('characterBalance_' + keyID + selectedCharacterID)
-    parseBalance data
-  return
+#@getBalance = (refresh) ->
+#  data = undefined
+#  if !$.totalStorage('characterBalance_' + keyID + selectedCharacterID) or isCacheExpired($.totalStorage('characterBalance_' + keyID + selectedCharacterID)['eveapi']['cachedUntil']['#text']) or refresh
+#    $.ajax
+#      url: 'https://api.eveonline.com/char/AccountBalance.xml.aspx?keyID=' + keyID + '&vCode=' + vCode + '&characterID=' + selectedCharacterID
+#      error: (xhr, status, error) ->
+#        showError 'Account balance for character ' + selectedCharacterID, xhr, status, error
+#        # TODO: implement fancy error logging
+#        return
+#      success: (xml) ->
+#        data = xmlToJson(xml)
+#        $.totalStorage 'characterBalance_' + keyID + selectedCharacterID, data
+#        parseBalance data
+#        return
+#  else
+#    data = $.totalStorage('characterBalance_' + keyID + selectedCharacterID)
+#    parseBalance data
+#  return
 
-parseBalance = (data) ->
-  balance = data['eveapi']['result']['rowset']['row']['@attributes']['balance']
-  options =
-    useEasing: false
-    useGrouping: true
-    separator: '.'
-    decimal: ','
-    suffix: ' ISK'
-  new CountUp('balanceSpan', 0, balance, 2, 1, options).start()
-  return
+#@parseBalance = (data) ->
+#  console.log data
+#  balance = data['eveapi']['result']['rowset']['row']['@attributes']['balance']
+#  options =
+#    useEasing: false
+#    useGrouping: true
+#    separator: '.'
+#    decimal: ','
+#    suffix: ' ISK'
+#  new CountUp('balanceSpan', 0, balance, 2, 1, options).start()
+#  return
 
 @getWalletJournal = (rowCount, fromID, refresh) ->
   data = undefined
@@ -112,6 +113,15 @@ Object.size = (obj) ->
 
 parseWalletJournal = (data) ->
   rows = data['eveapi']['result']['rowset']['row']
+  rows.sort (a, b) ->
+    timeA = a['@attributes']['date']
+    timeB = b['@attributes']['date']
+    if timeA < timeB
+      return 1
+    if timeA > timeB
+      return -1
+    return 0
+
   if Object.size(rows) is 1
     rows = new Array(rows)
   if rows and Object.size(rows) isnt 0
@@ -124,9 +134,9 @@ parseWalletJournal = (data) ->
     refID = undefined
     color = undefined
     i = 0
+    output = ''
     while i < Object.size(rows)
       row = rows[i]
-      ownerName1 = ''
       color = 'red'
       date = row['@attributes']['date']
       amount = row['@attributes']['amount']
@@ -137,25 +147,24 @@ parseWalletJournal = (data) ->
         color = 'green'
         ownerName1 = row['@attributes']['ownerName1']
         ownerID1 = row['@attributes']['ownerID1']
-      output = ''
       output += '<tr>'
-      output += '<td data-label="Date">' + date + '</td>'
-      output += '<td data-label="refType">' + refTypeID + '</td>'
-      if ownerName1 != ''
-        output += '<td data-label="From">'
+      output += '<td data-label="Date" class="left">' + date + '</td>'
+      output += '<td data-label="refType" class="left">' + refTypeID + '</td>'
+      if ownerName1
+        output += '<td data-label="From" class="left">'
         if parseInt(ownerID1).between(90000000, 100000000, true)
-          output += '<a class="' + ownerID1 + '" onclick="getCharDataFromID(' + '\'' + ownerID1 + '\'' + ')">' + ownerName1 + '</a>'
+          output += '<a class="eve-link ' + ownerID1 + '" onclick="getCharDataFromID(' + '\'' + ownerID1 + '\'' + ')">' + ownerName1 + '</a>'
         else
           output += '<span class="' + ownerID1 + '">' + ownerName1 + '</span>'
         output += '</td>'
       else
         if $(window).width() > 768
-          output += '<td></td>'
-      output += '<td style="color:' + color + '" data-label="Amount">' + parseFloat(amount).formatMoney(2, ',', '.') + ' ISK</td>'
-      output += '<td data-label="Balance">' + parseFloat(balance).formatMoney(2, ',', '.') + ' ISK</td></tr>'
+          output += '<td>Unknown</td>'
+      output += '<td style="color:' + color + '" data-label="Amount" class="right">' + parseFloat(amount).formatMoney(2, ',', '.') + ' ISK</td>'
+      output += '<td data-label="Balance" class="left">' + parseFloat(balance).formatMoney(2, ',', '.') + ' ISK</td></tr>'
       output += '</tr>'
-      $('#WalletJournalBody').append output
       i++
+    $('#WalletJournalBody').html output
   if Object.size(rows) is 50
     $('#moreJournal50').attr 'onclick', 'getWalletJournal("50", "' + refID + '")'
     $('#moreJournal100').attr 'onclick', 'getWalletJournal("100", "' + refID + '")'

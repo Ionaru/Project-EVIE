@@ -5,7 +5,7 @@
   // Helper class that sets opacity of an element
   @each $o in $opacity {
     &.opacity-#{$o} {
-      opacity: calc(#{$o}/100);
+      opacity: calc(#{$o} / 100);
     }
   }
 }
@@ -42,8 +42,8 @@ html {
     h1, h2, h3, h4, h5, h6, p {
       margin: 0;
       &.spacing {
-        margin-top: 1em;
-        margin-bottom: 1em;
+        margin-top: 10px;
+        margin-bottom: 10px;
       }
       &.spacing-top {
         margin-top: 1em;
@@ -56,10 +56,168 @@ html {
     a {
       color: $eve_skill_training;
       text-decoration: none;
+      &.eve-link {
+        color: $eve_text_yellow;
+        cursor: pointer;
+        &:hover {
+          text-decoration: underline;
+        }
+      }
     }
 
     .visible-lg, .visible-md, .visible-sm, .visible-xs {
       display: none !important;
     }
+
+    table {
+      width: 100%;
+      border-spacing: 0;
+      thead {
+        th {
+          border-left: $eve_ore_button_active solid 1px;
+          border-top: $eve_ore_button_active solid 1px;
+          border-bottom: $eve_ore_button_active solid 1px;
+          padding-left: 5px;
+          padding-right: 5px;
+          &:last-child {
+            border-right: $eve_ore_button_active solid 1px;
+          }
+        }
+      }
+      tbody {
+        tr {
+          transition: background-color 0.1s linear;
+          td {
+            border-left: $eve_ore_button_active solid 1px;
+            padding-left: 5px;
+            padding-right: 5px;
+            &:last-child {
+              border-right: $eve_ore_button_active solid 1px;
+            }
+          }
+          &:hover {
+            //background-color: darken($eve_ore_button_active, 9%);
+            background-color: darken($eve_ore_button_active, 20%);
+          }
+          &:last-child {
+            td {
+              border-bottom: $eve_ore_button_active solid 1px;
+            }
+          }
+        }
+      }
+    }
+
+    .left {
+      text-align: left;
+    }
+    .center {
+      text-align: center;
+    }
+    .right {
+      text-align: right;
+    }
+
+    #characterInfoWindow {
+      display: none; /* Hidden by default */
+      position: fixed; /* Stay in place */
+      z-index: 1; /* Sit on top */
+      left: 0;
+      top: 0;
+      width: 100%; /* Full width */
+      height: 100%; /* Full height */
+      overflow: auto; /* Enable scroll if needed */
+      background-color: rgb(0, 0, 0); /* Fallback color */
+      background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
+      .window-title {
+
+      }
+      .window-content {
+        //text-align: center;
+        box-shadow: 0 0 14px 1px rgba(0, 0, 0, 0.75);
+        background-color: $eve_ore_content;
+        margin: 15% auto; /* 15% from the top and centered */
+        padding: 10px;
+        border: 1px solid #888;
+        width: 40%; /* Could be more or less, depending on screen size */
+        height: auto;
+        .window-title {
+          #close-button {
+            float: right;
+          }
+        }
+        #character-image {
+          float: left;
+          img {
+            width: 128px;
+          }
+        }
+        #character-info {
+          float: left;
+          width: 75%;
+          padding-left: 10px;
+          #corporation {
+            #corporation-image {
+              float: left;
+            }
+            #corporation-info {
+              float: left;
+              width: 75%;
+              padding-left: 10px;
+            }
+          }
+          #alliance {
+            #alliance-image {
+              float: left;
+            }
+            #alliance-info {
+              float: left;
+              width: 75%;
+              padding-left: 10px;
+            }
+          }
+        }
+
+      }
+    }
+
+    #entry-body {
+      #register-section, #login-section {
+        width: 50%;
+        float: left;
+        padding: 10px;
+      }
+      #temporary-section {
+        padding: 10px;
+      }
+    }
+
+    form {
+      .form-group {
+        margin-bottom: 15px;
+        label {
+          display: inline-block;
+          max-width: 100%;
+          margin-bottom: 5px;
+          font-weight: 700;
+        }
+        input {
+          display: block;
+          width: 100%;
+          height: 34px;
+          padding: 6px 12px;
+          font-size: 14px;
+          line-height: 1.42857143;
+          color: #555;
+          background-color: #fff;
+          background-image: none;
+          border: 1px solid #ccc;
+          &:focus {
+            outline: none;
+          }
+        }
+      }
+    }
+
   }
 }

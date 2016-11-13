@@ -68,6 +68,6 @@ exports.compileScripts = (done) ->
 
     logger.info("Client-side javascript ready, took #{Date.now() - startTime}ms")
   catch e
-    logger.error("There was a problem while compiling the scripts, script was not updated.")
     logger.error(e)
+    logger.error("There was a problem while compiling the scripts, script was not updated.")
   return done()

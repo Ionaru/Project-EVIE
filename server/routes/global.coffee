@@ -12,15 +12,6 @@ router.get '/*', (req, res, next) ->
   }
   return next()
 
-# Router that handles the registration process
-router.post '/register', (req, res) ->
-
-# Router that handles the login process
-router.post '/login', (req, res) ->
-
-# Router that handles the password-change process
-router.post '/change_password', (req, res) ->
-
 # Router that handles the logout process
 router.all '/logout', (req, res) ->
   # Destroy the user session
